@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane id="AnchorPane" prefHeight="663.0" prefWidth="823.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+<AnchorPane id="AnchorPane" prefHeight="663.0" prefWidth="823.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="privatemoviecollection.gui.controller.MainViewController">
    <children>
       <TableView fx:id="categoryTable" layoutX="46.0" layoutY="139.0" prefHeight="470.0" prefWidth="200.0">
          <columns>
