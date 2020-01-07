@@ -18,7 +18,7 @@ import java.util.Properties;
  */
 public class DatabaseConnector
 {
-           private SQLServerDataSource dataSource;
+    private SQLServerDataSource dataSource;
     
     public DatabaseConnector() throws IOException
     {

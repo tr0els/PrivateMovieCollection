@@ -11,7 +11,10 @@ import java.util.List;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.bll.util.SearchMovies;
 import privatemoviecollection.dal.database.MovieDBDAO;
-
+import java.util.List;
+import privatemoviecollection.be.Category;
+import privatemoviecollection.bll.util.SearchMovies;
+import privatemoviecollection.dal.database.CategoryDBDAO;
 /**
  *
  * @author Christina
@@ -33,6 +36,34 @@ public class BLLManager
     }
     
     
+    private CategoryDBDAO categoryDbDao;
+    
+    public BLLManager() throws IOException
+    {
+        categoryDbDao = new CategoryDBDAO();
+    }
+
+    
+    public List<Category> getAllCategories() throws Exception
+    {
+        return categoryDbDao.getAllCategories();
+    }
+    
+    public Category createCategory(String name) throws Exception
+    {
+        Category category = categoryDbDao.createCategory(name);
+        return category;
+    }
+    
+    public boolean deleteCategory(Category category) throws Exception
+    {
+        return categoryDbDao.deleteCategory(category);
+    }
+    
+    public void updateCategory(Category category) throws Exception
+    {
+        categoryDbDao.updateCategory(category);
+    }
     
 //    public List<Movie> search(String query) throws Exception
 //    {
@@ -41,4 +72,6 @@ public class BLLManager
 //        
 //        return searchBase;
 //    }
+
+    
 }

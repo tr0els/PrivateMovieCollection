@@ -15,21 +15,26 @@ import javafx.beans.property.StringProperty;
 public class Category
 {
     private final int id;
-    private StringProperty name;
+    private SimpleStringProperty name;
     
     public Category(int id, String name)
     {
         this.id = id;
         this.name = new SimpleStringProperty(name);
     }
-
-    public StringProperty getName()
+    
+    public int getId()
     {
-        return name;
+        return id;
     }
 
-    public void setName(StringProperty name)
+    public String getName()
     {
-        this.name = name;
+        return name.get();
+    }
+
+    public void setName(String name)
+    {
+        this.name.set(name);
     }
 }

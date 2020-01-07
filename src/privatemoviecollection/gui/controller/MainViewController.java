@@ -7,6 +7,7 @@ package privatemoviecollection.gui.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,13 +18,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import privatemoviecollection.be.Category;
 import privatemoviecollection.gui.model.DataModel;
 
 /**
@@ -39,7 +43,7 @@ public class MainViewController implements Initializable
     @FXML
     private TextField searchField;
     @FXML
-    private ListView<?> categoryFilter;
+    private ListView<Category> categoryFilter;
     @FXML
     private ComboBox<?> comboFilterRating;
     @FXML
@@ -70,6 +74,7 @@ public class MainViewController implements Initializable
         try
         {
             dataModel = new DataModel();
+            setCategoryList();
         } catch (IOException ex)
         {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,7 +105,28 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleDeleteCategory(ActionEvent event)
+    private void handleDeleteCategory(ActionEvent event) throws Exception
+    {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("A Deletion Confirmation");
+        alert.setHeaderText("Are you sure you want to delete:");
+        alert.setContentText(categoryFilter.getSelectionModel().getSelectedItem() + "?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK)
+        {
+
+            dataModel.setChosenCategory(categoryFilter.getSelectionModel().getSelectedItem());
+            dataModel.deleteCategory(dataModel.getChosenCategory());
+
+        } else
+        {
+            alert.close();
+        }
+    }
+    
+    @FXML
+    private void handleEditCategory(ActionEvent event)
     {
     }
 
@@ -128,9 +154,15 @@ public class MainViewController implements Initializable
     {
     }
 
-    @FXML
-    private void handleEditCategory(ActionEvent event)
+    private void setCategoryList()
     {
+        try
+        {
+            categoryFilter.setItems(dataModel.getCategoryList());
+        } catch (Exception ex)
+        {
+            Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

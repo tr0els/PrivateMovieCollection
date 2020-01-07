@@ -11,6 +11,11 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import privatemoviecollection.be.Movie;
+import java.util.Comparator;
+import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import privatemoviecollection.be.Category;
 import privatemoviecollection.bll.BLLManager;
 
 /**
@@ -18,17 +23,57 @@ import privatemoviecollection.bll.BLLManager;
  * @author Christina
  */
 public class DataModel
-{
-    private BLLManager bll;
+{	
+    private BLLManager bm; 
+    private Category chosenCategory; 
+    
+    public ObservableList<Category> categories = FXCollections.observableArrayList();
     
     public DataModel() throws IOException
     {
-        bll = new BLLManager();
+        bm = new BLLManager();
+    }
+    
+    public ObservableList<Category> getCategoryList() throws IOException, Exception
+    {
+        categories.setAll(bm.getAllCategories());   
+        return categories;
+
+    }
+    
+    public void createCategory(String name) throws Exception
+    {
+        Category category = bm.createCategory(name);
+        categories.add(category);
+        getCategoryList();       
+    }
+    
+    public void updateCategory(Category selectedCategory) throws Exception
+    {
+        bm.updateCategory(selectedCategory);
+        getCategoryList();
+    }
+    
+    public void deleteCategory(Category category) throws Exception
+    {
+        bm.deleteCategory(chosenCategory);
+        getCategoryList();
+    }
+    
+    public void setChosenCategory(Category chosenCategory)
+    {
+        this.chosenCategory = chosenCategory;
+    }
+
+   
+    public Category getChosenCategory()
+    {
+        return chosenCategory;
     }
     
 //    public ObservableList<Movie> getSearchResult(String input) throws Exception
 //    {
-//        List<Movie> filter = bll.search(input);
+//        List<Movie> filter = bm.search(input);
 //        ObservableList<Movie> output = FXCollections.observableList(filter);
 //        
 //        return output;
@@ -36,7 +81,7 @@ public class DataModel
     
     public void createMovie(String name, int rating, String filelink, float imdb) throws SQLException
     {
-        Movie mov = bll.createMovie(name, rating, filelink, imdb);
+        Movie mov = bm.createMovie(name, rating, filelink, imdb);
     }
     
     
