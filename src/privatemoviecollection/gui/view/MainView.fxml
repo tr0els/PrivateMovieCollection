@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="663.0" prefWidth="823.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="privatemoviecollection.gui.controller.MainViewController">
+<AnchorPane id="AnchorPane" prefHeight="663.0" prefWidth="845.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="privatemoviecollection.gui.controller.MainViewController">
    <children>
       <TableView fx:id="movieTable" layoutX="35.0" layoutY="174.0" prefHeight="435.0" prefWidth="536.0">
          <columns>
@@ -25,22 +25,23 @@
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="searchField" layoutX="645.0" layoutY="174.0" onKeyTyped="#handleSearch" />
-      <Label layoutX="597.0" layoutY="178.0" text="Search" />
-      <ListView fx:id="categoryFilter" layoutX="597.0" layoutY="261.0" prefHeight="348.0" prefWidth="200.0" />
-      <Label layoutX="595.0" layoutY="243.0" text="Filter by categories" />
-      <ComboBox fx:id="comboFilterRating" layoutX="595.0" layoutY="208.0" prefHeight="26.0" prefWidth="200.0" promptText="Filter by rating" />
+      <TextField fx:id="searchField" layoutX="652.0" layoutY="174.0" onKeyTyped="#handleSearch" />
+      <Label layoutX="600.0" layoutY="178.0" text="Search" />
+      <ListView fx:id="categoryFilter" layoutX="600.0" layoutY="261.0" prefHeight="348.0" prefWidth="200.0" />
+      <Label layoutX="600.0" layoutY="243.0" text="Filter by categories" />
+      <ComboBox fx:id="comboFilterRating" layoutX="601.0" layoutY="208.0" prefHeight="26.0" prefWidth="200.0" promptText="Filter by rating" />
       <Button fx:id="playMovieButton" layoutX="497.0" layoutY="144.0" mnemonicParsing="false" onAction="#handlePlayMovie" text="Play Movie" />
       <Button fx:id="showAllButton" layoutX="391.0" layoutY="144.0" mnemonicParsing="false" onAction="#handleShowAll" text="Show all movies" />
-      <Button fx:id="newCategoryButton" layoutX="600.0" layoutY="619.0" mnemonicParsing="false" onAction="#handleNewCategory" text="New category" />
-      <Button fx:id="deleteCategoryButton" layoutX="697.0" layoutY="619.0" mnemonicParsing="false" onAction="#handleDeleteCategory" text="Delete category" />
+      <Button fx:id="newCategoryButton" layoutX="623.0" layoutY="619.0" mnemonicParsing="false" onAction="#handleNewCategory" text="New " />
+      <Button fx:id="deleteCategoryButton" layoutX="726.0" layoutY="619.0" mnemonicParsing="false" onAction="#handleDeleteCategory" text="Delete" />
       <Button fx:id="newMovieButton" layoutX="35.0" layoutY="619.0" mnemonicParsing="false" onAction="#handleNewMovie" text="New movie" />
-      <Button fx:id="deleteMovieButton" layoutX="119.0" layoutY="619.0" mnemonicParsing="false" onAction="#handleDeleteMovie" text="Delete movie" />
-      <Button fx:id="editRatingButton" layoutX="498.0" layoutY="619.0" mnemonicParsing="false" onAction="#handleEditRating" text="Edit rating" />
-      <Label layoutX="163.0" layoutY="31.0" text="Private Movie Collection">
+      <Button fx:id="deleteMovieButton" layoutX="238.0" layoutY="619.0" mnemonicParsing="false" onAction="#handleDeleteMovie" text="Delete movie" />
+      <Label layoutX="166.0" layoutY="29.0" text="Private Movie Collection">
          <font>
             <Font size="48.0" />
          </font>
       </Label>
+      <Button fx:id="editMovieButton" layoutX="120.0" layoutY="619.0" mnemonicParsing="false" onAction="#handleEditMovie" text="Edit movie/rating" />
+      <Button fx:id="editCategoryButton" layoutX="677.0" layoutY="619.0" mnemonicParsing="false" onAction="#handleEditCategory" text="Edit" />
    </children>
 </AnchorPane>
