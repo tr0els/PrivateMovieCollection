@@ -5,9 +5,13 @@
  */
 package privatemoviecollection.gui.model;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import privatemoviecollection.be.Movie;
+import privatemoviecollection.bll.BLLManager;
 
 /**
  *
@@ -15,6 +19,13 @@ import javafx.collections.ObservableList;
  */
 public class DataModel
 {
+    private BLLManager bll;
+    
+    public DataModel() throws IOException
+    {
+        bll = new BLLManager();
+    }
+    
 //    public ObservableList<Movie> getSearchResult(String input) throws Exception
 //    {
 //        List<Movie> filter = bll.search(input);
@@ -22,5 +33,12 @@ public class DataModel
 //        
 //        return output;
 //    }
+    
+    public void createMovie(String name, int rating, String filelink, float imdb) throws SQLException
+    {
+        Movie mov = bll.createMovie(name, rating, filelink, imdb);
+    }
+    
+    
 }
 
