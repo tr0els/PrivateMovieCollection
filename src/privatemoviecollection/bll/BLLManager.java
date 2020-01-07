@@ -23,9 +23,12 @@ public class BLLManager
 {
     private final MovieDBDAO movieDB;
     
+    private CategoryDBDAO categoryDbDao;
+    
     public BLLManager() throws IOException
     {
         movieDB = new MovieDBDAO();
+        categoryDbDao = new CategoryDBDAO();
     }
     
     public Movie createMovie(String name, int rating, String filelink, float imdb) throws SQLException
@@ -34,15 +37,6 @@ public class BLLManager
         
         return mov;
     }
-    
-    
-    private CategoryDBDAO categoryDbDao;
-    
-    public BLLManager() throws IOException
-    {
-        categoryDbDao = new CategoryDBDAO();
-    }
-
     
     public List<Category> getAllCategories() throws Exception
     {
