@@ -38,6 +38,11 @@ public class BLLManager
         return mov;
     }
     
+    public List<Movie> getAllMovies() throws SQLException
+    {
+        return movieDB.getAllMovies();
+    }
+    
     public List<Category> getAllCategories() throws Exception
     {
         return categoryDbDao.getAllCategories();

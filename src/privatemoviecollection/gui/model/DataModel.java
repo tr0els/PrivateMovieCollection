@@ -7,12 +7,7 @@ package privatemoviecollection.gui.model;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import privatemoviecollection.be.Movie;
-import java.util.Comparator;
-import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import privatemoviecollection.be.Category;
@@ -24,39 +19,46 @@ import privatemoviecollection.bll.BLLManager;
  */
 public class DataModel
 {	
-    private BLLManager bm; 
+    private BLLManager bll; 
+    
+    private ObservableList<Movie> movies = FXCollections.observableArrayList();
+    private ObservableList<Category> categories = FXCollections.observableArrayList();
     private Category chosenCategory; 
     
-    public ObservableList<Category> categories = FXCollections.observableArrayList();
-    
-    public DataModel() throws IOException
+    public DataModel() throws IOException, SQLException
     {
-        bm = new BLLManager();
+        bll = new BLLManager();
+        
+        movies.addAll(bll.getAllMovies());
     }
+    
+    public ObservableList<Movie> getAllMovies()
+    {
+        return movies;
+    }    
     
     public ObservableList<Category> getCategoryList() throws IOException, Exception
     {
-        categories.setAll(bm.getAllCategories());   
+        categories.setAll(bll.getAllCategories());
         return categories;
-
     }
     
     public void createCategory(String name) throws Exception
     {
-        Category category = bm.createCategory(name);
+        Category category = bll.createCategory(name);
         categories.add(category);
         getCategoryList();       
     }
     
     public void updateCategory(Category selectedCategory) throws Exception
     {
-        bm.updateCategory(selectedCategory);
+        bll.updateCategory(selectedCategory);
         getCategoryList();
     }
     
     public void deleteCategory(Category category) throws Exception
     {
-        bm.deleteCategory(chosenCategory);
+        bll.deleteCategory(chosenCategory);
         getCategoryList();
     }
     
@@ -81,7 +83,7 @@ public class DataModel
     
     public void createMovie(String name, int rating, String filelink, float imdb) throws SQLException
     {
-        Movie mov = bm.createMovie(name, rating, filelink, imdb);
+        Movie movie = bll.createMovie(name, rating, filelink, imdb);
     }
     
     

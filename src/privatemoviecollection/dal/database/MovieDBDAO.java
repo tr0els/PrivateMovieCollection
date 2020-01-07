@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import privatemoviecollection.be.Movie;
 
@@ -56,9 +57,35 @@ public class MovieDBDAO
      return null;
     }
     
-    public List<Movie> getAllMovies()
+    public List<Movie> getAllMovies() throws SQLException
     {
-        return null;
+        try (Connection con = dbCon.getConnection())
+        {
+            String sql = "SELECT * FROM Movie;";
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            
+            List<Movie> movies = new ArrayList<>();
+            
+            while (rs.next())
+            {
+                int id = rs.getInt("id");
+                String filelink = rs.getString("filelink");
+                String name = rs.getString("name");
+                int rating = rs.getInt("rating");
+                Date lastview = rs.getDate("lastview");
+                float imdb = rs.getFloat("imdb");
+                
+                Movie movie = new Movie(id, filelink, name, imdb, rating);
+                movies.add(movie);              
+            }
+            
+            return movies;
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            throw new SQLException();
+        }
     }
     
     public void deleteMovie()
