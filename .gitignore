@@ -43,7 +43,11 @@ mssql-jdbc*.jar
 # Database configuration file
 *.db
 
-# mp3 files just to be sure
+# Ignore media files
 *.mp3
+*.mp4
+*.mpeg4
+*.mpg
+*.mkv
 
 # End of https://www.gitignore.io/api/java,netbeans
