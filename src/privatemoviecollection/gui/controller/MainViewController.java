@@ -28,8 +28,6 @@ public class MainViewController implements Initializable
 {
 
     @FXML
-    private TableView<?> categoryTable;
-    @FXML
     private TableView<?> movieTable;
     @FXML
     private TextField searchField;
@@ -49,10 +47,12 @@ public class MainViewController implements Initializable
     private Button newMovieButton;
     @FXML
     private Button deleteMovieButton;
-    @FXML
-    private Button editRatingButton;
 
     private DataModel dataModel;
+    @FXML
+    private Button editMovieButton;
+    @FXML
+    private Button editCategoryButton;
     
     /**
      * Initializes the controller class.
@@ -102,7 +102,12 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleEditRating(ActionEvent event)
+    private void handleEditMovie(ActionEvent event)
+    {
+    }
+
+    @FXML
+    private void handleEditCategory(ActionEvent event)
     {
     }
     
