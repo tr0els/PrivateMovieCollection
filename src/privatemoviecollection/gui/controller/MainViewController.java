@@ -148,8 +148,19 @@ public class MainViewController implements Initializable
     }
     
     @FXML
-    private void handleEditCategory(ActionEvent event)
+    private void handleEditCategory(ActionEvent event) throws IOException
     {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditCategory.fxml"));
+        Parent root = loader.load();
+
+        if (categoryFilter.getSelectionModel().getSelectedItem() != null) {
+            EditCategoryController EditCategoryController = loader.getController();
+            EditCategoryController.transferCategory(categoryFilter.getSelectionModel().getSelectedItem());
+            EditCategoryController.transferDatamodel(dataModel);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
     }
 
     @FXML
