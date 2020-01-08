@@ -5,7 +5,6 @@
  */
 package privatemoviecollection.dal.database;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,7 +30,7 @@ public class MovieDBDAO
         dbCon = new DatabaseConnector();
     }
     
-    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws SQLServerException, SQLException
+    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws SQLException
     {
         Connection con = dbCon.getConnection();
         Date date = new Date();
@@ -70,7 +69,7 @@ public class MovieDBDAO
      return null;
     }
     
-    public List<Movie> getAllMovies() throws SQLException, Exception
+    public List<Movie> getAllMovies() throws SQLException
     {
         try (Connection con = dbCon.getConnection())
         {
@@ -102,27 +101,32 @@ public class MovieDBDAO
         }
     }
     
-    public List<Category> getMovieCategories(int movieId) throws Exception
+    public List<Category> getMovieCategories(int movieId) throws SQLException
     {
-        Connection con = dbCon.getConnection();
-        
-        List<Category> categories = new ArrayList<>();
-
-        String sql = "SELECT c.id, c.name FROM Category c, CatMovie cm WHERE c.id = cm.categoryId AND cm.MovieId = (?)";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, movieId);
-        ResultSet rs = ps.executeQuery(sql);
-        
-        while (rs.next())
+        try (Connection con = dbCon.getConnection())
         {
-            int id = rs.getInt("id");
-            String name = rs.getString("name");
+            List<Category> categories = new ArrayList<>();
 
-            Category category = new Category(id, name);
-            categories.add(category);
-        }
+            String sql = "SELECT c.id, c.name FROM Category c, CatMovie cm WHERE c.id = cm.categoryId AND cm.MovieId = (?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, movieId);
+            ResultSet rs = ps.executeQuery(sql);
         
-        return categories;
+            while (rs.next())
+            {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                
+                Category category = new Category(id, name);
+                categories.add(category);
+            }
+        
+            return categories;
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            throw new SQLException();
+        }
     }
     
     public void deleteMovie(Movie mov) throws SQLException
@@ -141,7 +145,7 @@ public class MovieDBDAO
         ps.executeUpdate();
     }
     
-    public void updateMovie(Movie mov) throws SQLServerException, SQLException
+    public void updateMovie(Movie mov) throws SQLException
     {
         Connection con = dbCon.getConnection();
         
