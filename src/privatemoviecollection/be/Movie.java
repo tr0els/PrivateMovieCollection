@@ -12,13 +12,14 @@ import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 
 /**
  *
  * @author Christina
  */
-public class Movie
-{
+public class Movie {
+
     private final int id;
     private StringProperty filelink;
     private StringProperty name;
@@ -34,54 +35,63 @@ public class Movie
         this.rating = new SimpleIntegerProperty(rating);
     }
 
-    public StringProperty getFilelink()
-    {
+    public int getId() {
+        return id;
+    }
+
+    public String getFilelink() {
+        return filelink.get();
+    }
+
+    public void setFilelink(String filelink) {
+        this.filelink.set(filelink);
+    }
+
+    public StringProperty filelinkProperty() {
         return filelink;
     }
 
-    public void setFilelink(StringProperty filelink)
-    {
-        this.filelink = filelink;
+    public String getName() {
+        return name.get();
     }
 
-    public StringProperty getName()
-    {
+    public void setName(String name) {
+        this.name.set(name);
+    }
+
+    public StringProperty nameProperty() {
         return name;
     }
 
-    public void setName(StringProperty name)
-    {
-        this.name = name;
+    public int getRating() {
+        return rating.get();
     }
 
-    public IntegerProperty getRating()
-    {
-        return rating;
+    public void setRating(int rating) {
+        this.rating.set(rating);
     }
 
-    public void setRating(IntegerProperty rating)
-    {
-        this.rating = rating;
+    public ObservableValue<Integer> ratingProperty() {
+        return rating.asObject();
+    }
+    
+    public float getImdb() {
+        return imdb.get();
     }
 
-    public FloatProperty getImdb()
-    {
-        return imdb;
+    public void setImdb(Float imdb) {
+        this.imdb.set(imdb);
     }
 
-    public void setImdb(FloatProperty imdb)
-    {
-        this.imdb = imdb;
+    public ObservableValue<Float> imdbProperty() {
+        return imdb.asObject();
     }
-
-    public Date getLastview()
-    {
+    
+    public Date getLastview() {
         return lastview;
     }
 
-    public void setLastview(Date lastview)
-    {
+    public void setLastview(Date lastview) {
         this.lastview = lastview;
     }
-    
 }

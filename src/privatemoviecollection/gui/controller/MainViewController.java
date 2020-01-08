@@ -11,19 +11,24 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 import privatemoviecollection.be.Category;
+import privatemoviecollection.be.Movie;
 import privatemoviecollection.gui.model.DataModel;
 
 /**
@@ -35,7 +40,15 @@ public class MainViewController implements Initializable
 {
 
     @FXML
-    private TableView<?> movieTable;
+    private TableView<Movie> movieTable;
+    @FXML
+    private TableColumn<Movie, String> movieName;
+    @FXML
+    private TableColumn<Movie, String> movieCategory;
+    @FXML
+    private TableColumn<Movie, Integer> movieRating;
+    @FXML
+    private TableColumn<Movie, Float> movieRatingIMDB;
     @FXML
     private TextField searchField;
     @FXML
@@ -70,8 +83,9 @@ public class MainViewController implements Initializable
         try
         {
             dataModel = new DataModel();
+            setAllMovies();
             setCategoryList();
-        } catch (IOException ex)
+        } catch (Exception ex)
         {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -127,8 +141,17 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleNewMovie(ActionEvent event)
+    private void handleNewMovie(ActionEvent event) throws IOException
     {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/NewMovie.fxml"));
+        Parent root = loader.load();
+
+        NewMovieController newMovieController = loader.getController();
+        newMovieController.transfer(dataModel);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     @FXML
@@ -139,6 +162,18 @@ public class MainViewController implements Initializable
     @FXML
     private void handleEditMovie(ActionEvent event)
     {
+    }
+    
+    private void setAllMovies() {
+        
+        // initialize the columns
+        movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        //movieCategory.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        movieRating.setCellValueFactory(cellData -> cellData.getValue().ratingProperty());
+        movieRatingIMDB.setCellValueFactory(cellData -> cellData.getValue().imdbProperty());
+
+        // add data to the table
+        movieTable.setItems(dataModel.getAllMovies());
     }
 
     private void setCategoryList()
