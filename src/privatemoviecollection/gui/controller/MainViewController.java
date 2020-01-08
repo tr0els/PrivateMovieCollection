@@ -5,6 +5,8 @@
  */
 package privatemoviecollection.gui.controller;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -103,7 +105,17 @@ public class MainViewController implements Initializable
 
     @FXML
     private void handlePlayMovie(ActionEvent event)
-    {
+    { 
+        try{
+            
+        String s = movieTable.getSelectionModel().getSelectedItem().getFilelink();
+        File f = new File(s);
+        Desktop d = Desktop.getDesktop(); 
+        d.open(f);
+    }
+        catch (Exception ex){
+        
+        }
     }
 
     @FXML
