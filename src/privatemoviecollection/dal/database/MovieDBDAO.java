@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
 
 /**
@@ -57,16 +58,16 @@ public class MovieDBDAO
      return null;
     }
     
-    public List<Movie> getAllMovies() throws SQLException
+    public List<Movie> getAllMovies() throws SQLException, Exception
     {
         try (Connection con = dbCon.getConnection())
         {
+            List<Movie> movies = new ArrayList<>();
+            
             String sql = "SELECT * FROM Movie;";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            
-            List<Movie> movies = new ArrayList<>();
-            
+                        
             while (rs.next())
             {
                 int id = rs.getInt("id");
@@ -77,7 +78,8 @@ public class MovieDBDAO
                 float imdb = rs.getFloat("imdb");
                 
                 Movie movie = new Movie(id, filelink, name, imdb, rating);
-                movies.add(movie);              
+                movie.addCategories(getMovieCategories(id));
+                movies.add(movie);
             }
             
             return movies;
@@ -86,6 +88,29 @@ public class MovieDBDAO
             ex.printStackTrace();
             throw new SQLException();
         }
+    }
+    
+    public List<Category> getMovieCategories(int movieId) throws Exception
+    {
+        Connection con = dbCon.getConnection();
+        
+        List<Category> categories = new ArrayList<>();
+
+        String sql = "SELECT c.id, c.name FROM Category c, CatMovie cm WHERE c.id = cm.categoryId AND cm.MovieId = (?)";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, movieId);
+        ResultSet rs = ps.executeQuery(sql);
+        
+        while (rs.next())
+        {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+
+            Category category = new Category(id, name);
+            categories.add(category);
+        }
+        
+        return categories;
     }
     
     public void deleteMovie(Movie mov) throws SQLException
