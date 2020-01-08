@@ -84,8 +84,14 @@ public class DataModel
     public void createMovie(String name, int rating, String filelink, float imdb) throws SQLException
     {
         Movie movie = bll.createMovie(name, rating, filelink, imdb);
+        movies.add(movie);
     }
     
+    public void deleteMovie(Movie mov) throws SQLException
+    {
+        movies.remove(mov);
+        bll.deleteMovie(mov);
+    }
     
 }
 
