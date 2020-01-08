@@ -7,6 +7,7 @@ package privatemoviecollection.gui.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -27,6 +28,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javax.swing.JOptionPane;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.gui.model.DataModel;
@@ -155,8 +157,19 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleDeleteMovie(ActionEvent event)
+    private void handleDeleteMovie(ActionEvent event) throws SQLException
     {
+        String name = movieTable.getSelectionModel().getSelectedItem().getName();
+        
+        if (movieTable.getSelectionModel().getSelectedItem() != null) {
+            int input = JOptionPane.showConfirmDialog(null, "Permanently delete " + name + " from the list?", "Select an Option...",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+
+            // 0=yes, 1=no.
+            if (input == JOptionPane.YES_OPTION) {
+                dataModel.deleteMovie(movieTable.getSelectionModel().getSelectedItem());
+            }
+        }
     }
 
     @FXML
