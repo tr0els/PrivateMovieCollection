@@ -37,5 +37,11 @@ public class Category
     {
         this.name.set(name);
     }
+    
+    @Override
+    public String toString()
+    {
+        return getName();
+    }
 
 }
