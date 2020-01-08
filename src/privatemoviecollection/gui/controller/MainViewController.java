@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -94,11 +95,11 @@ public class MainViewController implements Initializable
     }    
 
     @FXML
-    private void handleSearch(KeyEvent event)
+    private void handleSearch(KeyEvent event) throws Exception
     {
-//        String input = searchField.getText();
-//        ObservableList<Movie> result = dataModel.getSearchResult(input);
-//        movieTable.setItems(result);
+        String input = searchField.getText();
+        ObservableList<Movie> result = dataModel.getSearchResult(input);
+        movieTable.setItems(result);
     }
 
     @FXML
