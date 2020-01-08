@@ -6,6 +6,7 @@
 package privatemoviecollection.be;
 
 import java.util.Date;
+import java.util.List;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleFloatProperty;
@@ -101,6 +102,10 @@ public class Movie {
     
     public ObservableList<Category> getCategories() {
         return categories;
+    }
+    
+    public void addCategories(List<Category> categories) {
+        categories.addAll(categories);
     }
 
     public void addCategory(Category category) {
