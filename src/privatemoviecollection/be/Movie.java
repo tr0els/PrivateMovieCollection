@@ -107,7 +107,7 @@ public class Movie {
         categories.add(category);
     }
     
-    public void deleteCategory(Category category) {
+    public void removeCategory(Category category) {
         categories.remove(category);
     }
 }
