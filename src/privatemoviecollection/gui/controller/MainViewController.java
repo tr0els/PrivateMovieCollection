@@ -176,13 +176,14 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleNewMovie(ActionEvent event) throws IOException
+    private void handleNewMovie(ActionEvent event) throws IOException, Exception
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/NewMovie.fxml"));
         Parent root = loader.load();
 
         NewMovieController newMovieController = loader.getController();
         newMovieController.transfer(dataModel);
+        newMovieController.categoryMenu(dataModel.getCategoryList());
 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));

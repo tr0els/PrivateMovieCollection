@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
 
 /**
@@ -30,19 +31,23 @@ public class MovieDBDAO
         dbCon = new DatabaseConnector();
     }
     
-    public Movie createMovie(String name, int rating, String filelink, float imdb) throws SQLServerException, SQLException
+    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws SQLServerException, SQLException
     {
         Connection con = dbCon.getConnection();
         Date date = new Date();
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
         
             String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
+            String sql2 = "INSERT INTO CatMovie VALUES (?,?);";
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); 
+            PreparedStatement ps2 = con.prepareStatement(sql2);
+            
             ps.setString(1, name);
             ps.setInt(2, rating);
             ps.setString(3, filelink);
             ps.setDate(4, sqlDate);
             ps.setFloat(5, imdb);
+           
            int affectedRows = ps.executeUpdate();
             if (affectedRows == 1)
             {
@@ -51,6 +56,14 @@ public class MovieDBDAO
                 {
                     int id = rs.getInt(1);
                     Movie mov = new Movie(id, filelink, name, imdb, rating);
+                    
+                    for (Integer i : idList)
+                    {
+                        ps2.setInt(1, i);
+                        ps2.setInt(2, id);
+                        ps2.executeUpdate();
+                    }
+                    
                     return mov;
                 }
             }
