@@ -7,6 +7,7 @@ package privatemoviecollection.bll;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.bll.util.SearchMovies;
@@ -14,6 +15,7 @@ import privatemoviecollection.dal.database.MovieDBDAO;
 import java.util.List;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.bll.util.SearchMovies;
+import static privatemoviecollection.bll.util.SearchMovies.search;
 import privatemoviecollection.dal.database.CategoryDBDAO;
 /**
  *
@@ -31,9 +33,9 @@ public class BLLManager
         categoryDbDao = new CategoryDBDAO();
     }
     
-    public Movie createMovie(String name, int rating, String filelink, float imdb) throws SQLException
+    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws SQLException
     {
-        Movie mov = movieDB.createMovie(name, rating, filelink, imdb);
+        Movie mov = movieDB.createMovie(name, rating, filelink, imdb, idList);
         
         return mov;
     }
@@ -41,6 +43,11 @@ public class BLLManager
     public void deleteMovie(Movie mov) throws SQLException
     {
         movieDB.deleteMovie(mov);
+    }
+    
+    public void updateMovie(Movie mov) throws SQLException
+    {
+        movieDB.updateMovie(mov);
     }
     
     public List<Movie> getAllMovies() throws SQLException
@@ -69,13 +76,12 @@ public class BLLManager
         categoryDbDao.updateCategory(category);
     }
     
-//    public List<Movie> search(String query) throws Exception
-//    {
-//        List<Movie> searchBase = mediaDB.getAllMedias();
-//        searchBase = SearchMovies.search(searchBase, query);
-//        
-//        return searchBase;
-//    }
+    public List<Movie> searchMovies(String query) throws SQLException 
+    {
+        List<Movie> allMovies = getAllMovies();
+        allMovies = search(allMovies, query);
+        return allMovies;
+    }
 
     
 }

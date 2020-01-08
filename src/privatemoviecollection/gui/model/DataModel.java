@@ -7,6 +7,8 @@ package privatemoviecollection.gui.model;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import privatemoviecollection.be.Movie;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -73,17 +75,17 @@ public class DataModel
         return chosenCategory;
     }
     
-//    public ObservableList<Movie> getSearchResult(String input) throws Exception
-//    {
-//        List<Movie> filter = bm.search(input);
-//        ObservableList<Movie> output = FXCollections.observableList(filter);
-//        
-//        return output;
-//    }
-    
-    public void createMovie(String name, int rating, String filelink, float imdb) throws SQLException
+    public ObservableList<Movie> getSearchResult(String input) throws Exception
     {
-        Movie movie = bll.createMovie(name, rating, filelink, imdb);
+        List<Movie> filter = bll.searchMovies(input);
+        ObservableList<Movie> output = FXCollections.observableList(filter);
+        
+        return output;
+    }
+    
+    public void createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws SQLException
+    {
+        Movie movie = bll.createMovie(name, rating, filelink, imdb, idList);
         movies.add(movie);
     }
     
@@ -93,5 +95,9 @@ public class DataModel
         bll.deleteMovie(mov);
     }
     
+    public void updateMovie(Movie mov) throws SQLException
+    {
+        bll.updateMovie(mov);
+    }
 }
 

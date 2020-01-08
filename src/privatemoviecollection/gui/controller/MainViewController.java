@@ -5,6 +5,8 @@
  */
 package privatemoviecollection.gui.controller;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -12,6 +14,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -94,16 +97,26 @@ public class MainViewController implements Initializable
     }    
 
     @FXML
-    private void handleSearch(KeyEvent event)
+    private void handleSearch(KeyEvent event) throws Exception
     {
-//        String input = searchField.getText();
-//        ObservableList<Movie> result = dataModel.getSearchResult(input);
-//        movieTable.setItems(result);
+        String input = searchField.getText();
+        ObservableList<Movie> result = dataModel.getSearchResult(input);
+        movieTable.setItems(result);
     }
 
     @FXML
     private void handlePlayMovie(ActionEvent event)
-    {
+    { 
+        try{
+            
+        String s = movieTable.getSelectionModel().getSelectedItem().getFilelink();
+        File f = new File(s);
+        Desktop d = Desktop.getDesktop(); 
+        d.open(f);
+    }
+        catch (Exception ex){
+        
+        }
     }
 
     @FXML
@@ -164,13 +177,14 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleNewMovie(ActionEvent event) throws IOException
+    private void handleNewMovie(ActionEvent event) throws IOException, Exception
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/NewMovie.fxml"));
         Parent root = loader.load();
 
         NewMovieController newMovieController = loader.getController();
         newMovieController.transfer(dataModel);
+        newMovieController.categoryMenu(dataModel.getCategoryList());
 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
@@ -194,8 +208,17 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleEditMovie(ActionEvent event)
+    private void handleEditMovie(ActionEvent event) throws IOException
     {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditMovie.fxml"));
+        Parent root = loader.load();
+
+        EditMovieController editmoviecontroller = loader.getController();
+        editmoviecontroller.transfer(movieTable.getSelectionModel().getSelectedItem(), dataModel);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
     
     private void setAllMovies() {
