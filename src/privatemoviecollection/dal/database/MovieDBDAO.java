@@ -107,10 +107,9 @@ public class MovieDBDAO
         {
             List<Category> categories = new ArrayList<>();
 
-            String sql = "SELECT c.id, c.name FROM Category c, CatMovie cm WHERE c.id = cm.categoryId AND cm.MovieId = (?)";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, movieId);
-            ResultSet rs = ps.executeQuery(sql);
+            String sql = "SELECT c.id, c.name FROM Category c, CatMovie cm WHERE c.id = cm.categoryId AND cm.MovieId = " + movieId + ";";
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
         
             while (rs.next())
             {
