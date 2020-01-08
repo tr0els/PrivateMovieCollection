@@ -84,7 +84,7 @@ public class MainViewController implements Initializable
         {
             dataModel = new DataModel();
             setAllMovies();
-            setCategoryList();
+            setAllCategories();
         } catch (Exception ex)
         {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -110,8 +110,18 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleNewCategory(ActionEvent event)
+    private void handleNewCategory(ActionEvent event) throws IOException
     {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/NewCategory.fxml"));
+        Parent root = loader.load();
+
+        NewCategoryController newCategoryController = loader.getController();
+        newCategoryController.transfer(dataModel);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
+        setAllCategories();
     }
 
     @FXML
@@ -176,7 +186,7 @@ public class MainViewController implements Initializable
         movieTable.setItems(dataModel.getAllMovies());
     }
 
-    private void setCategoryList()
+    private void setAllCategories()
     {
         try
         {

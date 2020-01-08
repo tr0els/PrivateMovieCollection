@@ -94,7 +94,7 @@ public class CategoryDBDAO
                      
             ps.setInt(1, id);
             ps2.setInt(1, id);
-            if (ps.executeUpdate() == 1 && ps2.executeUpdate() == 1)
+            if (ps2.executeUpdate() == 1)
             {
                 return true;
             } else
