@@ -7,23 +7,25 @@ package privatemoviecollection.bll.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import privatemoviecollection.be.Movie;
 
 /**
  *
  * @author Troels Klein
  */
 public class SearchMovies {
+    
+    public static List<Movie> search(List<Movie> searchBase, String query)
+    {
+        List<Movie> results = new ArrayList<>();
+        for (Movie movie : searchBase)
+        {
+            if (movie.getName().toLowerCase().contains(query.toLowerCase())) 
+            {
+                results.add(movie);
+            }
+        }
+        return results;
+    }
 
-//    public static List<Movie> search(List<Movie> searchBase, String query) {
-//        List<Movie> output = new ArrayList<>();
-//
-//        for (Movie movie : searchBase) {
-//            if (movie.getTitle().toLowerCase().contains(query.toLowerCase())
-//                    || movie.getArtist().toLowerCase().contains(query.toLowerCase())) {
-//                output.add(movie);
-//            }
-//        }
-//
-//        return output;
-//    }
 }

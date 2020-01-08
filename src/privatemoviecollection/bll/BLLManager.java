@@ -15,6 +15,7 @@ import privatemoviecollection.dal.database.MovieDBDAO;
 import java.util.List;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.bll.util.SearchMovies;
+import static privatemoviecollection.bll.util.SearchMovies.search;
 import privatemoviecollection.dal.database.CategoryDBDAO;
 /**
  *
@@ -75,13 +76,12 @@ public class BLLManager
         categoryDbDao.updateCategory(category);
     }
     
-//    public List<Movie> search(String query) throws Exception
-//    {
-//        List<Movie> searchBase = mediaDB.getAllMedias();
-//        searchBase = SearchMovies.search(searchBase, query);
-//        
-//        return searchBase;
-//    }
+    public List<Movie> searchMovies(String query) throws SQLException 
+    {
+        List<Movie> allMovies = getAllMovies();
+        allMovies = search(allMovies, query);
+        return allMovies;
+    }
 
     
 }

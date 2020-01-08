@@ -75,13 +75,13 @@ public class DataModel
         return chosenCategory;
     }
     
-//    public ObservableList<Movie> getSearchResult(String input) throws Exception
-//    {
-//        List<Movie> filter = bm.search(input);
-//        ObservableList<Movie> output = FXCollections.observableList(filter);
-//        
-//        return output;
-//    }
+    public ObservableList<Movie> getSearchResult(String input) throws Exception
+    {
+        List<Movie> filter = bll.searchMovies(input);
+        ObservableList<Movie> output = FXCollections.observableList(filter);
+        
+        return output;
+    }
     
     public void createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws SQLException
     {
