@@ -44,6 +44,11 @@ public class BLLManager
         movieDB.deleteMovie(mov);
     }
     
+    public void updateMovie(Movie mov) throws SQLException
+    {
+        movieDB.updateMovie(mov);
+    }
+    
     public List<Movie> getAllMovies() throws SQLException
     {
         return movieDB.getAllMovies();

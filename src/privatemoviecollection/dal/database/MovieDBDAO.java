@@ -104,9 +104,20 @@ public class MovieDBDAO
         ps.executeUpdate();
     }
     
-    public void updateMovie()
+    public void updateMovie(Movie mov) throws SQLServerException, SQLException
     {
+        Connection con = dbCon.getConnection();
         
+        int id = mov.getId();
+        String sql = "UPDATE Movie SET name = ?, rating = ?, filelink = ?, imdb = ? WHERE id="+id+";";
+        PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, mov.getName());
+            ps.setInt(2, mov.getRating());
+            ps.setString(3, mov.getFilelink());
+            ps.setFloat(4, mov.getImdb());
+            
+        ps.executeUpdate();
+        ps.close();
     }
     
     
