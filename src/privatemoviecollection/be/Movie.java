@@ -13,6 +13,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -26,6 +28,7 @@ public class Movie {
     private IntegerProperty rating;
     private FloatProperty imdb;
     private Date lastview;
+    private ObservableList<Category> categories;
 
     public Movie(int id, String filelink, String name, float imdb, int rating) {
         this.id = id;
@@ -33,6 +36,7 @@ public class Movie {
         this.name = new SimpleStringProperty(name);
         this.imdb = new SimpleFloatProperty(imdb);
         this.rating = new SimpleIntegerProperty(rating);
+        this.categories = FXCollections.observableArrayList();
     }
 
     public int getId() {
@@ -93,5 +97,17 @@ public class Movie {
 
     public void setLastview(Date lastview) {
         this.lastview = lastview;
+    }
+    
+    public ObservableList<Category> getCategories() {
+        return categories;
+    }
+
+    public void addCategory(Category category) {
+        categories.add(category);
+    }
+    
+    public void deleteCategory(Category category) {
+        categories.remove(category);
     }
 }
