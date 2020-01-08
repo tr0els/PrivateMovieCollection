@@ -93,5 +93,9 @@ public class DataModel
         bll.deleteMovie(mov);
     }
     
+    public void updateMovie(Movie mov) throws SQLException
+    {
+        bll.updateMovie(mov);
+    }
 }
 

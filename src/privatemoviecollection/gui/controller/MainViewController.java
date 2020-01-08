@@ -173,8 +173,17 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleEditMovie(ActionEvent event)
+    private void handleEditMovie(ActionEvent event) throws IOException
     {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditMovie.fxml"));
+        Parent root = loader.load();
+
+        EditMovieController editmoviecontroller = loader.getController();
+        editmoviecontroller.transfer(movieTable.getSelectionModel().getSelectedItem(), dataModel);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
     
     private void setAllMovies() {
