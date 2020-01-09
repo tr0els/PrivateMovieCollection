@@ -177,28 +177,24 @@ public class MovieDBDAO
         Connection con = dbCon.getConnection();
         
         ArrayList<Movie> oldMovies = new ArrayList<Movie>();
-        String sql = "SELECT * FROM Movie WHERE lastview >= DATEADD(year,-2,GETDATE());"; 
+        String sql = "SELECT * FROM Movie WHERE lastview < DATEADD(year,-2,GETDATE());"; 
         Statement ps = con.createStatement();
         ResultSet rs = ps.executeQuery(sql);
         
-        if(rs != null)
+        while(rs.next())
         {
-            while(rs.next())
-            {
-                int id = rs.getInt("id");
-                String filelink = rs.getString("filelink");
-                String name = rs.getString("name");
-                int rating = rs.getInt("rating");
-                Date lastview = rs.getDate("lastview");
-                float imdb = rs.getFloat("imdb");
+            int id = rs.getInt("id");
+            String filelink = rs.getString("filelink");
+            String name = rs.getString("name");
+            int rating = rs.getInt("rating");
+            Date lastview = rs.getDate("lastview");
+            float imdb = rs.getFloat("imdb");
              
-                Movie movie = new Movie(id, filelink, name, imdb, rating);
-                oldMovies.add(movie);
-            }
-            return oldMovies;
+            Movie movie = new Movie(id, filelink, name, imdb, rating);
+            oldMovies.add(movie);
         }
-        return null;
+            
+        return oldMovies;
     }
-    
-    
+
 }
