@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.StringProperty;
 import privatemoviecollection.be.Category;
+import privatemoviecollection.dal.dalException.DALException;
 
 /**
  *
@@ -24,12 +25,12 @@ public class CategoryDBDAO
 {
     private DatabaseConnector dbCon;
     
-    public CategoryDBDAO() throws IOException
+    public CategoryDBDAO() throws DALException
     {
         dbCon = new DatabaseConnector();
     }
     
-    public Category createCategory(String name) throws Exception
+    public Category createCategory(String name) throws DALException 
     {
         try ( Connection con = dbCon.getConnection())
         {
@@ -47,16 +48,15 @@ public class CategoryDBDAO
                     return cg;
                 }
             }
-            throw new Exception();
-
+ 
         } catch (SQLException ex)
         {
-            ex.printStackTrace();
-            throw new Exception();
+            throw new DALException("whut happend");
         }
+        return null;
     }
     
-    public List<Category> getAllCategories() throws Exception
+    public List<Category> getAllCategories() throws DALException
     {
         try ( Connection con = dbCon.getConnection())
         {
@@ -76,12 +76,11 @@ public class CategoryDBDAO
             return allCategories;
         } catch (SQLException ex)
         {
-            ex.printStackTrace();
-            throw new Exception();
+            throw new DALException("Could not do this");
         }
     }
     
-    public boolean deleteCategory(Category category) throws Exception
+    public boolean deleteCategory(Category category) throws DALException
     {
         try ( Connection con = dbCon.getConnection())
         {
@@ -99,18 +98,17 @@ public class CategoryDBDAO
                 return true;
             } else
             {
-                throw new Exception();
+                throw new DALException("could not Delete");
             }
 
         } catch (SQLException ex)
         {
-            ex.printStackTrace();
-            throw new Exception();
+            throw new DALException("could not delete from category");
         }
         
     }
     
-    public void updateCategory(Category category) throws Exception
+    public void updateCategory(Category category) throws DALException
     {
         try ( Connection con = dbCon.getConnection())
         {
@@ -125,13 +123,12 @@ public class CategoryDBDAO
             int affectedRows = ps.executeUpdate();
             if (affectedRows != 1)
             {
-                throw new Exception();
+                throw new DALException("Could not update Category");
             }
 
         } catch (SQLException ex)
         {
-            ex.printStackTrace();
-            throw new Exception();
+            throw new DALException("Could not update Category ");
         }
         
     }

@@ -14,8 +14,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
+import privatemoviecollection.dal.dalException.DALException;
 
 /**
  *
@@ -25,13 +28,20 @@ public class MovieDBDAO
 {
     private DatabaseConnector dbCon;
     
-    public MovieDBDAO() throws IOException
+    public MovieDBDAO() throws DALException
     {
+        try {
         dbCon = new DatabaseConnector();
+    }   catch (DALException ex )
+        { 
+            throw ex;
+        }
+    
     }
     
-    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws SQLException
+    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException
     {
+        try{
         Connection con = dbCon.getConnection();
         Date date = new Date();
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
@@ -65,11 +75,15 @@ public class MovieDBDAO
                     
                     return mov;
                 }
-            }
+            }}
+        catch (SQLException ex)
+        {
+        throw new DALException("fuck you"); 
+        }
      return null;
     }
     
-    public List<Movie> getAllMovies() throws SQLException
+    public List<Movie> getAllMovies() throws DALException
     {
         try (Connection con = dbCon.getConnection())
         {
@@ -96,12 +110,11 @@ public class MovieDBDAO
             return movies;
         } catch (SQLException ex)
         {
-            ex.printStackTrace();
-            throw new SQLException();
+           throw new DALException("can not do this");
         }
     }
     
-    public List<Category> getMovieCategories(int movieId) throws SQLException
+    public List<Category> getMovieCategories(int movieId) throws DALException
     {
         try (Connection con = dbCon.getConnection())
         {
@@ -123,13 +136,12 @@ public class MovieDBDAO
             return categories;
         } catch (SQLException ex)
         {
-            ex.printStackTrace();
-            throw new SQLException();
+            throw new DALException("you shall not pass!!");
         }
     }
     
-    public void deleteMovie(Movie mov) throws SQLException
-    {
+    public void deleteMovie(Movie mov) throws DALException
+    {   try{
         Connection con = dbCon.getConnection();
         
         int id = mov.getId();
@@ -142,10 +154,14 @@ public class MovieDBDAO
         
         ps2.executeUpdate();
         ps.executeUpdate();
+    } catch (SQLException ex)
+    {
+    throw new DALException("you shall not pass!!");
+    }
     }
     
-    public void updateMovie(Movie mov) throws SQLException
-    {
+    public void updateMovie(Movie mov) throws DALException
+    {   try{
         Connection con = dbCon.getConnection();
         
         int id = mov.getId();
@@ -159,9 +175,15 @@ public class MovieDBDAO
         ps.executeUpdate();
         ps.close();
     }
-    
-    public void updateLastView(Movie mov) throws SQLException 
+    catch (SQLException ex)
     {
+    throw new DALException("you shall not pass!!");
+    }
+    }
+    
+    public void updateLastView(Movie mov) throws DALException  
+    {
+        try{
         Connection con = dbCon.getConnection();
         
         int id = mov.getId();
@@ -174,7 +196,11 @@ public class MovieDBDAO
         ps.setInt(2, id);
         
         ps.executeUpdate();
-        ps.close();
+        ps.close();}
+        catch (SQLException ex)
+        {
+        throw new DALException("you shall not pass!!");
+        }
         
     }
     

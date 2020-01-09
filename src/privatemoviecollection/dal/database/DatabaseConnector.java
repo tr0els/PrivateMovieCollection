@@ -11,6 +11,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import privatemoviecollection.dal.dalException.DALException;
 
 /**
  *
@@ -20,8 +23,9 @@ public class DatabaseConnector
 {
     private SQLServerDataSource dataSource;
     
-    public DatabaseConnector() throws IOException
+    public DatabaseConnector() throws DALException
     {
+        try{
         Properties props = new Properties();
         props.load(new FileReader("DBSettings.db"));
         dataSource = new SQLServerDataSource();
@@ -29,12 +33,24 @@ public class DatabaseConnector
         dataSource.setUser(props.getProperty("user"));
         dataSource.setPassword(props.getProperty("password"));        
         dataSource.setServerName(props.getProperty("server"));
+        }
+        catch (IOException ex) {
+            
+        throw new DALException("Kunne ikke connecte til DB");
+        }
     }
     
-    public Connection getConnection() throws SQLServerException
+    public Connection getConnection() throws DALException  
     {
+        try{
         return dataSource.getConnection();
+        }
+        catch (SQLServerException ex)
+        {
+        throw new DALException("kunne ikke finde ud af det"); 
+        }
     }
+        
     
     
 }
