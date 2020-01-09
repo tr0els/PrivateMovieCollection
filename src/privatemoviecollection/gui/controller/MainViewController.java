@@ -31,6 +31,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
@@ -229,23 +230,19 @@ public class MainViewController implements Initializable
     
     private void setAllMovies() {
         
-        // initialize the columns
-        movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        //movieCategory.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());        
         
-        // custom rendering of the time table cell
-        movieCategory.setCellFactory(column -> new TableCell<Movie, List<Category>>() {
-
+        movieCategory.setCellValueFactory(new PropertyValueFactory<>("categories"));       
+        movieCategory.setCellFactory(col -> new TableCell<Movie, List<Category>>() {
             @Override
-            protected void updateItem(List<Category> item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || item == null) {
+            public void updateItem(List<Category> categories, boolean empty) {
+                super.updateItem(categories, empty);
+                if (empty || categories.isEmpty()) {
                     setText(null);
                 } else {
                     String text = "";
-                    for (Category c : item) {
-                        text = text + c.getName();
+                    for (Category c : categories) {
+                        text = text + c.getName() + ", ";
                     }
                     text = text.replaceAll(", $", "");
                     text.trim();
@@ -253,6 +250,31 @@ public class MainViewController implements Initializable
                 }
             }
         });
+
+/*   
+        // custom rendering of the time table cell
+        movieCategory.setCellFactory(column -> new TableCell<Movie, List<Category>>() {
+
+            @Override
+            protected void updateItem(List<Category> item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setText(null);
+                } else if(!item.isEmpty()) {
+                    String text = "";
+                    for (Category c : item) {
+                        text = text + c.getName() + ", ";
+                    }
+                    text = text.replaceAll(", $", "");
+                    text.trim();
+                    setText(text);
+                } else {
+                    setText("list is empty!");
+                }
+            }
+        });
+*/
         
         movieRating.setCellValueFactory(cellData -> cellData.getValue().ratingProperty());
         movieRatingIMDB.setCellValueFactory(cellData -> cellData.getValue().imdbProperty());
