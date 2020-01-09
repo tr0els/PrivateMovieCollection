@@ -99,5 +99,12 @@ public class DataModel
     {
         bll.updateMovie(mov);
     }
+    
+    
+    public void updateLastView(Movie mov) throws Exception 
+    {
+        bll.updateLastView(mov);
+    
+    }
 }
 

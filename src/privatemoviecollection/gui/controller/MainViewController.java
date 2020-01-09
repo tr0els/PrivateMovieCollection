@@ -107,12 +107,16 @@ public class MainViewController implements Initializable
     @FXML
     private void handlePlayMovie(ActionEvent event)
     { 
-        try{
-            
+        try{ 
+                   
         String s = movieTable.getSelectionModel().getSelectedItem().getFilelink();
         File f = new File(s);
         Desktop d = Desktop.getDesktop(); 
         d.open(f);
+        
+        Movie mo = movieTable.getSelectionModel().getSelectedItem();
+        dataModel.updateLastView(mo);
+        
     }
         catch (Exception ex){
         
