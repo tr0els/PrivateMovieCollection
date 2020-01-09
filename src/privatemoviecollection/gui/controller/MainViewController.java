@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -26,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -49,7 +51,7 @@ public class MainViewController implements Initializable
     @FXML
     private TableColumn<Movie, String> movieName;
     @FXML
-    private TableColumn<Movie, String> movieCategory;
+    private TableColumn<Movie, List<Category>> movieCategory;
     @FXML
     private TableColumn<Movie, Integer> movieRating;
     @FXML
@@ -232,6 +234,28 @@ public class MainViewController implements Initializable
         // initialize the columns
         movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         //movieCategory.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        
+        // custom rendering of the time table cell
+        movieCategory.setCellFactory(column -> new TableCell<Movie, List<Category>>() {
+
+            @Override
+            protected void updateItem(List<Category> item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    String text = "";
+                    for (Category c : item) {
+                        text = text + c.getName();
+                    }
+                    text = text.replaceAll(", $", "");
+                    text.trim();
+                    setText(text);
+                }
+            }
+        });
+        
         movieRating.setCellValueFactory(cellData -> cellData.getValue().ratingProperty());
         movieRatingIMDB.setCellValueFactory(cellData -> cellData.getValue().imdbProperty());
 
