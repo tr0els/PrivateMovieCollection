@@ -82,6 +82,12 @@ public class BLLManager
         allMovies = search(allMovies, query);
         return allMovies;
     }
+    
+    public void updateLastView(Movie mov) throws Exception 
+    {
+        movieDB.updateLastView(mov);
+    
+    }
 
     
 }

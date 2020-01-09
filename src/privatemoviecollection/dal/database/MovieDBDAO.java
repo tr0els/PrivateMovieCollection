@@ -160,7 +160,23 @@ public class MovieDBDAO
         ps.close();
     }
     
-    
+    public void updateLastView(Movie mov) throws SQLException 
+    {
+        Connection con = dbCon.getConnection();
+        
+        int id = mov.getId();
+        Date date = new Date();
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        
+        String Sql = "Update Movie set lastview = ? where id=?";
+        PreparedStatement ps = con.prepareStatement(Sql);
+        ps.setDate(1, sqlDate);
+        ps.setInt(2, id);
+        
+        ps.executeUpdate();
+        ps.close();
+        
+    }
     
     
 }
