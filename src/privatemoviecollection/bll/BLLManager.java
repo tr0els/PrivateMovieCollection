@@ -89,6 +89,11 @@ public class BLLManager
         movieDB.updateLastView(mov);
     
     }
+    
+    public List<Movie> timeSinceLastview() throws SQLException
+    {
+        return movieDB.timeSinceLastview();
+    }
 
     
 }

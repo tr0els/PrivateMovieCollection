@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -26,9 +27,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
@@ -49,7 +52,7 @@ public class MainViewController implements Initializable
     @FXML
     private TableColumn<Movie, String> movieName;
     @FXML
-    private TableColumn<Movie, String> movieCategory;
+    private TableColumn<Movie, List<Category>> movieCategory;
     @FXML
     private TableColumn<Movie, Integer> movieRating;
     @FXML
@@ -90,6 +93,7 @@ public class MainViewController implements Initializable
             dataModel = new DataModel();
             setAllMovies();
             setAllCategories();
+            //alertOldMovies();
         } catch (Exception ex)
         {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -124,8 +128,9 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleShowAll(ActionEvent event)
+    private void handleShowAll(ActionEvent event) throws SQLException, IOException
     {
+        alertOldMovies();
     }
 
     @FXML
@@ -227,9 +232,52 @@ public class MainViewController implements Initializable
     
     private void setAllMovies() {
         
-        // initialize the columns
-        movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        //movieCategory.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());        
+        
+        movieCategory.setCellValueFactory(new PropertyValueFactory<>("categories"));       
+        movieCategory.setCellFactory(col -> new TableCell<Movie, List<Category>>() {
+            @Override
+            public void updateItem(List<Category> categories, boolean empty) {
+                super.updateItem(categories, empty);
+                if (empty || categories.isEmpty()) {
+                    setText(null);
+                } else {
+                    String text = "";
+                    for (Category c : categories) {
+                        text = text + c.getName() + ", ";
+                    }
+                    text = text.replaceAll(", $", "");
+                    text.trim();
+                    setText(text);
+                }
+            }
+        });
+
+/*   
+        // custom rendering of the time table cell
+        movieCategory.setCellFactory(column -> new TableCell<Movie, List<Category>>() {
+
+            @Override
+            protected void updateItem(List<Category> item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty) {
+                    setText(null);
+                } else if(!item.isEmpty()) {
+                    String text = "";
+                    for (Category c : item) {
+                        text = text + c.getName() + ", ";
+                    }
+                    text = text.replaceAll(", $", "");
+                    text.trim();
+                    setText(text);
+                } else {
+                    setText("list is empty!");
+                }
+            }
+        });
+*/
+        
         movieRating.setCellValueFactory(cellData -> cellData.getValue().ratingProperty());
         movieRatingIMDB.setCellValueFactory(cellData -> cellData.getValue().imdbProperty());
 
@@ -246,6 +294,20 @@ public class MainViewController implements Initializable
         {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void alertOldMovies() throws IOException 
+    {       
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/AlertOldMovies.fxml"));
+        Parent root = loader.load();
+
+        AlertOldMoviesController alertOldMoviesController = loader.getController();
+        alertOldMoviesController.transfer(dataModel);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+        
     }
     
 }
