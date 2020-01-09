@@ -25,7 +25,6 @@ public class DataModel
     
     private ObservableList<Movie> movies = FXCollections.observableArrayList();
     private ObservableList<Category> categories = FXCollections.observableArrayList();
-    private ObservableList<Movie> oldMovies = FXCollections.observableArrayList();
     private Category chosenCategory; 
     
     public DataModel() throws IOException, SQLException
@@ -109,12 +108,6 @@ public class DataModel
     
     public List<Movie> timeSinceLastview() throws SQLException
     {
-        if(bll.timeSinceLastview() != null)
-        {
-            return bll.timeSinceLastview();
-        }
-        return null;
+        return bll.timeSinceLastview();
     }
-    
 }
-
