@@ -28,7 +28,6 @@ import privatemoviecollection.gui.model.DataModel;
  */
 public class AlertOldMoviesController implements Initializable
 {
-    private DataModel dm;
     @FXML
     private ListView<String> oldMovieList;
     @FXML
@@ -37,6 +36,7 @@ public class AlertOldMoviesController implements Initializable
     private Button cancelButton;
     
     private ObservableList<Movie> movieList;
+    private DataModel dm;
     
     /**
      * Initializes the controller class.
@@ -44,36 +44,31 @@ public class AlertOldMoviesController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        movieList = FXCollections.observableArrayList();
-        try
-        {
-            getListOfMovies();
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(AlertOldMoviesController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-                
-        
     }    
     
     public void getListOfMovies() throws SQLException
     {
         ObservableList<String> movieNames = FXCollections.observableArrayList();
-        if (dm.timeSinceLastview() != null)
-        {
-            movieList.setAll(dm.timeSinceLastview());
+
+            movieList.addAll(dm.timeSinceLastview());
         
             for (Movie movie : movieList)
             {
                 movieNames.add(movie.getName());
             }
             oldMovieList.setItems(movieNames);
-        }
+
     }
     
     public void transfer(DataModel datamodel)
     {
         dm = datamodel;
+        movieList = FXCollections.observableArrayList();
+        try {
+            getListOfMovies();
+        } catch (SQLException ex) {
+            // too bad
+        }
     }
 
     @FXML
@@ -94,9 +89,4 @@ public class AlertOldMoviesController implements Initializable
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
-    
-    
-    
-    
-    
 }
