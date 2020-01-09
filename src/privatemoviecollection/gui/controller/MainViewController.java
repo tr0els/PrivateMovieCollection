@@ -93,6 +93,7 @@ public class MainViewController implements Initializable
             dataModel = new DataModel();
             setAllMovies();
             setAllCategories();
+            //alertOldMovies();
         } catch (Exception ex)
         {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -127,8 +128,9 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleShowAll(ActionEvent event)
+    private void handleShowAll(ActionEvent event) throws SQLException, IOException
     {
+        alertOldMovies();
     }
 
     @FXML
@@ -292,6 +294,20 @@ public class MainViewController implements Initializable
         {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void alertOldMovies() throws IOException 
+    {       
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/AlertOldMovies.fxml"));
+        Parent root = loader.load();
+
+        AlertOldMoviesController alertOldMoviesController = loader.getController();
+        alertOldMoviesController.transfer(dataModel);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+        
     }
     
 }
