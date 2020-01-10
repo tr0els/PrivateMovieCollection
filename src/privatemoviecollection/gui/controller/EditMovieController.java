@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -22,7 +23,6 @@ import privatemoviecollection.be.Movie;
 import privatemoviecollection.dal.dalException.DALException;
 import privatemoviecollection.gui.model.DataModel;
 import privatemoviecollection.gui.utilGUI.DisplayAlert;
-
 
 /**
  * FXML Controller class
@@ -49,17 +49,16 @@ public class EditMovieController implements Initializable
 
     private Movie movie;
     private DataModel dm;
-    
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        // TODO
-    }    
 
-    
+    }
+
     @FXML
     private void handleFileChooser(ActionEvent event)
     {
@@ -75,30 +74,43 @@ public class EditMovieController implements Initializable
 
     @FXML
     private void handleUpdateMovie(ActionEvent event) throws DALException
-    {   try{
-        movie.setName(nameInput.getText());
-        movie.setRating(Integer.parseInt(ratingInput.getText()));
-        movie.setFilelink(fileInput.getText());
-        movie.setImdb(Float.parseFloat(imdbInput.getText()));
-        
-        dm.updateMovie(movie);
-        
-        Stage stage = (Stage) updateMovie.getScene().getWindow();
-        stage.close();
-    } catch (DALException ex)
+    {
+        try {
+        for (int i = 0; i < dm.getAllMovies().size(); i++)
+        {
+            nameInput.getText();
+            if (dm.getAllMovies().get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
+                alert.showAndWait();            
+                break; 
+                
+            } else
+            {
+                movie.setName(nameInput.getText());
+                movie.setRating(Integer.parseInt(ratingInput.getText()));
+                movie.setFilelink(fileInput.getText());
+                movie.setImdb(Float.parseFloat(imdbInput.getText()));
+                dm.updateMovie(movie);
+                Stage stage = (Stage) updateMovie.getScene().getWindow();
+                stage.close();
+                break; 
+            }
+        }}
+		 catch (DALException ex)
     {
         DisplayAlert dp = new DisplayAlert();
         dp.displayAlert(AlertType.ERROR, "ERROR - kan ikke håndtere efterspørgslen", ex.getMessage());
     }
     }
-    
+
     public void transfer(Movie movie, DataModel datamodel)
     {
         nameInput.setText(movie.getName());
-        ratingInput.setText(movie.getRating()+"");
+        ratingInput.setText(movie.getRating() + "");
         fileInput.setText(movie.getFilelink());
-        imdbInput.setText(movie.getImdb()+"");
-        
+        imdbInput.setText(movie.getImdb() + "");
+
         this.movie = movie;
         dm = datamodel;
     }

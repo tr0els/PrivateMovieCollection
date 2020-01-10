@@ -95,7 +95,11 @@ public class MainViewController implements Initializable
             dataModel = new DataModel();
             setAllMovies();
             setAllCategories();
-            //alertOldMovies();
+            
+            if(!dataModel.timeSinceLastview().isEmpty())
+            {
+               alertOldMovies(); 
+            }
         } catch (DALException ex)
         {
            DisplayAlert al = new DisplayAlert();
@@ -134,8 +138,9 @@ public class MainViewController implements Initializable
 
     @FXML
     private void handleShowAll(ActionEvent event) 
-    {  
-        alertOldMovies();
+    {
+        
+
     }
 
     @FXML
@@ -265,6 +270,11 @@ public class MainViewController implements Initializable
     }
     }
     
+    @FXML
+    private void filterByRating(ActionEvent event)
+    {
+    }
+    
     private void setAllMovies() {
         
         movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());        
@@ -341,6 +351,7 @@ public class MainViewController implements Initializable
 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
+        stage.setAlwaysOnTop(true);
         stage.show();
         
     }

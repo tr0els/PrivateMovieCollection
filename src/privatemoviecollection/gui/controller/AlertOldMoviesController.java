@@ -32,7 +32,7 @@ import privatemoviecollection.gui.utilGUI.DisplayAlert;
 public class AlertOldMoviesController implements Initializable
 {
     @FXML
-    private ListView<String> oldMovieList;
+    private ListView<Movie> oldMovieList;
     @FXML
     private Button deleteOldMovieButton;
     @FXML
@@ -49,6 +49,7 @@ public class AlertOldMoviesController implements Initializable
     {
     }    
     
+
     public void getListOfMovies() throws DALException
     {   try{
         ObservableList<String> movieNames = FXCollections.observableArrayList();
@@ -66,6 +67,11 @@ public class AlertOldMoviesController implements Initializable
     DisplayAlert al = new DisplayAlert();
     al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
     }
+
+    public void getListOfMovies() throws SQLException
+    {
+        movieList.addAll(dm.timeSinceLastview());      
+        oldMovieList.setItems(movieList);
     }
     
     public void transfer(DataModel datamodel) throws DALException
@@ -85,12 +91,13 @@ public class AlertOldMoviesController implements Initializable
     {   try{
         int index = oldMovieList.getSelectionModel().getSelectedIndex();
         dm.deleteMovie(movieList.get(index));
-        movieList.remove(movieList.get(index));}
+        movieList.remove(index);}
     catch (DALException ex)
             {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
             }
+
     }
 
     @FXML

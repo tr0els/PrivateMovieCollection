@@ -38,7 +38,8 @@ public class DataModel
     public ObservableList<Movie> getAllMovies()
     {
         return movies;
-    }    
+    } 
+    
     
     public ObservableList<Category> getCategoryList() throws DALException
     {
@@ -102,6 +103,7 @@ public class DataModel
     }
     
     
+
     public void updateLastView(Movie mov) throws DALException 
     {
         bll.updateLastView(mov);
