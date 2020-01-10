@@ -50,28 +50,19 @@ public class AlertOldMoviesController implements Initializable
     }    
     
 
+
+
     public void getListOfMovies() throws DALException
     {   try{
-        ObservableList<String> movieNames = FXCollections.observableArrayList();
-
-            movieList.addAll(dm.timeSinceLastview());
-        
-            for (Movie movie : movieList)
-            {
-                movieNames.add(movie.getName());
-            }
-            oldMovieList.setItems(movieNames);
-    }
+        movieList.addAll(dm.timeSinceLastview());      
+        oldMovieList.setItems(movieList);}
+    
     catch (DALException ex)
     {
     DisplayAlert al = new DisplayAlert();
     al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
     }
-
-    public void getListOfMovies() throws SQLException
-    {
-        movieList.addAll(dm.timeSinceLastview());      
-        oldMovieList.setItems(movieList);
+    
     }
     
     public void transfer(DataModel datamodel) throws DALException

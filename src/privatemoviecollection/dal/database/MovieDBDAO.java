@@ -77,33 +77,31 @@ public class MovieDBDAO
                     ps2.setInt(2, id);
                     ps2.executeUpdate();
                 }
-
-            }}
-´
-
-                return mov;
-
+                return mov;}
             }
-			    catch (SQLException ex)
+               
+        }
+            
+        catch (SQLException ex)
         {
         throw new DALException("Kunne ikke oprette Movie"); 
         }
 		return null;
     }
 
-    public Movie getMovie(int id) throws SQLException
+    public Movie getMovie(int id) throws SQLException, DALException
     {
         // only one movie will be returned when searching on id
         // so always return the first movie in the result list
         return getMoviesQuery(id).get(0);
     }
     
-       public List<Movie> getAllMovies() throws DALException
+       public List<Movie> getAllMovies() throws DALException, SQLException 
     {
         return getMoviesQuery(0);
     }
 
-    public List<Movie> getMoviesQuery(int movieId) throws SQLException
+    public List<Movie> getMoviesQuery(int movieId) throws DALException
     {
         try (Connection con = dbCon.getConnection())
         {

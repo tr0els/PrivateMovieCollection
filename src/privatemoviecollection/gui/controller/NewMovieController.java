@@ -81,9 +81,20 @@ public class NewMovieController implements Initializable
     }
 
     @FXML
-    private void handleCreateMovie(ActionEvent event)
-    {   try{
-             for (int i = 0; i < datamodel.getAllMovies().size(); i++)
+    private void handleCreateMovie(ActionEvent event)   
+{   try{
+        ArrayList<Integer> idList = new ArrayList<Integer>();
+        for (MenuItem item : chooseCategory.getItems())
+        {
+            CheckMenuItem checkMenuItem = (CheckMenuItem) item;
+            if (checkMenuItem.isSelected())
+            {
+                int index = chooseCategory.getItems().indexOf(checkMenuItem);
+                idList.add(categoryList.get(index).getId());
+            }
+        }
+
+        for (int i = 0; i < datamodel.getAllMovies().size(); i++)
         {
             nameInput.getText();
             if (datamodel.getAllMovies().get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
@@ -99,13 +110,16 @@ public class NewMovieController implements Initializable
                 stage.close();
                 break; 
             }
-	}}
-    catch (DALException ex)
-    {
-        DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+        }}
+            catch (DALException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+        }
+
     }
-    }
+ 
+    
         
 
     
