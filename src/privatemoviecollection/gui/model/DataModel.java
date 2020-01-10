@@ -36,7 +36,8 @@ public class DataModel
     public ObservableList<Movie> getAllMovies()
     {
         return movies;
-    }    
+    } 
+    
     
     public ObservableList<Category> getCategoryList() throws IOException, Exception
     {
@@ -98,5 +99,8 @@ public class DataModel
     {
         bll.updateMovie(mov);
     }
+    
+    
+    
 }
 

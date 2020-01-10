@@ -90,6 +90,7 @@ public class MainViewController implements Initializable
             dataModel = new DataModel();
             setAllMovies();
             setAllCategories();
+            
         } catch (Exception ex)
         {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -220,6 +221,11 @@ public class MainViewController implements Initializable
         stage.show();
     }
     
+    @FXML
+    private void filterByRating(ActionEvent event)
+    {
+    }
+    
     private void setAllMovies() {
         
         // initialize the columns
@@ -242,5 +248,7 @@ public class MainViewController implements Initializable
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+   
     
 }

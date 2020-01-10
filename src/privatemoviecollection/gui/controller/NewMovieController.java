@@ -12,11 +12,14 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.media.Media;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import privatemoviecollection.be.Movie;
 import privatemoviecollection.gui.model.DataModel;
 
 /**
@@ -43,6 +46,7 @@ public class NewMovieController implements Initializable
     private TextField categoryInput;
 
     private DataModel datamodel;
+
     /**
      * Initializes the controller class.
      */
@@ -50,7 +54,7 @@ public class NewMovieController implements Initializable
     public void initialize(URL url, ResourceBundle rb)
     {
         // TODO
-    }    
+    }
 
     @FXML
     private void handleFileChooser(ActionEvent event)
@@ -68,14 +72,27 @@ public class NewMovieController implements Initializable
     @FXML
     private void handleCreateMovie(ActionEvent event) throws SQLException
     {
-        datamodel.createMovie(nameInput.getText(), Integer.parseInt(ratingInput.getText()), fileInput.getText(), Float.parseFloat(imdbInput.getText()));
-        Stage stage = (Stage) createMovie.getScene().getWindow();
-        stage.close();
+        for (int i = 0; i < datamodel.getAllMovies().size(); i++)
+        {
+            if (datamodel.getAllMovies().get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
+                alert.showAndWait();
+                break; 
+            } else
+            {
+                datamodel.createMovie(nameInput.getText(), Integer.parseInt(ratingInput.getText()), fileInput.getText(), Float.parseFloat(imdbInput.getText()));
+                Stage stage = (Stage) createMovie.getScene().getWindow();
+                stage.close();
+                break; 
+            }
+        }
+
     }
-    
+
     public void transfer(DataModel dm)
     {
         datamodel = dm;
     }
-    
+
 }

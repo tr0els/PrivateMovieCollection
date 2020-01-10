@@ -23,50 +23,51 @@ import privatemoviecollection.be.Movie;
  */
 public class MovieDBDAO
 {
+
     private DatabaseConnector dbCon;
-    
+
     public MovieDBDAO() throws IOException
     {
         dbCon = new DatabaseConnector();
     }
-    
+
     public Movie createMovie(String name, int rating, String filelink, float imdb) throws SQLServerException, SQLException
     {
         Connection con = dbCon.getConnection();
         Date date = new Date();
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-        
-            String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
-            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); 
-            ps.setString(1, name);
-            ps.setInt(2, rating);
-            ps.setString(3, filelink);
-            ps.setDate(4, sqlDate);
-            ps.setFloat(5, imdb);
-           int affectedRows = ps.executeUpdate();
-            if (affectedRows == 1)
+
+        String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
+        PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ps.setString(1, name);
+        ps.setInt(2, rating);
+        ps.setString(3, filelink);
+        ps.setDate(4, sqlDate);
+        ps.setFloat(5, imdb);
+        int affectedRows = ps.executeUpdate();
+        if (affectedRows == 1)
+        {
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next())
             {
-                ResultSet rs = ps.getGeneratedKeys();
-                if(rs.next())
-                {
-                    int id = rs.getInt(1);
-                    Movie mov = new Movie(id, filelink, name, imdb, rating);
-                    return mov;
-                }
+                int id = rs.getInt(1);
+                Movie mov = new Movie(id, filelink, name, imdb, rating);
+                return mov;
             }
-     return null;
+        }
+        return null;
     }
-    
+
     public List<Movie> getAllMovies() throws SQLException
     {
-        try (Connection con = dbCon.getConnection())
+        try ( Connection con = dbCon.getConnection())
         {
             String sql = "SELECT * FROM Movie;";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            
+
             List<Movie> movies = new ArrayList<>();
-            
+
             while (rs.next())
             {
                 int id = rs.getInt("id");
@@ -75,11 +76,11 @@ public class MovieDBDAO
                 int rating = rs.getInt("rating");
                 Date lastview = rs.getDate("lastview");
                 float imdb = rs.getFloat("imdb");
-                
+
                 Movie movie = new Movie(id, filelink, name, imdb, rating);
-                movies.add(movie);              
+                movies.add(movie);
             }
-            
+
             return movies;
         } catch (SQLException ex)
         {
@@ -87,11 +88,11 @@ public class MovieDBDAO
             throw new SQLException();
         }
     }
-    
+
     public void deleteMovie(Movie mov) throws SQLException
     {
         Connection con = dbCon.getConnection();
-        
+
         int id = mov.getId();
         String sql = "DELETE FROM Movie WHERE id=?;";
         String sql2 = "DELETE FROM CatMovie WHERE MovieId = (?)";
@@ -99,28 +100,27 @@ public class MovieDBDAO
         PreparedStatement ps2 = con.prepareStatement(sql2);
         ps.setInt(1, id);
         ps2.setInt(1, id);
-        
+
         ps2.executeUpdate();
         ps.executeUpdate();
     }
-    
+
     public void updateMovie(Movie mov) throws SQLServerException, SQLException
     {
         Connection con = dbCon.getConnection();
-        
+
         int id = mov.getId();
-        String sql = "UPDATE Movie SET name = ?, rating = ?, filelink = ?, imdb = ? WHERE id="+id+";";
+        String sql = "UPDATE Movie SET name = ?, rating = ?, filelink = ?, imdb = ? WHERE id=" + id + ";";
         PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, mov.getName());
-            ps.setInt(2, mov.getRating());
-            ps.setString(3, mov.getFilelink());
-            ps.setFloat(4, mov.getImdb());
-            
+        ps.setString(1, mov.getName());
+        ps.setInt(2, mov.getRating());
+        ps.setString(3, mov.getFilelink());
+        ps.setFloat(4, mov.getImdb());
+
         ps.executeUpdate();
         ps.close();
     }
+
     
-    
-    
-    
+
 }

@@ -94,4 +94,10 @@ public class Movie {
     public void setLastview(Date lastview) {
         this.lastview = lastview;
     }
+    
+    @Override
+    public String toString()
+    {
+        return getName();
+    }
 }
