@@ -100,6 +100,12 @@ public class Movie {
         this.lastview = lastview;
     }
     
+    @Override
+    public String toString()
+    {
+        return getName();
+    }
+    
     public ObservableList<Category> getCategories() {
         return categories;
     }

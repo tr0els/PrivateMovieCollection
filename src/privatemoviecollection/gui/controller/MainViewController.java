@@ -230,6 +230,11 @@ public class MainViewController implements Initializable
         stage.show();
     }
     
+    @FXML
+    private void filterByRating(ActionEvent event)
+    {
+    }
+    
     private void setAllMovies() {
         
         movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());        

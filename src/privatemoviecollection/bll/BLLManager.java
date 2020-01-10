@@ -25,7 +25,7 @@ public class BLLManager
 {
     private final MovieDBDAO movieDB;
     
-    private CategoryDBDAO categoryDbDao;
+    private final CategoryDBDAO categoryDbDao;
     
     public BLLManager() throws IOException
     {
