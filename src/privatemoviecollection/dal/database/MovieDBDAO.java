@@ -89,14 +89,14 @@ public class MovieDBDAO
 		return null;
     }
 
-    public Movie getMovie(int id) throws SQLException, DALException
+    public Movie getMovie(int id) throws DALException
     {
         // only one movie will be returned when searching on id
         // so always return the first movie in the result list
         return getMoviesQuery(id).get(0);
     }
     
-       public List<Movie> getAllMovies() throws DALException, SQLException 
+       public List<Movie> getAllMovies() throws DALException 
     {
         return getMoviesQuery(0);
     }
