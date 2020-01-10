@@ -99,8 +99,6 @@ public class NewMovieController implements Initializable
             {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
                 alert.showAndWait();
-                Stage stage = (Stage) createMovie.getScene().getWindow();
-                stage.show();
                 break; 
                 
             } else

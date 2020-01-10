@@ -75,13 +75,11 @@ public class EditMovieController implements Initializable
         
         for (int i = 0; i < dm.getAllMovies().size(); i++)
         {
-
+            nameInput.getText();
             if (dm.getAllMovies().get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
             {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
                 alert.showAndWait();            
-                Stage stage = (Stage) updateMovie.getScene().getWindow();
-                stage.show();
                 break; 
                 
             } else
@@ -93,6 +91,7 @@ public class EditMovieController implements Initializable
                 dm.updateMovie(movie);
                 Stage stage = (Stage) updateMovie.getScene().getWindow();
                 stage.close();
+                break; 
             }
         }
 
