@@ -26,7 +26,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.be.Category;
+import privatemoviecollection.dal.dalException.DALException;
 import privatemoviecollection.gui.model.DataModel;
+import privatemoviecollection.gui.utilGUI.DisplayAlert;
 
 /**
  * FXML Controller class
@@ -79,8 +81,8 @@ public class NewMovieController implements Initializable
     }
 
     @FXML
-    private void handleCreateMovie(ActionEvent event) throws SQLException
-    {
+    private void handleCreateMovie(ActionEvent event)   
+{   try{
         ArrayList<Integer> idList = new ArrayList<Integer>();
         for (MenuItem item : chooseCategory.getItems())
         {
@@ -108,9 +110,19 @@ public class NewMovieController implements Initializable
                 stage.close();
                 break; 
             }
+        }}
+            catch (DALException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
         }
 
     }
+ 
+    
+        
+
+    
 
     public void transfer(DataModel dm)
     {

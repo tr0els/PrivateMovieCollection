@@ -13,13 +13,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import privatemoviecollection.be.Movie;
+import privatemoviecollection.dal.dalException.DALException;
 import privatemoviecollection.gui.model.DataModel;
+import privatemoviecollection.gui.utilGUI.DisplayAlert;
 
 /**
  * FXML Controller class
@@ -70,9 +73,9 @@ public class EditMovieController implements Initializable
     }
 
     @FXML
-    private void handleUpdateMovie(ActionEvent event) throws SQLException, Exception
+    private void handleUpdateMovie(ActionEvent event) throws DALException
     {
-        
+        try {
         for (int i = 0; i < dm.getAllMovies().size(); i++)
         {
             nameInput.getText();
@@ -93,8 +96,12 @@ public class EditMovieController implements Initializable
                 stage.close();
                 break; 
             }
-        }
-
+        }}
+		 catch (DALException ex)
+    {
+        DisplayAlert dp = new DisplayAlert();
+        dp.displayAlert(AlertType.ERROR, "ERROR - kan ikke håndtere efterspørgslen", ex.getMessage());
+    }
     }
 
     public void transfer(Movie movie, DataModel datamodel)

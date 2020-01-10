@@ -16,6 +16,7 @@ import java.util.List;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.bll.util.SearchMovies;
 import static privatemoviecollection.bll.util.SearchMovies.search;
+import privatemoviecollection.dal.dalException.DALException;
 import privatemoviecollection.dal.database.CategoryDBDAO;
 /**
  *
@@ -27,69 +28,69 @@ public class BLLManager
     
     private final CategoryDBDAO categoryDbDao;
     
-    public BLLManager() throws IOException
+    public BLLManager() throws DALException
     {
         movieDB = new MovieDBDAO();
         categoryDbDao = new CategoryDBDAO();
     }
     
-    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws SQLException
+    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException 
     {
         Movie mov = movieDB.createMovie(name, rating, filelink, imdb, idList);
         
         return mov;
     }
     
-    public void deleteMovie(Movie mov) throws SQLException
+    public void deleteMovie(Movie mov) throws DALException
     {
         movieDB.deleteMovie(mov);
     }
     
-    public void updateMovie(Movie mov) throws SQLException
+    public void updateMovie(Movie mov) throws DALException
     {
         movieDB.updateMovie(mov);
     }
     
-    public List<Movie> getAllMovies() throws SQLException
+    public List<Movie> getAllMovies() throws DALException
     {
         return movieDB.getAllMovies();
     }
     
-    public List<Category> getAllCategories() throws Exception
+    public List<Category> getAllCategories() throws DALException
     {
         return categoryDbDao.getAllCategories();
     }
     
-    public Category createCategory(String name) throws Exception
+    public Category createCategory(String name) throws DALException
     {
         Category category = categoryDbDao.createCategory(name);
         return category;
     }
     
-    public boolean deleteCategory(Category category) throws Exception
+    public boolean deleteCategory(Category category) throws DALException
     {
         return categoryDbDao.deleteCategory(category);
     }
     
-    public void updateCategory(Category category) throws Exception
+    public void updateCategory(Category category) throws DALException
     {
         categoryDbDao.updateCategory(category);
     }
     
-    public List<Movie> searchMovies(String query) throws SQLException 
+    public List<Movie> searchMovies(String query) throws DALException 
     {
         List<Movie> allMovies = getAllMovies();
         allMovies = search(allMovies, query);
         return allMovies;
     }
     
-    public void updateLastView(Movie mov) throws Exception 
+    public void updateLastView(Movie mov) throws DALException 
     {
         movieDB.updateLastView(mov);
     
     }
     
-    public List<Movie> timeSinceLastview() throws SQLException
+    public List<Movie> timeSinceLastview() throws DALException
     {
         return movieDB.timeSinceLastview();
     }

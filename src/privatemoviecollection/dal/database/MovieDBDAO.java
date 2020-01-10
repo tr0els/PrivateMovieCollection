@@ -15,9 +15,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
+import privatemoviecollection.dal.dalException.DALException;
 
 /**
  *
@@ -28,13 +31,22 @@ public class MovieDBDAO
 
     private DatabaseConnector dbCon;
 
-    public MovieDBDAO() throws IOException
+    
+    public MovieDBDAO() throws DALException
     {
+        try {
         dbCon = new DatabaseConnector();
+    }   catch (DALException ex )
+        { 
+            throw new DALException("Kunne ikke oprette forbindelse til Databasen") ;
+        }
+    
     }
 
-    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws SQLException
+    
+    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException
     {
+        try{
         Connection con = dbCon.getConnection();
         Date date = new Date();
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
@@ -63,30 +75,34 @@ public class MovieDBDAO
                     ps2.setInt(2, id);
                     ps2.executeUpdate();
                 }
-                
+
                 Movie movie = getMovie(id);
 
                 return movie;
-
             }
-
+               
         }
-        return null;
+            
+        catch (SQLException ex)
+        {
+        throw new DALException("Kunne ikke oprette Movie"); 
+        }
+		return null;
     }
 
-    public Movie getMovie(int id) throws SQLException
+    public Movie getMovie(int id) throws DALException
     {
         // only one movie will be returned when searching on id
         // so always return the first and only movie in the result list
         return getMoviesQuery(id).get(0);
     }
     
-    public List<Movie> getAllMovies() throws SQLException
+       public List<Movie> getAllMovies() throws DALException 
     {
         return getMoviesQuery(0);
     }
 
-    public List<Movie> getMoviesQuery(int movieId) throws SQLException
+    public List<Movie> getMoviesQuery(int movieId) throws DALException
     {
         try (Connection con = dbCon.getConnection())
         {
@@ -137,13 +153,17 @@ public class MovieDBDAO
             return movies;
         } catch (SQLException ex)
         {
-            ex.printStackTrace();
-            throw new SQLException();
+          
+            throw new DALException("Kunne ikke oprette forbindelse til din Server");
         }
     }
 
-    public void deleteMovie(Movie mov) throws SQLException
-    {
+    
+
+    
+    public void deleteMovie(Movie mov) throws DALException
+    {   try{
+
         Connection con = dbCon.getConnection();
 
         int id = mov.getId();
@@ -156,10 +176,15 @@ public class MovieDBDAO
 
         ps2.executeUpdate();
         ps.executeUpdate();
+    } catch (SQLException ex)
+    {
+    throw new DALException("Kunne ikke Slette movie");
+    }
     }
 
-    public void updateMovie(Movie mov) throws SQLException
-    {
+    
+    public void updateMovie(Movie mov) throws DALException
+    {   try{
         Connection con = dbCon.getConnection();
 
         int id = mov.getId();
@@ -173,9 +198,15 @@ public class MovieDBDAO
         ps.executeUpdate();
         ps.close();
     }
-
-    public void updateLastView(Movie mov) throws SQLException
+    catch (SQLException ex)
     {
+    throw new DALException("Kunne ikke opdatere movie");
+    }
+    }
+    
+    public void updateLastView(Movie mov) throws DALException  
+    {
+        try{
         Connection con = dbCon.getConnection();
 
         int id = mov.getId();
@@ -188,12 +219,18 @@ public class MovieDBDAO
         ps.setInt(2, id);
 
         ps.executeUpdate();
-        ps.close();
-
+        ps.close();}
+        catch (SQLException ex)
+        {
+        throw new DALException("Kunne ikke opdatere lastview");
+        }
+        
     }
+    
+    public List<Movie> timeSinceLastview() throws DALException
+    {   try{
 
-    public List<Movie> timeSinceLastview() throws SQLServerException, SQLException
-    {
+
         Connection con = dbCon.getConnection();
 
         ArrayList<Movie> oldMovies = new ArrayList<Movie>();
@@ -214,7 +251,12 @@ public class MovieDBDAO
             oldMovies.add(movie);
         }
 
-        return oldMovies;
+            return oldMovies; 
+       
+    }catch ( SQLException ex)
+    {
+    throw new DALException("Kunne ikke hente listen");
+    }
     }
 
 }

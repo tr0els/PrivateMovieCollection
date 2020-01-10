@@ -12,10 +12,13 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import privatemoviecollection.dal.dalException.DALException;
 import privatemoviecollection.gui.model.DataModel;
+import privatemoviecollection.gui.utilGUI.DisplayAlert;
 
 /**
  * FXML Controller class
@@ -51,7 +54,7 @@ public class NewCategoryController implements Initializable
     }
 
     @FXML
-    private void addNewCategory(ActionEvent event) throws Exception
+    private void addNewCategory(ActionEvent event) throws DALException
     {
         try
         {
@@ -61,9 +64,10 @@ public class NewCategoryController implements Initializable
             Stage stage = (Stage) saveCategory.getScene().getWindow();
             stage.close();
 
-        } catch (IOException ex)
+        } catch (DALException ex)
         {
-            ex.printStackTrace();
+         DisplayAlert al = new DisplayAlert();
+         al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
         }
     }
 

@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.bll.BLLManager;
+import privatemoviecollection.dal.dalException.DALException;
 
 /**
  *
@@ -27,7 +28,7 @@ public class DataModel
     private ObservableList<Category> categories = FXCollections.observableArrayList();
     private Category chosenCategory; 
     
-    public DataModel() throws IOException, SQLException
+    public DataModel() throws DALException
     {
         bll = new BLLManager();
         
@@ -40,26 +41,26 @@ public class DataModel
     } 
     
     
-    public ObservableList<Category> getCategoryList() throws IOException, Exception
+    public ObservableList<Category> getCategoryList() throws DALException
     {
         categories.setAll(bll.getAllCategories());
         return categories;
     }
     
-    public void createCategory(String name) throws Exception
+    public void createCategory(String name) throws DALException
     {
         Category category = bll.createCategory(name);
         categories.add(category);
         getCategoryList();       
     }
     
-    public void updateCategory(Category selectedCategory) throws Exception
+    public void updateCategory(Category selectedCategory) throws DALException
     {
         bll.updateCategory(selectedCategory);
         getCategoryList();
     }
     
-    public void deleteCategory(Category category) throws Exception
+    public void deleteCategory(Category category) throws DALException
     {
         bll.deleteCategory(chosenCategory);
         getCategoryList();
@@ -76,7 +77,7 @@ public class DataModel
         return chosenCategory;
     }
     
-    public ObservableList<Movie> getSearchResult(String input) throws Exception
+    public ObservableList<Movie> getSearchResult(String input) throws DALException
     {
         List<Movie> filter = bll.searchMovies(input);
         ObservableList<Movie> output = FXCollections.observableList(filter);
@@ -84,32 +85,31 @@ public class DataModel
         return output;
     }
     
-    public void createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws SQLException
+    public void createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException
     {
         Movie movie = bll.createMovie(name, rating, filelink, imdb, idList);
         movies.add(movie);
     }
     
-    public void deleteMovie(Movie mov) throws SQLException
+    public void deleteMovie(Movie mov) throws DALException
     {
         movies.remove(mov);
         bll.deleteMovie(mov);
     }
     
-    public void updateMovie(Movie mov) throws SQLException
+    public void updateMovie(Movie mov) throws DALException
     {
         bll.updateMovie(mov);
     }
     
     
-    
 
-    public void updateLastView(Movie mov) throws Exception 
+    public void updateLastView(Movie mov) throws DALException 
     {
         bll.updateLastView(mov);
     }
     
-    public List<Movie> timeSinceLastview() throws SQLException
+    public List<Movie> timeSinceLastview() throws DALException
     {
         return bll.timeSinceLastview();
     }
