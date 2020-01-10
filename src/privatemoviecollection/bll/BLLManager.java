@@ -7,6 +7,7 @@ package privatemoviecollection.bll;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.bll.util.SearchMovies;
@@ -32,9 +33,9 @@ public class BLLManager
         categoryDbDao = new CategoryDBDAO();
     }
     
-    public Movie createMovie(String name, int rating, String filelink, float imdb) throws SQLException
+    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws SQLException
     {
-        Movie mov = movieDB.createMovie(name, rating, filelink, imdb);
+        Movie mov = movieDB.createMovie(name, rating, filelink, imdb, idList);
         
         return mov;
     }
@@ -80,6 +81,17 @@ public class BLLManager
         List<Movie> allMovies = getAllMovies();
         allMovies = search(allMovies, query);
         return allMovies;
+    }
+    
+    public void updateLastView(Movie mov) throws Exception 
+    {
+        movieDB.updateLastView(mov);
+    
+    }
+    
+    public List<Movie> timeSinceLastview() throws SQLException
+    {
+        return movieDB.timeSinceLastview();
     }
 
     

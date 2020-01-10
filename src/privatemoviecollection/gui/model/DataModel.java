@@ -7,6 +7,7 @@ package privatemoviecollection.gui.model;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import privatemoviecollection.be.Movie;
 import javafx.collections.FXCollections;
@@ -83,9 +84,9 @@ public class DataModel
         return output;
     }
     
-    public void createMovie(String name, int rating, String filelink, float imdb) throws SQLException
+    public void createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws SQLException
     {
-        Movie movie = bll.createMovie(name, rating, filelink, imdb);
+        Movie movie = bll.createMovie(name, rating, filelink, imdb, idList);
         movies.add(movie);
     }
     
@@ -102,5 +103,14 @@ public class DataModel
     
     
     
-}
 
+    public void updateLastView(Movie mov) throws Exception 
+    {
+        bll.updateLastView(mov);
+    }
+    
+    public List<Movie> timeSinceLastview() throws SQLException
+    {
+        return bll.timeSinceLastview();
+    }
+}
