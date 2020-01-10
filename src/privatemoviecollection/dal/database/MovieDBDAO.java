@@ -173,7 +173,7 @@ public class MovieDBDAO
         Connection con = dbCon.getConnection();
 
         ArrayList<Movie> oldMovies = new ArrayList<Movie>();
-        String sql = "SELECT * FROM Movie WHERE lastview < DATEADD(year,-2,GETDATE());";
+        String sql = "SELECT * FROM Movie WHERE lastview < DATEADD(year,-2,GETDATE()) AND rating < 6;";
         Statement ps = con.createStatement();
         ResultSet rs = ps.executeQuery(sql);
 
