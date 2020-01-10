@@ -46,43 +46,42 @@ public class MovieDBDAO
     
     public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException
     {
-        try{
-        Connection con = dbCon.getConnection();
-        Date date = new Date();
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        try {
+            Connection con = dbCon.getConnection();
+            Date date = new Date();
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
-        String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
-        String sql2 = "INSERT INTO CatMovie VALUES (?,?);";
-        PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        PreparedStatement ps2 = con.prepareStatement(sql2);
+            String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
+            String sql2 = "INSERT INTO CatMovie VALUES (?,?);";
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps2 = con.prepareStatement(sql2);
 
-        ps.setString(1, name);
-        ps.setInt(2, rating);
-        ps.setString(3, filelink);
-        ps.setDate(4, sqlDate);
-        ps.setFloat(5, imdb);
-        int affectedRows = ps.executeUpdate();
-        if (affectedRows == 1)
-        {
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next())
+            ps.setString(1, name);
+            ps.setInt(2, rating);
+            ps.setString(3, filelink);
+            ps.setDate(4, sqlDate);
+            ps.setFloat(5, imdb);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 1)
             {
-                int id = rs.getInt(1);
-
-                for (Integer i : idList)
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next())
                 {
-                    ps2.setInt(1, i);
-                    ps2.setInt(2, id);
-                    ps2.executeUpdate();
+                    int id = rs.getInt(1);
+
+                    for (Integer i : idList)
+                    {
+                        ps2.setInt(1, i);
+                        ps2.setInt(2, id);
+                        ps2.executeUpdate();
+                    }
+
+                    Movie movie = getMovie(id);
+
+                    return movie;
                 }
-
-                Movie movie = getMovie(id);
-
-                return movie;
             }
-               
-        }
-            
+        }    
         catch (SQLException ex)
         {
         throw new DALException("Kunne ikke oprette Movie"); 
