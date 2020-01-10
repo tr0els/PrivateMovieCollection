@@ -62,6 +62,11 @@ public class MovieDBDAO
         return null;
     }
 
+    public List<Movie> getMovie(int id) throws SQLException
+    {
+        return null;
+    }
+
     public List<Movie> getAllMovies() throws SQLException
     {
         try (Connection con = dbCon.getConnection())
