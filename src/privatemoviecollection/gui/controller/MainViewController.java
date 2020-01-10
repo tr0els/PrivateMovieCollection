@@ -315,6 +315,7 @@ public class MainViewController implements Initializable
 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
+        stage.setAlwaysOnTop(true);
         stage.show();
         
     }
