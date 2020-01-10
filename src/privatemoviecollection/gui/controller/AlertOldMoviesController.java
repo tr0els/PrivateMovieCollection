@@ -29,14 +29,13 @@ import privatemoviecollection.gui.model.DataModel;
 public class AlertOldMoviesController implements Initializable
 {
     @FXML
-    private ListView<String> oldMovieList;
+    private ListView<Movie> oldMovieList;
     @FXML
     private Button deleteOldMovieButton;
     @FXML
     private Button cancelButton;
     
     private ObservableList<Movie> movieList;
-    private ObservableList<String> movieNames = FXCollections.observableArrayList();
     private DataModel dm;
     
     /**
@@ -49,14 +48,8 @@ public class AlertOldMoviesController implements Initializable
     
     public void getListOfMovies() throws SQLException
     {
-        movieList.addAll(dm.timeSinceLastview());
-        
-        for (Movie movie : movieList)
-        {
-            movieNames.add(movie.getName());
-        }            
-        oldMovieList.setItems(movieNames);
-
+        movieList.addAll(dm.timeSinceLastview());      
+        oldMovieList.setItems(movieList);
     }
     
     public void transfer(DataModel datamodel)
@@ -75,8 +68,7 @@ public class AlertOldMoviesController implements Initializable
     {
         int index = oldMovieList.getSelectionModel().getSelectedIndex();
         dm.deleteMovie(movieList.get(index));
-        movieNames.remove(index);
-        
+        movieList.remove(index);
     }
 
     @FXML
