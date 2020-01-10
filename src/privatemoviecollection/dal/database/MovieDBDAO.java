@@ -40,7 +40,10 @@ public class MovieDBDAO
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
         String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
+        String sql2 = "INSERT INTO CatMovie VALUES (?,?);";
         PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement ps2 = con.prepareStatement(sql2);
+
         ps.setString(1, name);
         ps.setInt(2, rating);
         ps.setString(3, filelink);
@@ -53,7 +56,16 @@ public class MovieDBDAO
             if (rs.next())
             {
                 int id = rs.getInt(1);
+
                 Movie mov = getMovie(id);
+
+                for (Integer i : idList)
+                {
+                    ps2.setInt(1, i);
+                    ps2.setInt(2, id);
+                    ps2.executeUpdate();
+                }
+
                 return mov;
 
             }
@@ -79,7 +91,7 @@ public class MovieDBDAO
         try (Connection con = dbCon.getConnection())
         {
             List<Movie> movies = new ArrayList<>();
-            
+
             String sql = "SELECT * FROM Movie;";
             if(movieId > 0) {
                 sql = "SELECT * FROM Movie WHERE id " + movieId + ";";
@@ -87,7 +99,7 @@ public class MovieDBDAO
             
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-                        
+
             while (rs.next())
             {
                 int id = rs.getInt("id");
@@ -96,31 +108,32 @@ public class MovieDBDAO
                 int rating = rs.getInt("rating");
                 Date lastview = rs.getDate("lastview");
                 float imdb = rs.getFloat("imdb");
-                
+
                 Movie movie = new Movie(id, filelink, name, imdb, rating);
 
                 // get categories for movie
                 String sql2 = "SELECT id, name FROM Category WHERE id IN (SELECT CategoryId FROM CatMovie WHERE MovieId = " + id + ");";
                 Statement statement2 = con.createStatement();
                 ResultSet rs2 = statement2.executeQuery(sql2);
-        
+
                 while (rs2.next())
                 {
                     int catId = rs2.getInt("id");
                     String catName = rs2.getString("name");
-                
+
                     Category category = new Category(catId, catName);
                     movie.addCategory(category);
                 }
-                
+
                 movies.add(movie);
             }
-            
+
             System.out.println("\n\n*** TEST ***\n");
-            for (Movie movie : movies) {
+            for (Movie movie : movies)
+            {
                 System.out.println("Movie name: " + movie.getName() + " is in " + movie.getCategories().size() + " categories");
             }
-            
+
             return movies;
         } catch (SQLException ex)
         {
@@ -184,7 +197,7 @@ public class MovieDBDAO
         Connection con = dbCon.getConnection();
 
         ArrayList<Movie> oldMovies = new ArrayList<Movie>();
-        String sql = "SELECT * FROM Movie WHERE lastview < DATEADD(year,-2,GETDATE());";
+        String sql = "SELECT * FROM Movie WHERE lastview < DATEADD(year,-2,GETDATE()) AND rating < 6;";
         Statement ps = con.createStatement();
         ResultSet rs = ps.executeQuery(sql);
 
