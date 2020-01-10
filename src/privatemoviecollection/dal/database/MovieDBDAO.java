@@ -31,63 +31,62 @@ public class MovieDBDAO
 
     private DatabaseConnector dbCon;
 
-    
     public MovieDBDAO() throws DALException
     {
-        try {
-        dbCon = new DatabaseConnector();
-    }   catch (DALException ex )
-        { 
-            throw new DALException("Kunne ikke oprette forbindelse til Databasen") ;
+        try
+        {
+            dbCon = new DatabaseConnector();
+        } catch (DALException ex)
+        {
+            throw new DALException("Kunne ikke oprette forbindelse til Databasen");
         }
-    
+
     }
 
-    
     public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException
     {
-        try{
-        Connection con = dbCon.getConnection();
-        Date date = new Date();
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-
-        String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
-        String sql2 = "INSERT INTO CatMovie VALUES (?,?);";
-        PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        PreparedStatement ps2 = con.prepareStatement(sql2);
-
-        ps.setString(1, name);
-        ps.setInt(2, rating);
-        ps.setString(3, filelink);
-        ps.setDate(4, sqlDate);
-        ps.setFloat(5, imdb);
-        int affectedRows = ps.executeUpdate();
-        if (affectedRows == 1)
+        try
         {
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next())
-            {
-                int id = rs.getInt(1);
+            Connection con = dbCon.getConnection();
+            Date date = new Date();
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 
-                for (Integer i : idList)
+            String sql = "INSERT INTO Movie VALUES (?,?,?,?,?);";
+            String sql2 = "INSERT INTO CatMovie VALUES (?,?);";
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps2 = con.prepareStatement(sql2);
+
+            ps.setString(1, name);
+            ps.setInt(2, rating);
+            ps.setString(3, filelink);
+            ps.setDate(4, sqlDate);
+            ps.setFloat(5, imdb);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 1)
+            {
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next())
                 {
-                    ps2.setInt(1, i);
-                    ps2.setInt(2, id);
-                    ps2.executeUpdate();
+                    int id = rs.getInt(1);
+
+                    for (Integer i : idList)
+                    {
+                        ps2.setInt(1, i);
+                        ps2.setInt(2, id);
+                        ps2.executeUpdate();
+                    }
+
+                    Movie movie = getMovie(id);
+
+                    return movie;
                 }
 
-                Movie movie = getMovie(id);
-
-                return movie;
             }
-               
-        }
-            
-        catch (SQLException ex)
+        } catch (SQLException ex)
         {
-        throw new DALException("Kunne ikke oprette Movie"); 
+            throw new DALException("Kunne ikke oprette Movie");
         }
-		return null;
+        return null;
     }
 
     public Movie getMovie(int id) throws DALException
@@ -96,23 +95,24 @@ public class MovieDBDAO
         // so always return the first and only movie in the result list
         return getMoviesQuery(id).get(0);
     }
-    
-       public List<Movie> getAllMovies() throws DALException 
+
+    public List<Movie> getAllMovies() throws DALException
     {
         return getMoviesQuery(0);
     }
 
     public List<Movie> getMoviesQuery(int movieId) throws DALException
     {
-        try (Connection con = dbCon.getConnection())
+        try ( Connection con = dbCon.getConnection())
         {
             List<Movie> movies = new ArrayList<>();
 
             String sql = "SELECT * FROM Movie;";
-            if(movieId > 0) {
+            if (movieId > 0)
+            {
                 sql = "SELECT * FROM Movie WHERE id = " + movieId + ";";
             }
-            
+
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
 
@@ -153,110 +153,111 @@ public class MovieDBDAO
             return movies;
         } catch (SQLException ex)
         {
-          
+
             throw new DALException("Kunne ikke oprette forbindelse til din Server");
         }
     }
 
-    
-
-    
     public void deleteMovie(Movie mov) throws DALException
-    {   try{
-
-        Connection con = dbCon.getConnection();
-
-        int id = mov.getId();
-        String sql = "DELETE FROM Movie WHERE id=?;";
-        String sql2 = "DELETE FROM CatMovie WHERE MovieId = (?)";
-        PreparedStatement ps = con.prepareStatement(sql);
-        PreparedStatement ps2 = con.prepareStatement(sql2);
-        ps.setInt(1, id);
-        ps2.setInt(1, id);
-
-        ps2.executeUpdate();
-        ps.executeUpdate();
-    } catch (SQLException ex)
     {
-    throw new DALException("Kunne ikke Slette movie");
-    }
+        try
+        {
+
+            Connection con = dbCon.getConnection();
+
+            int id = mov.getId();
+            String sql = "DELETE FROM Movie WHERE id=?;";
+            String sql2 = "DELETE FROM CatMovie WHERE MovieId = (?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            PreparedStatement ps2 = con.prepareStatement(sql2);
+            ps.setInt(1, id);
+            ps2.setInt(1, id);
+
+            ps2.executeUpdate();
+            ps.executeUpdate();
+        } catch (SQLException ex)
+        {
+            throw new DALException("Kunne ikke Slette movie");
+        }
     }
 
-    
     public void updateMovie(Movie mov) throws DALException
-    {   try{
-        Connection con = dbCon.getConnection();
-
-        int id = mov.getId();
-        String sql = "UPDATE Movie SET name = ?, rating = ?, filelink = ?, imdb = ? WHERE id=" + id + ";";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setString(1, mov.getName());
-        ps.setInt(2, mov.getRating());
-        ps.setString(3, mov.getFilelink());
-        ps.setFloat(4, mov.getImdb());
-
-        ps.executeUpdate();
-        ps.close();
-    }
-    catch (SQLException ex)
     {
-    throw new DALException("Kunne ikke opdatere movie");
-    }
-    }
-    
-    public void updateLastView(Movie mov) throws DALException  
-    {
-        try{
-        Connection con = dbCon.getConnection();
-
-        int id = mov.getId();
-        Date date = new Date();
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-
-        String Sql = "Update Movie set lastview = ? where id=?";
-        PreparedStatement ps = con.prepareStatement(Sql);
-        ps.setDate(1, sqlDate);
-        ps.setInt(2, id);
-
-        ps.executeUpdate();
-        ps.close();}
-        catch (SQLException ex)
+        try
         {
-        throw new DALException("Kunne ikke opdatere lastview");
+            Connection con = dbCon.getConnection();
+
+            int id = mov.getId();
+            String sql = "UPDATE Movie SET name = ?, rating = ?, filelink = ?, imdb = ? WHERE id=" + id + ";";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, mov.getName());
+            ps.setInt(2, mov.getRating());
+            ps.setString(3, mov.getFilelink());
+            ps.setFloat(4, mov.getImdb());
+
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex)
+        {
+            throw new DALException("Kunne ikke opdatere movie");
         }
-        
     }
-    
+
+    public void updateLastView(Movie mov) throws DALException
+    {
+        try
+        {
+            Connection con = dbCon.getConnection();
+
+            int id = mov.getId();
+            Date date = new Date();
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+
+            String Sql = "Update Movie set lastview = ? where id=?";
+            PreparedStatement ps = con.prepareStatement(Sql);
+            ps.setDate(1, sqlDate);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex)
+        {
+            throw new DALException("Kunne ikke opdatere lastview");
+        }
+
+    }
+
     public List<Movie> timeSinceLastview() throws DALException
-    {   try{
-
-
-        Connection con = dbCon.getConnection();
-
-        ArrayList<Movie> oldMovies = new ArrayList<Movie>();
-        String sql = "SELECT * FROM Movie WHERE lastview < DATEADD(year,-2,GETDATE()) AND rating < 6;";
-        Statement ps = con.createStatement();
-        ResultSet rs = ps.executeQuery(sql);
-
-        while (rs.next())
-        {
-            int id = rs.getInt("id");
-            String filelink = rs.getString("filelink");
-            String name = rs.getString("name");
-            int rating = rs.getInt("rating");
-            Date lastview = rs.getDate("lastview");
-            float imdb = rs.getFloat("imdb");
-
-            Movie movie = new Movie(id, filelink, name, imdb, rating);
-            oldMovies.add(movie);
-        }
-
-            return oldMovies; 
-       
-    }catch ( SQLException ex)
     {
-    throw new DALException("Kunne ikke hente listen");
-    }
+        try
+        {
+
+            Connection con = dbCon.getConnection();
+
+            ArrayList<Movie> oldMovies = new ArrayList<Movie>();
+            String sql = "SELECT * FROM Movie WHERE lastview < DATEADD(year,-2,GETDATE()) AND rating < 6;";
+            Statement ps = con.createStatement();
+            ResultSet rs = ps.executeQuery(sql);
+
+            while (rs.next())
+            {
+                int id = rs.getInt("id");
+                String filelink = rs.getString("filelink");
+                String name = rs.getString("name");
+                int rating = rs.getInt("rating");
+                Date lastview = rs.getDate("lastview");
+                float imdb = rs.getFloat("imdb");
+
+                Movie movie = new Movie(id, filelink, name, imdb, rating);
+                oldMovies.add(movie);
+            }
+
+            return oldMovies;
+
+        } catch (SQLException ex)
+        {
+            throw new DALException("Kunne ikke hente listen");
+        }
     }
 
 }
