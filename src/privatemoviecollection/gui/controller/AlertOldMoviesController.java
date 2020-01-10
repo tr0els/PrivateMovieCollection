@@ -36,6 +36,7 @@ public class AlertOldMoviesController implements Initializable
     private Button cancelButton;
     
     private ObservableList<Movie> movieList;
+    private ObservableList<String> movieNames = FXCollections.observableArrayList();
     private DataModel dm;
     
     /**
@@ -48,15 +49,13 @@ public class AlertOldMoviesController implements Initializable
     
     public void getListOfMovies() throws SQLException
     {
-        ObservableList<String> movieNames = FXCollections.observableArrayList();
-
-            movieList.addAll(dm.timeSinceLastview());
+        movieList.addAll(dm.timeSinceLastview());
         
-            for (Movie movie : movieList)
-            {
-                movieNames.add(movie.getName());
-            }
-            oldMovieList.setItems(movieNames);
+        for (Movie movie : movieList)
+        {
+            movieNames.add(movie.getName());
+        }            
+        oldMovieList.setItems(movieNames);
 
     }
     
@@ -76,7 +75,8 @@ public class AlertOldMoviesController implements Initializable
     {
         int index = oldMovieList.getSelectionModel().getSelectedIndex();
         dm.deleteMovie(movieList.get(index));
-        movieList.remove(movieList.get(index));
+        movieNames.remove(index);
+        
     }
 
     @FXML
