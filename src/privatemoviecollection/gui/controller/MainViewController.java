@@ -93,7 +93,11 @@ public class MainViewController implements Initializable
             dataModel = new DataModel();
             setAllMovies();
             setAllCategories();
-            alertOldMovies();
+            
+            if(!dataModel.timeSinceLastview().isEmpty())
+            {
+               alertOldMovies(); 
+            }
         } catch (Exception ex)
         {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);

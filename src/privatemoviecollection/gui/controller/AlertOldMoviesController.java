@@ -75,6 +75,7 @@ public class AlertOldMoviesController implements Initializable
     {
         int index = oldMovieList.getSelectionModel().getSelectedIndex();
         dm.deleteMovie(movieList.get(index));
+        movieList.remove(index);
         movieNames.remove(index);
     }
 
