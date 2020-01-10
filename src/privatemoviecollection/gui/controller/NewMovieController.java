@@ -94,12 +94,11 @@ public class NewMovieController implements Initializable
 
         for (int i = 0; i < datamodel.getAllMovies().size(); i++)
         {
+            nameInput.getText();
             if (datamodel.getAllMovies().get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
             {
                 Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
                 alert.showAndWait();
-                Stage stage = (Stage) createMovie.getScene().getWindow();
-                stage.show();
                 break; 
                 
             } else
@@ -107,6 +106,7 @@ public class NewMovieController implements Initializable
                 datamodel.createMovie(nameInput.getText(), Integer.parseInt(ratingInput.getText()), fileInput.getText(), Float.parseFloat(imdbInput.getText()), idList);
                 Stage stage = (Stage) createMovie.getScene().getWindow();
                 stage.close();
+                break; 
             }
         }
 
