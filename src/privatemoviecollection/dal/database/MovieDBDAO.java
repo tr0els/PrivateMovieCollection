@@ -57,16 +57,16 @@ public class MovieDBDAO
             {
                 int id = rs.getInt(1);
 
-                Movie mov = getMovie(id);
-
                 for (Integer i : idList)
                 {
                     ps2.setInt(1, i);
                     ps2.setInt(2, id);
                     ps2.executeUpdate();
                 }
+                
+                Movie movie = getMovie(id);
 
-                return mov;
+                return movie;
 
             }
 
@@ -77,7 +77,7 @@ public class MovieDBDAO
     public Movie getMovie(int id) throws SQLException
     {
         // only one movie will be returned when searching on id
-        // so always return the first movie in the result list
+        // so always return the first and only movie in the result list
         return getMoviesQuery(id).get(0);
     }
     
@@ -94,7 +94,7 @@ public class MovieDBDAO
 
             String sql = "SELECT * FROM Movie;";
             if(movieId > 0) {
-                sql = "SELECT * FROM Movie WHERE id " + movieId + ";";
+                sql = "SELECT * FROM Movie WHERE id = " + movieId + ";";
             }
             
             Statement statement = con.createStatement();
