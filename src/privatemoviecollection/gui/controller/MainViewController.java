@@ -37,7 +37,9 @@ import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
+import privatemoviecollection.dal.dalException.DALException;
 import privatemoviecollection.gui.model.DataModel;
+import privatemoviecollection.gui.utilGUI.DisplayAlert;
 
 /**
  * FXML Controller class
@@ -94,9 +96,10 @@ public class MainViewController implements Initializable
             setAllMovies();
             setAllCategories();
             //alertOldMovies();
-        } catch (Exception ex)
+        } catch (DALException ex)
         {
-            Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
+           DisplayAlert al = new DisplayAlert();
+           al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke hente dine filer", ex.getMessage());
         }
     }    
 
@@ -121,21 +124,23 @@ public class MainViewController implements Initializable
         Movie mo = movieTable.getSelectionModel().getSelectedItem();
         dataModel.updateLastView(mo);
         
-    }
-        catch (Exception ex){
-        
+           }
+        catch (DALException | IOException ex1)
+        {
+          DisplayAlert al = new DisplayAlert();
+           al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke hente dine filer", ex1.getMessage());
         }
     }
 
     @FXML
-    private void handleShowAll(ActionEvent event) throws SQLException, IOException
-    {
+    private void handleShowAll(ActionEvent event) 
+    {  
         alertOldMovies();
     }
 
     @FXML
-    private void handleNewCategory(ActionEvent event) throws IOException
-    {
+    private void handleNewCategory(ActionEvent event)
+    {   try{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/NewCategory.fxml"));
         Parent root = loader.load();
 
@@ -145,12 +150,17 @@ public class MainViewController implements Initializable
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.showAndWait();
-        setAllCategories();
+        setAllCategories();}
+        catch (IOException ex)
+        {
+        DisplayAlert al = new DisplayAlert();
+        al.displayAlert(Alert.AlertType.ERROR, "ERROR - Kunne ikke håndtere efterspørgslen", ex.getMessage());
+        }
     }
 
     @FXML
-    private void handleDeleteCategory(ActionEvent event) throws Exception
-    {
+    private void handleDeleteCategory(ActionEvent event) 
+    {   try{
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("A Deletion Confirmation");
         alert.setHeaderText("Are you sure you want to delete:");
@@ -166,12 +176,17 @@ public class MainViewController implements Initializable
         } else
         {
             alert.close();
-        }
+        }}
+    catch (DALException ex)
+    {
+        DisplayAlert al = new DisplayAlert();
+        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+    }
     }
     
     @FXML
-    private void handleEditCategory(ActionEvent event) throws IOException
-    {
+    private void handleEditCategory(ActionEvent event) 
+    {   try{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditCategory.fxml"));
         Parent root = loader.load();
 
@@ -182,12 +197,17 @@ public class MainViewController implements Initializable
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
-        }
+        }}
+    catch (IOException ex)
+    {
+        DisplayAlert al = new DisplayAlert();
+        al.displayAlert(Alert.AlertType.ERROR, "ERROR - Håndtere efterspørgslen", ex.getMessage());
+    }
     }
 
     @FXML
-    private void handleNewMovie(ActionEvent event) throws IOException, Exception
-    {
+    private void handleNewMovie(ActionEvent event)
+    {   try{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/NewMovie.fxml"));
         Parent root = loader.load();
 
@@ -197,12 +217,17 @@ public class MainViewController implements Initializable
 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
-        stage.show();
+        stage.show();}
+    catch (DALException | IOException ex)
+    {
+        DisplayAlert al = new DisplayAlert();
+        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+    }
     }
 
     @FXML
-    private void handleDeleteMovie(ActionEvent event) throws SQLException
-    {
+    private void handleDeleteMovie(ActionEvent event) 
+    {   try{
         String name = movieTable.getSelectionModel().getSelectedItem().getName();
         
         if (movieTable.getSelectionModel().getSelectedItem() != null) {
@@ -213,12 +238,17 @@ public class MainViewController implements Initializable
             if (input == JOptionPane.YES_OPTION) {
                 dataModel.deleteMovie(movieTable.getSelectionModel().getSelectedItem());
             }
-        }
+        }}
+    catch (DALException ex) 
+    {
+        DisplayAlert al = new DisplayAlert();
+        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+    }
     }
 
     @FXML
-    private void handleEditMovie(ActionEvent event) throws IOException
-    {
+    private void handleEditMovie(ActionEvent event) 
+    { try{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditMovie.fxml"));
         Parent root = loader.load();
 
@@ -227,7 +257,12 @@ public class MainViewController implements Initializable
 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
-        stage.show();
+        stage.show();}
+    catch(IOException ex )
+    {
+        DisplayAlert al = new DisplayAlert();
+        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+    }
     }
     
     private void setAllMovies() {
@@ -296,8 +331,8 @@ public class MainViewController implements Initializable
         }
     }
 
-    private void alertOldMovies() throws IOException 
-    {       
+    private void alertOldMovies()
+    {   try {    
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/AlertOldMovies.fxml"));
         Parent root = loader.load();
 
@@ -309,5 +344,10 @@ public class MainViewController implements Initializable
         stage.show();
         
     }
-    
+    catch (DALException | IOException ex)
+    { 
+        DisplayAlert al = new DisplayAlert();
+        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+    }
+    }
 }

@@ -36,7 +36,7 @@ public class MovieDBDAO
         dbCon = new DatabaseConnector();
     }   catch (DALException ex )
         { 
-            throw ex;
+            throw new DALException("Kunne ikke oprette forbindelse til Databasen") ;
         }
     
     }
@@ -80,12 +80,12 @@ public class MovieDBDAO
             }}
         catch (SQLException ex)
         {
-        throw new DALException("fuck you"); 
+        throw new DALException("Kunne ikke oprette Movie"); 
         }
      return null;
     }
     
-    public List<Movie> getAllMovies() throws DALException
+       public List<Movie> getAllMovies() throws DALException
     {
         try (Connection con = dbCon.getConnection())
         {
@@ -105,23 +105,6 @@ public class MovieDBDAO
                 float imdb = rs.getFloat("imdb");
                 
                 Movie movie = new Movie(id, filelink, name, imdb, rating);
-
-                movie.addCategories(getMovieCategories(id));
-                movies.add(movie);
-            }
-            
-            return movies;
-        } catch (SQLException ex)
-        {
-           throw new DALException("can not do this");
-        }
-    }
-    
-    public List<Category> getMovieCategories(int movieId) throws DALException
-    {
-        try (Connection con = dbCon.getConnection())
-        {
-            List<Category> categories = new ArrayList<>();
 
                 // get categories for movie
                 String sql2 = "SELECT id, name FROM Category WHERE id IN (SELECT CategoryId FROM CatMovie WHERE MovieId = " + id + ");";
@@ -148,9 +131,11 @@ public class MovieDBDAO
             return movies;
         } catch (SQLException ex)
         {
-            throw new DALException("you shall not pass!!");
+          
+            throw new DALException("Kunne ikke oprette forbindelse til din Server");
         }
     }
+    
 
     
     public void deleteMovie(Movie mov) throws DALException
@@ -170,7 +155,7 @@ public class MovieDBDAO
         ps.executeUpdate();
     } catch (SQLException ex)
     {
-    throw new DALException("you shall not pass!!");
+    throw new DALException("Kunne ikke Slette movie");
     }
     }
     
@@ -191,7 +176,7 @@ public class MovieDBDAO
     }
     catch (SQLException ex)
     {
-    throw new DALException("you shall not pass!!");
+    throw new DALException("Kunne ikke opdatere movie");
     }
     }
     
@@ -213,13 +198,13 @@ public class MovieDBDAO
         ps.close();}
         catch (SQLException ex)
         {
-        throw new DALException("you shall not pass!!");
+        throw new DALException("Kunne ikke opdatere lastview");
         }
         
     }
     
-    public List<Movie> timeSinceLastview() throws SQLServerException, SQLException
-    {
+    public List<Movie> timeSinceLastview() throws DALException
+    {   try{
         Connection con = dbCon.getConnection();
         
         ArrayList<Movie> oldMovies = new ArrayList<Movie>();
@@ -239,8 +224,13 @@ public class MovieDBDAO
             Movie movie = new Movie(id, filelink, name, imdb, rating);
             oldMovies.add(movie);
         }
-            
-        return oldMovies;
+            return oldMovies; 
+       
+    }catch ( SQLException ex)
+    {
+    throw new DALException("Kunne ikke hente listen");
+    }
+    
     }
 
 }

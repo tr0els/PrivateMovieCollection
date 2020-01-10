@@ -90,7 +90,7 @@ public class BLLManager
     
     }
     
-    public List<Movie> timeSinceLastview() throws SQLException
+    public List<Movie> timeSinceLastview() throws DALException
     {
         return movieDB.timeSinceLastview();
     }

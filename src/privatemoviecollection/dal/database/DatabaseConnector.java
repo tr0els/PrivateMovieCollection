@@ -36,7 +36,7 @@ public class DatabaseConnector
         }
         catch (IOException ex) {
             
-        throw new DALException("Kunne ikke connecte til DB");
+        throw new DALException("ingen forbindelse til Serveren");
         }
     }
     
@@ -47,7 +47,7 @@ public class DatabaseConnector
         }
         catch (SQLServerException ex)
         {
-        throw new DALException("kunne ikke finde ud af det"); 
+        throw new DALException("Kunne ikke oprette forbindelse"); 
         }
     }
         

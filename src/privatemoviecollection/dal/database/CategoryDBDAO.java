@@ -76,7 +76,7 @@ public class CategoryDBDAO
             return allCategories;
         } catch (SQLException ex)
         {
-            throw new DALException("Could not do this");
+            throw new DALException("Kunne ikke hente Categories");
         }
     }
     
@@ -103,7 +103,7 @@ public class CategoryDBDAO
 
         } catch (SQLException ex)
         {
-            throw new DALException("could not delete from category");
+            throw new DALException("Kunne ikke slette Category");
         }
         
     }
