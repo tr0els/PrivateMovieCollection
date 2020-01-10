@@ -45,6 +45,7 @@ public class MovieDBDAO
 
     public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException
     {
+
         try
         {
             Connection con = dbCon.getConnection();
