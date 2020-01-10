@@ -82,6 +82,7 @@ public class EditMovieController implements Initializable
                 alert.showAndWait();            
                 Stage stage = (Stage) updateMovie.getScene().getWindow();
                 stage.show();
+                break; 
                 
             } else
             {
