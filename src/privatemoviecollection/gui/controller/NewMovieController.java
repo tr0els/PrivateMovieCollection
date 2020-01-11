@@ -81,48 +81,41 @@ public class NewMovieController implements Initializable
     }
 
     @FXML
-    private void handleCreateMovie(ActionEvent event)   
-{   try{
-        ArrayList<Integer> idList = new ArrayList<Integer>();
-        for (MenuItem item : chooseCategory.getItems())
+    private void handleCreateMovie(ActionEvent event)
+    {
+        try
         {
-            CheckMenuItem checkMenuItem = (CheckMenuItem) item;
-            if (checkMenuItem.isSelected())
+            ArrayList<Integer> idList = new ArrayList<Integer>();
+            for (MenuItem item : chooseCategory.getItems())
             {
-                int index = chooseCategory.getItems().indexOf(checkMenuItem);
-                idList.add(categoryList.get(index).getId());
+                CheckMenuItem checkMenuItem = (CheckMenuItem) item;
+                if (checkMenuItem.isSelected())
+                {
+                    int index = chooseCategory.getItems().indexOf(checkMenuItem);
+                    idList.add(categoryList.get(index).getId());
+                }
             }
-        }
 
-        for (int i = 0; i < datamodel.getAllMovies().size(); i++)
-        {
-            nameInput.getText();
-            if (datamodel.getAllMovies().get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
+            for (int i = 0; i < datamodel.getAllMovies().size(); i++)
             {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
-                alert.showAndWait();
-                break; 
-                
-            } else
-            {
-                datamodel.createMovie(nameInput.getText(), Integer.parseInt(ratingInput.getText()), fileInput.getText(), Float.parseFloat(imdbInput.getText()), idList);
-                Stage stage = (Stage) createMovie.getScene().getWindow();
-                stage.close();
-                break; 
+                if (datamodel.getAllMovies().get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
+                {
+                    Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
+                    alert.showAndWait();
+                    return;
+
+                }
             }
-        }}
-            catch (DALException ex)
+            datamodel.createMovie(nameInput.getText(), Integer.parseInt(ratingInput.getText()), fileInput.getText(), Float.parseFloat(imdbInput.getText()), idList);
+            Stage stage = (Stage) createMovie.getScene().getWindow();
+            stage.close();
+        } catch (DALException ex)
         {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
         }
 
     }
- 
-    
-        
-
-    
 
     public void transfer(DataModel dm)
     {
