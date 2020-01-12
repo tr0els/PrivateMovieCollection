@@ -68,7 +68,7 @@ public class MainViewController implements Initializable
     @FXML
     private Button playMovieButton;
     @FXML
-    private Button showAllButton;
+    private Button clearFilter;
     @FXML
     private Button newCategoryButton;
     @FXML
@@ -108,7 +108,7 @@ public class MainViewController implements Initializable
     }    
 
     @FXML
-    private void handleSearch(KeyEvent event) throws Exception
+    private void handleSearch(KeyEvent event) throws DALException
     {
         String input = searchField.getText();
         ObservableList<Movie> result = dataModel.getSearchResult(input);
@@ -137,9 +137,12 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleShowAll(ActionEvent event) 
+    private void handleClearFilter(ActionEvent event) 
     {
-        
+        setAllMovies();
+        setAllCategories();
+        searchField.clear();
+            
 
     }
 
