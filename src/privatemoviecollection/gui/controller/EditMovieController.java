@@ -8,6 +8,8 @@ package privatemoviecollection.gui.controller;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -75,33 +77,34 @@ public class EditMovieController implements Initializable
     @FXML
     private void handleUpdateMovie(ActionEvent event) throws DALException
     {
-        try {
-        for (int i = 0; i < dm.getAllMovies().size(); i++)
+
+        List<Movie> tempMovieList = new ArrayList<>();
+        tempMovieList.addAll(dm.getAllMovies());
+        tempMovieList.remove(movie);
+
+        try
         {
-            nameInput.getText();
-            if (dm.getAllMovies().get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
+            for (int i = 0; i < tempMovieList.size(); i++)
             {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
-                alert.showAndWait();            
-                break; 
-                
-            } else
-            {
-                movie.setName(nameInput.getText());
-                movie.setRating(Integer.parseInt(ratingInput.getText()));
-                movie.setFilelink(fileInput.getText());
-                movie.setImdb(Float.parseFloat(imdbInput.getText()));
-                dm.updateMovie(movie);
-                Stage stage = (Stage) updateMovie.getScene().getWindow();
-                stage.close();
-                break; 
+                if (tempMovieList.get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
+                {
+                    Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
+                    alert.showAndWait();
+                    return;
+                }
             }
-        }}
-		 catch (DALException ex)
-    {
-        DisplayAlert dp = new DisplayAlert();
-        dp.displayAlert(AlertType.ERROR, "ERROR - kan ikke håndtere efterspørgslen", ex.getMessage());
-    }
+            movie.setName(nameInput.getText());
+            movie.setRating(Integer.parseInt(ratingInput.getText()));
+            movie.setFilelink(fileInput.getText());
+            movie.setImdb(Float.parseFloat(imdbInput.getText()));
+            dm.updateMovie(movie);
+            Stage stage = (Stage) updateMovie.getScene().getWindow();
+            stage.close();
+        } catch (DALException ex)
+        {
+            DisplayAlert dp = new DisplayAlert();
+            dp.displayAlert(AlertType.ERROR, "ERROR - kan ikke håndtere efterspørgslen", ex.getMessage());
+        }
     }
 
     public void transfer(Movie movie, DataModel datamodel)

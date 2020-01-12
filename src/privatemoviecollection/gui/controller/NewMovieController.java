@@ -81,49 +81,41 @@ public class NewMovieController implements Initializable
     }
 
     @FXML
-    private void handleCreateMovie(ActionEvent event)   throws DALException
-{   try{
-        ArrayList<Integer> idList = new ArrayList<Integer>();
-        for (MenuItem item : chooseCategory.getItems())
-        {
-            CheckMenuItem checkMenuItem = (CheckMenuItem) item;
-            if (checkMenuItem.isSelected())
-            {
-                int index = chooseCategory.getItems().indexOf(checkMenuItem);
-                idList.add(categoryList.get(index).getId());
-            }
-        }
+    private void handleCreateMovie(ActionEvent event)
+    {
+        try
 
-        for (int i = 0; i < datamodel.getAllMovies().size(); i++)
         {
-            nameInput.getText();
-            if (datamodel.getAllMovies().get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
+            ArrayList<Integer> idList = new ArrayList<Integer>();
+            for (MenuItem item : chooseCategory.getItems())
             {
-                Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
-                alert.showAndWait();
-                break; 
-                
-            } else
-            {
-                datamodel.createMovie(nameInput.getText(), Integer.parseInt(ratingInput.getText()), fileInput.getText(), Float.parseFloat(imdbInput.getText()), idList);
-                Stage stage = (Stage) createMovie.getScene().getWindow();
-                stage.close();
-                break; 
+                CheckMenuItem checkMenuItem = (CheckMenuItem) item;
+                if (checkMenuItem.isSelected())
+                {
+                    int index = chooseCategory.getItems().indexOf(checkMenuItem);
+                    idList.add(categoryList.get(index).getId());
+                }
             }
-        }
-        }
-            catch (DALException ex)
+
+            for (int i = 0; i < datamodel.getAllMovies().size(); i++)
+            {
+                if (datamodel.getAllMovies().get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
+                {
+                    Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
+                    alert.showAndWait();
+                    return;
+
+                }
+            }
+		
+        } catch (DALException ex)
+
         {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
         }
 
     }
- 
-    
-        
-
-    
 
     public void transfer(DataModel dm)
     {

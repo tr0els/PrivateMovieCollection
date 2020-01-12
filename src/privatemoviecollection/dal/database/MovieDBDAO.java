@@ -5,19 +5,14 @@
  */
 package privatemoviecollection.dal.database;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.io.IOException;
-import java.util.List;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.collections.FXCollections;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.dal.dalException.DALException;
@@ -43,7 +38,7 @@ public class MovieDBDAO
 
     }
 
-    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException
+    public Movie createMovie(String name, int rating, String filelink, float imdb, List<Integer> idList) throws DALException
     {
 
         try
@@ -235,7 +230,7 @@ public class MovieDBDAO
 
             Connection con = dbCon.getConnection();
 
-            ArrayList<Movie> oldMovies = new ArrayList<Movie>();
+            List<Movie> oldMovies = new ArrayList<Movie>();
             String sql = "SELECT * FROM Movie WHERE lastview < DATEADD(year,-2,GETDATE()) AND rating < 6;";
             Statement ps = con.createStatement();
             ResultSet rs = ps.executeQuery(sql);
