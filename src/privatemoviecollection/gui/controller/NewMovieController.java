@@ -81,7 +81,7 @@ public class NewMovieController implements Initializable
     }
 
     @FXML
-    private void handleCreateMovie(ActionEvent event)   
+    private void handleCreateMovie(ActionEvent event)   throws DALException
 {   try{
         ArrayList<Integer> idList = new ArrayList<Integer>();
         for (MenuItem item : chooseCategory.getItems())
@@ -110,7 +110,8 @@ public class NewMovieController implements Initializable
                 stage.close();
                 break; 
             }
-        }}
+        }
+        }
             catch (DALException ex)
         {
             DisplayAlert al = new DisplayAlert();
