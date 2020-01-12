@@ -106,8 +106,12 @@ public class NewMovieController implements Initializable
                     return;
 
                 }
+            
             }
-		
+            datamodel.createMovie(nameInput.getText(), Integer.parseInt(ratingInput.getText()), fileInput.getText(), Float.parseFloat(imdbInput.getText()), idList);
+            Stage stage = (Stage) createMovie.getScene().getWindow();
+            stage.close();
+
         } catch (DALException ex)
 
         {
