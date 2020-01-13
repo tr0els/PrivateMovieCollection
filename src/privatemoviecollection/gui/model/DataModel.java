@@ -85,12 +85,19 @@ public class DataModel
         getCategoryList();
     }
     
+    /**
+     * Sets the chosen category. Used for deleting a category. 
+     * @param chosenCategory
+     */
     public void setChosenCategory(Category chosenCategory)
     {
         this.chosenCategory = chosenCategory;
     }
 
-   
+    /**
+     * Gets the chosen category. Used for deleting a category. 
+     * @return
+     */
     public Category getChosenCategory()
     {
         return chosenCategory;

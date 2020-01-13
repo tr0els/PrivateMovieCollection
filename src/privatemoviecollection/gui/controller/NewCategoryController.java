@@ -44,6 +44,9 @@ public class NewCategoryController implements Initializable
         // TODO
     }
 
+    /**
+     * Closes the window and cancels the creation of the movie.
+     */
     @FXML
     private void closeWindow(ActionEvent event)
     {
@@ -51,6 +54,9 @@ public class NewCategoryController implements Initializable
         stage.close();
     }
 
+    /**
+     * Adds a new category to the list. Then closes the window.
+     */
     @FXML
     private void addNewCategory(ActionEvent event) throws DALException
     {
@@ -64,13 +70,14 @@ public class NewCategoryController implements Initializable
 
         } catch (DALException ex)
         {
-         DisplayAlert al = new DisplayAlert();
-         al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
         }
     }
 
     /**
      * Transfers datamodel from MainView to this view
+     *
      * @param dm
      */
     public void transfer(DataModel dm)

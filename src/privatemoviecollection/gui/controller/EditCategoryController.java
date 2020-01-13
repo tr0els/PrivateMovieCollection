@@ -46,6 +46,9 @@ public class EditCategoryController implements Initializable
         // TODO
     }
 
+    /**
+     * Closes the window and cancels the action.
+     */
     @FXML
     private void closeWindow(ActionEvent event)
     {
@@ -53,6 +56,9 @@ public class EditCategoryController implements Initializable
         stage.close();
     }
     
+    /**
+     * Edits the name of the category, then closes the window. 
+     */
     @FXML
     private void editCategory(ActionEvent event) throws DALException
     {

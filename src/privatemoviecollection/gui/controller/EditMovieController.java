@@ -75,16 +75,24 @@ public class EditMovieController implements Initializable
         fileInput.setText(path);
     }
 
+    /**
+     * Adds all movies in the database to an arraylist.
+     * Removes the selected movie from the arraylist so it isn't checked if the name equals itself.
+     * Loops through every movie in the arraylist 
+     * and checks if the nameinput equals a name already in the list 
+     * so two movies can't have the same name. 
+     * Then updates the parameters of the selected movie that the user has changed.
+     */
     @FXML
     private void handleUpdateMovie(ActionEvent event) throws DALException
     {
 
-        List<Movie> tempMovieList = new ArrayList<>();
-        tempMovieList.addAll(dm.getAllMovies());
-        tempMovieList.remove(movie);
-
         try
         {
+            List<Movie> tempMovieList = new ArrayList<>();
+            tempMovieList.addAll(dm.getAllMovies());
+            tempMovieList.remove(movie);
+
             for (int i = 0; i < tempMovieList.size(); i++)
             {
                 if (tempMovieList.get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
@@ -108,6 +116,11 @@ public class EditMovieController implements Initializable
         }
     }
 
+    /**
+     * Transfers the data from MainView to this view. 
+     * @param movie
+     * @param datamodel
+     */
     public void transfer(Movie movie, DataModel datamodel)
     {
         nameInput.setText(movie.getName());
