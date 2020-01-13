@@ -14,7 +14,7 @@ import javafx.scene.control.Alert.AlertType;
  */
 public class DisplayAlert
 {
-    
+    //util class to display catched Exception 
   public void displayAlert(AlertType type, String title, String message )
   {
       Alert alert = new Alert(type);

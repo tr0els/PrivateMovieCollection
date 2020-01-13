@@ -10,7 +10,9 @@ package privatemoviecollection.dal.dalException;
  * @author zilot
  */
 public class DALException extends Exception
-{
+{   /*
+    * our own DALException is made here.
+    */
     public DALException (String msg)
     {
     super( msg); 
