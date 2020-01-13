@@ -262,11 +262,12 @@ public class MainViewController implements Initializable
 
         EditMovieController editmoviecontroller = loader.getController();
         editmoviecontroller.transfer(movieTable.getSelectionModel().getSelectedItem(), dataModel);
+        editmoviecontroller.categoryMenu(dataModel.getCategoryList());
 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();}
-    catch(IOException ex )
+    catch(DALException | IOException ex)
     {
         DisplayAlert al = new DisplayAlert();
         al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
