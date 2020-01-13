@@ -56,22 +56,44 @@ public class BLLManager
         return movieDB.getAllMovies();
     }
     
+    /**
+     * Gets a list of all categories
+     * @return
+     * @throws DALException
+     */
     public List<Category> getAllCategories() throws DALException
     {
         return categoryDbDao.getAllCategories();
     }
     
+    /**
+     * Creates a category object
+     * @param name
+     * @return
+     * @throws DALException
+     */
     public Category createCategory(String name) throws DALException
     {
         Category category = categoryDbDao.createCategory(name);
         return category;
     }
     
+    /**
+     * Deletes a category object
+     * @param category
+     * @return
+     * @throws DALException
+     */
     public boolean deleteCategory(Category category) throws DALException
     {
         return categoryDbDao.deleteCategory(category);
     }
     
+    /**
+     * Updates the name of a category object
+     * @param category
+     * @throws DALException
+     */
     public void updateCategory(Category category) throws DALException
     {
         categoryDbDao.updateCategory(category);

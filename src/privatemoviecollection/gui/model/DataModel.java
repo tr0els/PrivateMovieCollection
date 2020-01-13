@@ -40,13 +40,22 @@ public class DataModel
         return movies;
     } 
     
-    
+    /**
+     * Gets an observable list of all categories
+     * @return
+     * @throws DALException
+     */
     public ObservableList<Category> getCategoryList() throws DALException
     {
         categories.setAll(bll.getAllCategories());
         return categories;
     }
     
+    /**
+     * Creates a category and adds it to the list of all categories
+     * @param name
+     * @throws DALException
+     */
     public void createCategory(String name) throws DALException
     {
         Category category = bll.createCategory(name);
@@ -54,12 +63,22 @@ public class DataModel
         getCategoryList();       
     }
     
+    /**
+     * Updates the category selected from the list
+     * @param selectedCategory
+     * @throws DALException
+     */
     public void updateCategory(Category selectedCategory) throws DALException
     {
         bll.updateCategory(selectedCategory);
         getCategoryList();
     }
     
+    /**
+     * Deletes the category selected from the list
+     * @param category
+     * @throws DALException
+     */
     public void deleteCategory(Category category) throws DALException
     {
         bll.deleteCategory(chosenCategory);

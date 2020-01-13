@@ -5,7 +5,6 @@
  */
 package privatemoviecollection.dal.database;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.beans.property.StringProperty;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.dal.dalException.DALException;
 
@@ -30,6 +28,12 @@ public class CategoryDBDAO
         dbCon = new DatabaseConnector();
     }
     
+    /**
+     * Creates a category in the database
+     * @param name
+     * @return
+     * @throws DALException
+     */
     public Category createCategory(String name) throws DALException 
     {
         try ( Connection con = dbCon.getConnection())
@@ -56,6 +60,11 @@ public class CategoryDBDAO
         return null;
     }
     
+    /**
+     * Gets a list of all the categories in the database
+     * @return
+     * @throws DALException
+     */
     public List<Category> getAllCategories() throws DALException
     {
         try ( Connection con = dbCon.getConnection())
@@ -80,6 +89,13 @@ public class CategoryDBDAO
         }
     }
     
+    /**
+     * Deletes a category in the database. 
+     * Also deletes all instances of the category in the CatMovie table
+     * @param category
+     * @return
+     * @throws DALException
+     */
     public boolean deleteCategory(Category category) throws DALException
     {
         try ( Connection con = dbCon.getConnection())
@@ -108,6 +124,11 @@ public class CategoryDBDAO
         
     }
     
+    /**
+     * Updates the name of a category in the database
+     * @param category
+     * @throws DALException
+     */
     public void updateCategory(Category category) throws DALException
     {
         try ( Connection con = dbCon.getConnection())

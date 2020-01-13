@@ -26,7 +26,7 @@ import privatemoviecollection.gui.utilGUI.DisplayAlert;
  */
 public class EditCategoryController implements Initializable
 {
-    
+
     @FXML
     private TextField txtCategoryTitle;
     @FXML
@@ -35,7 +35,7 @@ public class EditCategoryController implements Initializable
     private Button saveCategory;
 
     private DataModel dataModel;
-    private Category category; 
+    private Category category;
 
     /**
      * Initializes the controller class.
@@ -44,7 +44,7 @@ public class EditCategoryController implements Initializable
     public void initialize(URL url, ResourceBundle rb)
     {
         // TODO
-    }    
+    }
 
     @FXML
     private void closeWindow(ActionEvent event)
@@ -52,40 +52,56 @@ public class EditCategoryController implements Initializable
         Stage stage = (Stage) cancel.getScene().getWindow();
         stage.close();
     }
-
-    @FXML
-    private void addNewCategory(ActionEvent event) throws DALException
-    {   try{
-        handleEditCategory(); 
-        Stage stage = (Stage) saveCategory.getScene().getWindow();
-        stage.close();}
-    catch (DALException ex)
-    {
-        DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
-    }
-    }
     
+    @FXML
+    private void editCategory(ActionEvent event) throws DALException
+    {
+        try
+        {
+            handleEditCategory();
+            Stage stage = (Stage) saveCategory.getScene().getWindow();
+            stage.close();
+        } catch (DALException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+        }
+    }
+
+    /**
+     * Transfers category from MainView to this view
+     * @param cg
+     */
     public void transferCategory(Category cg)
-    {   
+    {
         category = cg;
         txtCategoryTitle.setText(cg.getName());
     }
-    
+
+    /**
+     * Transfers datamodel from MainView to this view
+     * @param model
+     */
     public void transferDatamodel(DataModel model)
     {
         dataModel = model;
     }
-    
-    public void handleEditCategory() throws DALException 
-    {  try{
-        category.setName(txtCategoryTitle.getText());
-        dataModel.updateCategory(category);}
-    catch (DALException ex)
+
+    /**
+     * Sets a new name for the category and updates the listview
+     * @throws DALException
+     */
+    public void handleEditCategory() throws DALException
     {
-        DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+        try
+        {
+            category.setName(txtCategoryTitle.getText());
+            dataModel.updateCategory(category);
+        } catch (DALException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+        }
     }
-    }
-    
+
 }

@@ -5,9 +5,7 @@
  */
 package privatemoviecollection.gui.controller;
 
-import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -71,6 +69,10 @@ public class NewCategoryController implements Initializable
         }
     }
 
+    /**
+     * Transfers datamodel from MainView to this view
+     * @param dm
+     */
     public void transfer(DataModel dm)
     {
         dataModel = dm;

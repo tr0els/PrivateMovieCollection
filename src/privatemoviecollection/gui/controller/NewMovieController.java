@@ -83,6 +83,10 @@ public class NewMovieController implements Initializable
     @FXML
     private void handleCreateMovie(ActionEvent event)
     {
+        
+        List<Movie> tempMovieList = new ArrayList<>();
+        tempMovieList.addAll(datamodel.getAllMovies());
+        
         try
 
         {
@@ -97,9 +101,9 @@ public class NewMovieController implements Initializable
                 }
             }
 
-            for (int i = 0; i < datamodel.getAllMovies().size(); i++)
+            for (int i = 0; i < tempMovieList.size(); i++)
             {
-                if (datamodel.getAllMovies().get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
+                if (tempMovieList.get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
                 {
                     Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
                     alert.showAndWait();
