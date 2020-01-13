@@ -47,7 +47,7 @@ public class DatabaseConnector
         }
         catch (SQLServerException ex)
         {
-        throw new DALException("Kunne ikke oprette forbindelse"); 
+        throw new DALException("Kunne ikke oprette forbindelse til serveren"); 
         }
     }
         

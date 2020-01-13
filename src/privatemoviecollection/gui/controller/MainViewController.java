@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -64,7 +65,7 @@ public class MainViewController implements Initializable
     @FXML
     private ListView<Category> categoryFilter;
     @FXML
-    private ComboBox<?> comboFilterRating;
+    private ComboBox<Integer> comboFilterRating;
     @FXML
     private Button playMovieButton;
     @FXML
@@ -84,6 +85,8 @@ public class MainViewController implements Initializable
     @FXML
     private Button editCategoryButton;
     
+    ObservableList<Integer> comboList = FXCollections.observableArrayList(1,2,3,4,5,6,7,8,9,10);
+    
     /**
      * Initializes the controller class.
      */
@@ -91,7 +94,8 @@ public class MainViewController implements Initializable
     public void initialize(URL url, ResourceBundle rb)
     {
         try
-        {
+        {   
+            comboFilterRating.setItems(comboList);
             dataModel = new DataModel();
             setAllMovies();
             setAllCategories();
@@ -108,11 +112,16 @@ public class MainViewController implements Initializable
     }    
 
     @FXML
-    private void handleSearch(KeyEvent event) throws DALException
-    {
+    private void handleSearch(KeyEvent event) 
+    {   try{
         String input = searchField.getText();
         ObservableList<Movie> result = dataModel.getSearchResult(input);
-        movieTable.setItems(result);
+        movieTable.setItems(result);}
+    catch (DALException ex)
+    {
+     DisplayAlert al = new DisplayAlert();
+     al.displayAlert(Alert.AlertType.ERROR,"Kunne ikke håndtere din efterspørgsel", ex.getMessage());
+    }
     }
 
     @FXML
@@ -276,6 +285,8 @@ public class MainViewController implements Initializable
     @FXML
     private void filterByRating(ActionEvent event)
     {
+        
+        
     }
     
     private void setAllMovies() {
