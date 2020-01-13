@@ -73,7 +73,7 @@ public class NewMovieController implements Initializable
         String path;
 
         FileChooser fc = new FileChooser();
-        //fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("*.mp4"));
+        //"HUSK AT UNCOMMENT!!!!!!!" fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Movie Files" ,"*.mp4", "*.mpeg4"));
         File file = fc.showOpenDialog(null);
         path = file.getAbsolutePath();
         path = path.replace("\\", "/");
@@ -104,7 +104,6 @@ public class NewMovieController implements Initializable
                     Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
                     alert.showAndWait();
                     return;
-
                 }
             
             }

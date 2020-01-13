@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.dal.dalException.DALException;
@@ -67,7 +68,7 @@ public class EditMovieController implements Initializable
         String path;
 
         FileChooser fc = new FileChooser();
-        //fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("*.mp4"));
+        //"HUSK AT DECOMMENT!!!!" fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Movie Files", "*.mp4", "*.mpeg4"));
         File file = fc.showOpenDialog(null);
         path = file.getAbsolutePath();
         path = path.replace("\\", "/");
