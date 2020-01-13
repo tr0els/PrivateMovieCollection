@@ -99,6 +99,7 @@ public class MainViewController implements Initializable
             dataModel = new DataModel();
             setAllMovies();
             setAllCategories();
+            
 
             if (!dataModel.timeSinceLastview().isEmpty())
             {
@@ -157,6 +158,10 @@ public class MainViewController implements Initializable
         setAllMovies();
         setAllCategories();
         searchField.clear();
+        comboList.clear();
+        comboList.addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        
+        comboFilterRating.getSelectionModel().clearSelection();
 
     }
 

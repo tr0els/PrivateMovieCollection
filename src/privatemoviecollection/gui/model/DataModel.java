@@ -35,6 +35,10 @@ public class DataModel
         movies.addAll(bll.getAllMovies());
     }
     
+    /**
+     * Gets an observable list of all movies
+     * @return
+     */
     public ObservableList<Movie> getAllMovies()
     {
         return movies;
@@ -111,25 +115,42 @@ public class DataModel
         return output;
     }
     
+    /**
+     * Creates a movie object and adds it to the movie list
+     * @param name
+     * @param rating
+     * @param filelink
+     * @param imdb
+     * @param idList
+     * @throws DALException
+     */
     public void createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException
     {
         Movie movie = bll.createMovie(name, rating, filelink, imdb, idList);
         movies.add(movie);
     }
     
+    /**
+     * Deletes a movie object from the list
+     * @param mov
+     * @throws DALException
+     */
     public void deleteMovie(Movie mov) throws DALException
     {
         movies.remove(mov);
         bll.deleteMovie(mov);
     }
     
+    /**
+     * Updates the movie in the list. 
+     * @param mov
+     * @throws DALException
+     */
     public void updateMovie(Movie mov) throws DALException
     {
         bll.updateMovie(mov);
     }
     
-    
-
     public void updateLastView(Movie mov) throws DALException 
     {
         bll.updateLastView(mov);
