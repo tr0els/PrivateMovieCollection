@@ -1,4 +1,4 @@
-/*
+﻿/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -22,6 +22,7 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
@@ -72,23 +73,31 @@ public class EditMovieController implements Initializable
         String path;
 
         FileChooser fc = new FileChooser();
-        //fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("*.mp4"));
+        //"HUSK AT DECOMMENT!!!!" fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Movie Files", "*.mp4", "*.mpeg4"));
         File file = fc.showOpenDialog(null);
         path = file.getAbsolutePath();
         path = path.replace("\\", "/");
         fileInput.setText(path);
     }
 
+    /**
+     * Adds all movies in the database to an arraylist.
+     * Removes the selected movie from the arraylist so it isn't checked if the name equals itself.
+     * Loops through every movie in the arraylist 
+     * and checks if the nameinput equals a name already in the list 
+     * so two movies can't have the same name. 
+     * Then updates the parameters of the selected movie that the user has changed.
+     */
     @FXML
     private void handleUpdateMovie(ActionEvent event) throws DALException
     {
 
-        List<Movie> tempMovieList = new ArrayList<>();
-        tempMovieList.addAll(dm.getAllMovies());
-        tempMovieList.remove(movie);
-
         try
         {
+            List<Movie> tempMovieList = new ArrayList<>();
+            tempMovieList.addAll(dm.getAllMovies());
+            tempMovieList.remove(movie);
+
             for (int i = 0; i < tempMovieList.size(); i++)
             {
                 if (tempMovieList.get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
@@ -114,6 +123,12 @@ public class EditMovieController implements Initializable
     }
 
     public void transfer(Movie currentMovie, DataModel datamodel)
+    /**
+     * Transfers the data from MainView to this view. 
+     * @param movie
+     * @param datamodel
+     */
+    public void transfer(Movie movie, DataModel datamodel)
     {
         movie = currentMovie;
         
