@@ -52,7 +52,7 @@ public class AlertOldMoviesController implements Initializable
 
 
 
-    public void getListOfMovies() 
+    public void getListOfMovies() throws DALException 
     {   try{
         movieList.addAll(dm.timeSinceLastview());      
         oldMovieList.setItems(movieList);}
@@ -65,7 +65,7 @@ public class AlertOldMoviesController implements Initializable
     
     }
     
-    public void transfer(DataModel datamodel) 
+    public void transfer(DataModel datamodel) throws DALException 
     {
         dm = datamodel;
         movieList = FXCollections.observableArrayList();
@@ -76,7 +76,7 @@ public class AlertOldMoviesController implements Initializable
     
 
     @FXML
-    private void handleDeleteMovie(ActionEvent event) 
+    private void handleDeleteMovie(ActionEvent event) throws DALException 
     {   try{
         int index = oldMovieList.getSelectionModel().getSelectedIndex();
         dm.deleteMovie(movieList.get(index));
@@ -90,7 +90,7 @@ public class AlertOldMoviesController implements Initializable
     }
 
     @FXML
-    private void handleCancel(ActionEvent event) 
+    private void handleCancel(ActionEvent event) throws DALException 
     { try{
         for (Movie oldMovy : movieList)
         {
