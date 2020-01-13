@@ -83,10 +83,11 @@ public class MainViewController implements Initializable
     private Button editMovieButton;
     @FXML
     private Button editCategoryButton;
-    
+
     //laver listen til comboFilterRating med tal fra 1-10
+
     ObservableList<String> comboList = FXCollections.observableArrayList("Filter by rating","1","2","3","4","5","6","7","8","9","10");
-    
+
     /**
      * Initializes the controller class.
      */
@@ -94,34 +95,36 @@ public class MainViewController implements Initializable
     public void initialize(URL url, ResourceBundle rb)
     {
         try
-        {   
+        {
             comboFilterRating.setItems(comboList);
             dataModel = new DataModel();
             setAllMovies();
             setAllCategories();
-            
-            if(!dataModel.timeSinceLastview().isEmpty())
+
+            if (!dataModel.timeSinceLastview().isEmpty())
             {
-               alertOldMovies(); 
+                alertOldMovies();
             }
         } catch (DALException ex)
         {
-           DisplayAlert al = new DisplayAlert();
-           al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke hente dine filer", ex.getMessage());
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke hente dine filer", ex.getMessage());
         }
-    }    
+    }
 
     @FXML
-    private void handleSearch(KeyEvent event) 
-    {   try{
-        String input = searchField.getText();
-        ObservableList<Movie> result = dataModel.getSearchResult(input);
-        movieTable.setItems(result);}
-    catch (DALException ex)
+    private void handleSearch(KeyEvent event)
     {
-     DisplayAlert al = new DisplayAlert();
-     al.displayAlert(Alert.AlertType.ERROR,"Kunne ikke håndtere din efterspørgsel", ex.getMessage());
-    }
+        try
+        {
+            String input = searchField.getText();
+            ObservableList<Movie> result = dataModel.getSearchResult(input);
+            movieTable.setItems(result);
+        } catch (DALException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke håndtere din efterspørgsel", ex.getMessage());
+        }
     }
 
     /*
@@ -129,197 +132,223 @@ public class MainViewController implements Initializable
     */
     @FXML
     private void handlePlayMovie(ActionEvent event)
-    { 
-        try{ 
-                   
-        String s = movieTable.getSelectionModel().getSelectedItem().getFilelink();
-        File f = new File(s);
-        Desktop d = Desktop.getDesktop(); 
-        d.open(f);
-        
-        Movie mo = movieTable.getSelectionModel().getSelectedItem();
-        dataModel.updateLastView(mo);
-        
-           }
-        catch (DALException ex1)
+    {
+        try{
+       
+            String s = movieTable.getSelectionModel().getSelectedItem().getFilelink();
+            File f = new File(s);
+            Desktop d = Desktop.getDesktop();
+            d.open(f);
+
+            Movie mo = movieTable.getSelectionModel().getSelectedItem();
+            dataModel.updateLastView(mo);
+
+        } catch (DALException ex1)
         {
-          DisplayAlert al = new DisplayAlert();
-           al.displayAlert(Alert.AlertType.ERROR, "kunne ikke tilgå dine filer", ex1.getMessage());
-        }
-        catch (IOException ex)
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke hente dine filer", ex1.getMessage());
+        } catch (IOException ex)
+
         {
-        DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke åbne mediaplayer", ex.getMessage());
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke åbne mediaplayer", ex.getMessage());
         }
     }
     /*
     *Sets allmovies, allcategories and clears searchfiled 
     */
     @FXML
-    private void handleClearFilter(ActionEvent event) 
+    private void handleClearFilter(ActionEvent event)
     {
         
         setAllMovies();
         setAllCategories();
         searchField.clear();       
         comboFilterRating.getSelectionModel().clearAndSelect(0);
-        
-  
-       
-          
-            
 
     }
   
 
+    /**
+     * Opens the NewCategory controller. Transfers the datamodel
+     * and updates the list of categories. 
+     */
     @FXML
     private void handleNewCategory(ActionEvent event)
-    {   try{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/NewCategory.fxml"));
-        Parent root = loader.load();
-
-        NewCategoryController newCategoryController = loader.getController();
-        newCategoryController.transfer(dataModel);
-
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.showAndWait();
-        setAllCategories();}
-        catch (IOException ex)
+    {
+        try
         {
-        DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke åbne NewCategory", ex.getMessage());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/NewCategory.fxml"));
+            Parent root = loader.load();
+
+            NewCategoryController newCategoryController = loader.getController();
+            newCategoryController.transfer(dataModel);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+            setAllCategories();
+        } catch (IOException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke åbne NewCategory", ex.getMessage());
+        }
+    }
+
+    /**
+     * Deletes the category selected from the list. Opens a confirmation alert
+     * for the user to confirm the action.
+     */
+    @FXML
+    private void handleDeleteCategory(ActionEvent event)
+    {
+        try
+        {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("A Deletion Confirmation");
+            alert.setHeaderText("Are you sure you want to delete:");
+            alert.setContentText(categoryFilter.getSelectionModel().getSelectedItem() + "?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK)
+            {
+
+                dataModel.setChosenCategory(categoryFilter.getSelectionModel().getSelectedItem());
+                dataModel.deleteCategory(dataModel.getChosenCategory());
+
+            } else
+            {
+                alert.close();
+            }
+        } catch (DALException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+        }
+    }
+
+    /**
+     * Opens the EditCategory view and transfers the selected category as well
+     * as the datamodel.
+     */
+    @FXML
+    private void handleEditCategory(ActionEvent event)
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditCategory.fxml"));
+            Parent root = loader.load();
+
+            if (categoryFilter.getSelectionModel().getSelectedItem() != null)
+            {
+                EditCategoryController EditCategoryController = loader.getController();
+                EditCategoryController.transferCategory(categoryFilter.getSelectionModel().getSelectedItem());
+                EditCategoryController.transferDatamodel(dataModel);
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.show();
+            }
+        } catch (IOException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Håndtere efterspørgslen", ex.getMessage());
         }
     }
 
     @FXML
-    private void handleDeleteCategory(ActionEvent event) 
-    {   try{
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("A Deletion Confirmation");
-        alert.setHeaderText("Are you sure you want to delete:");
-        alert.setContentText(categoryFilter.getSelectionModel().getSelectedItem() + "?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK)
-        {
-
-            dataModel.setChosenCategory(categoryFilter.getSelectionModel().getSelectedItem());
-            dataModel.deleteCategory(dataModel.getChosenCategory());
-
-        } else
-        {
-            alert.close();
-        }}
-    catch (DALException ex)
+    private void handleNewMovie(ActionEvent event)
     {
-        DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
-    }
-    }
-    
-    @FXML
-    private void handleEditCategory(ActionEvent event) 
-    {   try{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditCategory.fxml"));
-        Parent root = loader.load();
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/NewMovie.fxml"));
+            Parent root = loader.load();
 
-        if (categoryFilter.getSelectionModel().getSelectedItem() != null) {
-            EditCategoryController EditCategoryController = loader.getController();
-            EditCategoryController.transferCategory(categoryFilter.getSelectionModel().getSelectedItem());
-            EditCategoryController.transferDatamodel(dataModel);
+            NewMovieController newMovieController = loader.getController();
+            newMovieController.transfer(dataModel);
+            newMovieController.categoryMenu(dataModel.getCategoryList());
+
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
-        }}
-    catch (IOException ex)
-    {
-        DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "ERROR - Håndtere efterspørgslen", ex.getMessage());
-    }
-    }
-
-    @FXML
-    private void handleNewMovie(ActionEvent event)
-    {   try{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/NewMovie.fxml"));
-        Parent root = loader.load();
-
-        NewMovieController newMovieController = loader.getController();
-        newMovieController.transfer(dataModel);
-        newMovieController.categoryMenu(dataModel.getCategoryList());
-
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();}
-    catch (DALException | IOException ex)
-    {
-        DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
-    }
+        } catch (DALException | IOException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+        }
     }
 
     @FXML
-    private void handleDeleteMovie(ActionEvent event) 
-    {   try{
-        String name = movieTable.getSelectionModel().getSelectedItem().getName();
-        
-        if (movieTable.getSelectionModel().getSelectedItem() != null) {
-            int input = JOptionPane.showConfirmDialog(null, "Permanently delete " + name + " from the list?", "Select an Option...",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+    private void handleDeleteMovie(ActionEvent event)
+    {
+        try
+        {
+            String name = movieTable.getSelectionModel().getSelectedItem().getName();
 
-            // 0=yes, 1=no.
-            if (input == JOptionPane.YES_OPTION) {
-                dataModel.deleteMovie(movieTable.getSelectionModel().getSelectedItem());
+            if (movieTable.getSelectionModel().getSelectedItem() != null)
+            {
+                int input = JOptionPane.showConfirmDialog(null, "Permanently delete " + name + " from the list?", "Select an Option...",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+
+                // 0=yes, 1=no.
+                if (input == JOptionPane.YES_OPTION)
+                {
+                    dataModel.deleteMovie(movieTable.getSelectionModel().getSelectedItem());
+                }
             }
-        }}
-    catch (DALException ex) 
-    {
-        DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
-    }
+        } catch (DALException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+        }
     }
 
     @FXML
-    private void handleEditMovie(ActionEvent event) 
-    { try{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditMovie.fxml"));
-        Parent root = loader.load();
-
-        EditMovieController editmoviecontroller = loader.getController();
-        editmoviecontroller.transfer(movieTable.getSelectionModel().getSelectedItem(), dataModel);
-
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();}
-    catch(IOException ex )
+    private void handleEditMovie(ActionEvent event)
     {
-        DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "ERROR - Fejl i out- eller indput", ex.getMessage());
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditMovie.fxml"));
+            Parent root = loader.load();
+
+            EditMovieController editmoviecontroller = loader.getController();
+            editmoviecontroller.transfer(movieTable.getSelectionModel().getSelectedItem(), dataModel);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Fejl i out- eller indput", ex.getMessage());
+        }
     }
-    }
-    
+
     @FXML
     private void filterByRating(ActionEvent event)
     {
-        
-        
+
     }
-    
-    private void setAllMovies() {
-        
-        movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());        
-        
-        movieCategory.setCellValueFactory(new PropertyValueFactory<>("categories"));       
-        movieCategory.setCellFactory(col -> new TableCell<Movie, List<Category>>() {
+
+    private void setAllMovies()
+    {
+
+        movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+
+        movieCategory.setCellValueFactory(new PropertyValueFactory<>("categories"));
+        movieCategory.setCellFactory(col -> new TableCell<Movie, List<Category>>()
+        {
             @Override
-            public void updateItem(List<Category> categories, boolean empty) {
+            public void updateItem(List<Category> categories, boolean empty)
+            {
                 super.updateItem(categories, empty);
-                if (empty || categories.isEmpty()) {
+                if (empty || categories.isEmpty())
+                {
                     setText(null);
-                } else {
+                } else
+                {
                     String text = "";
-                    for (Category c : categories) {
+                    for (Category c : categories)
+                    {
                         text = text + c.getName() + ", ";
                     }
                     text = text.replaceAll(", $", "");
@@ -329,7 +358,7 @@ public class MainViewController implements Initializable
             }
         });
 
-/*   
+        /*   
         // custom rendering of the time table cell
         movieCategory.setCellFactory(column -> new TableCell<Movie, List<Category>>() {
 
@@ -352,8 +381,7 @@ public class MainViewController implements Initializable
                 }
             }
         });
-*/
-        
+         */
         movieRating.setCellValueFactory(cellData -> cellData.getValue().ratingProperty());
         movieRatingIMDB.setCellValueFactory(cellData -> cellData.getValue().imdbProperty());
 
@@ -361,35 +389,39 @@ public class MainViewController implements Initializable
         movieTable.setItems(dataModel.getAllMovies());
     }
 
+    /**
+     * Sets all the categories in the listview
+     */
     private void setAllCategories()
     {
         try
         {
             categoryFilter.setItems(dataModel.getCategoryList());
-        } catch ( DALException ex)
+        } catch (DALException ex)
         {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void alertOldMovies()
-    {   try {    
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/AlertOldMovies.fxml"));
-        Parent root = loader.load();
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/AlertOldMovies.fxml"));
+            Parent root = loader.load();
 
-        AlertOldMoviesController alertOldMoviesController = loader.getController();
-        alertOldMoviesController.transfer(dataModel);
+            AlertOldMoviesController alertOldMoviesController = loader.getController();
+            alertOldMoviesController.transfer(dataModel);
 
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setAlwaysOnTop(true);
-        stage.show();
-        
-    }
-    catch (DALException | IOException ex)
-    { 
-        DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
-    }
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setAlwaysOnTop(true);
+            stage.show();
+
+        } catch (DALException | IOException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+        }
     }
 }

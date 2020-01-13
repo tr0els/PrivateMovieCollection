@@ -83,6 +83,7 @@ public class NewMovieController implements Initializable
     @FXML
     private void handleCreateMovie(ActionEvent event)
     {
+
         try
 
         {
@@ -97,15 +98,18 @@ public class NewMovieController implements Initializable
                 }
             }
 
-            for (int i = 0; i < datamodel.getAllMovies().size(); i++)
+            List<Movie> tempMovieList = new ArrayList<>();
+            tempMovieList.addAll(datamodel.getAllMovies());
+            
+            for (int i = 0; i < tempMovieList.size(); i++)
             {
-                if (datamodel.getAllMovies().get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
+                if (tempMovieList.get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
                 {
                     Alert alert = new Alert(Alert.AlertType.WARNING, "That name already exists in the database. Please pick another", ButtonType.OK);
                     alert.showAndWait();
                     return;
                 }
-            
+
             }
             datamodel.createMovie(nameInput.getText(), Integer.parseInt(ratingInput.getText()), fileInput.getText(), Float.parseFloat(imdbInput.getText()), idList);
             Stage stage = (Stage) createMovie.getScene().getWindow();
@@ -120,6 +124,9 @@ public class NewMovieController implements Initializable
 
     }
 
+    /**
+     * Transfers the datamodel from MainView to this view.
+     */
     public void transfer(DataModel dm)
     {
         datamodel = dm;
