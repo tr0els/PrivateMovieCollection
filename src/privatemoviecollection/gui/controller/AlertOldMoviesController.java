@@ -52,7 +52,7 @@ public class AlertOldMoviesController implements Initializable
 
 
 
-    public void getListOfMovies() throws DALException
+    public void getListOfMovies() throws DALException 
     {   try{
         movieList.addAll(dm.timeSinceLastview());      
         oldMovieList.setItems(movieList);}
@@ -65,20 +65,18 @@ public class AlertOldMoviesController implements Initializable
     
     }
     
-    public void transfer(DataModel datamodel) throws DALException
+    public void transfer(DataModel datamodel) throws DALException 
     {
         dm = datamodel;
         movieList = FXCollections.observableArrayList();
-        try {
-            getListOfMovies();
-        } catch (DALException ex) {
-            DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
-        }
+        
+        getListOfMovies();
+        
     }
+    
 
     @FXML
-    private void handleDeleteMovie(ActionEvent event) throws DALException
+    private void handleDeleteMovie(ActionEvent event) throws DALException 
     {   try{
         int index = oldMovieList.getSelectionModel().getSelectedIndex();
         dm.deleteMovie(movieList.get(index));
@@ -92,7 +90,7 @@ public class AlertOldMoviesController implements Initializable
     }
 
     @FXML
-    private void handleCancel(ActionEvent event) throws DALException
+    private void handleCancel(ActionEvent event) throws DALException 
     { try{
         for (Movie oldMovy : movieList)
         {

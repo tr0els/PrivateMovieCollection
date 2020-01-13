@@ -9,7 +9,6 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -85,6 +84,7 @@ public class MainViewController implements Initializable
     @FXML
     private Button editCategoryButton;
     
+    //laver listen til comboFilterRating med tal fra 1-10
     ObservableList<Integer> comboList = FXCollections.observableArrayList(1,2,3,4,5,6,7,8,9,10);
     
     /**
@@ -138,10 +138,15 @@ public class MainViewController implements Initializable
         dataModel.updateLastView(mo);
         
            }
-        catch (DALException | IOException ex1)
+        catch (DALException ex1)
         {
           DisplayAlert al = new DisplayAlert();
            al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke hente dine filer", ex1.getMessage());
+        }
+        catch (IOException ex)
+        {
+        DisplayAlert al = new DisplayAlert();
+        al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke åbne mediaplayer", ex.getMessage());
         }
     }
 
@@ -171,7 +176,7 @@ public class MainViewController implements Initializable
         catch (IOException ex)
         {
         DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "ERROR - Kunne ikke håndtere efterspørgslen", ex.getMessage());
+        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke åbne NewCategory", ex.getMessage());
         }
     }
 
@@ -278,7 +283,7 @@ public class MainViewController implements Initializable
     catch(IOException ex )
     {
         DisplayAlert al = new DisplayAlert();
-        al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+        al.displayAlert(Alert.AlertType.ERROR, "ERROR - Fejl i out- eller indput", ex.getMessage());
     }
     }
     
@@ -349,7 +354,7 @@ public class MainViewController implements Initializable
         try
         {
             categoryFilter.setItems(dataModel.getCategoryList());
-        } catch (Exception ex)
+        } catch ( DALException ex)
         {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
