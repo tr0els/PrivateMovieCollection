@@ -64,7 +64,7 @@ public class MainViewController implements Initializable
     @FXML
     private ListView<Category> categoryFilter;
     @FXML
-    private ComboBox<Integer> comboFilterRating;
+    private ComboBox<String> comboFilterRating;
     @FXML
     private Button playMovieButton;
     @FXML
@@ -85,7 +85,8 @@ public class MainViewController implements Initializable
     private Button editCategoryButton;
 
     //laver listen til comboFilterRating med tal fra 1-10
-    ObservableList<Integer> comboList = FXCollections.observableArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+    ObservableList<String> comboList = FXCollections.observableArrayList("Filter by rating","1","2","3","4","5","6","7","8","9","10");
 
     /**
      * Initializes the controller class.
@@ -127,12 +128,14 @@ public class MainViewController implements Initializable
         }
     }
 
+    /*
+    *Handel playmovie via systemdefault mediaplayer 
+    */
     @FXML
     private void handlePlayMovie(ActionEvent event)
     {
-        try
-        {
-
+        try{
+       
             String s = movieTable.getSelectionModel().getSelectedItem().getFilelink();
             File f = new File(s);
             Desktop d = Desktop.getDesktop();
@@ -146,24 +149,24 @@ public class MainViewController implements Initializable
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke hente dine filer", ex1.getMessage());
         } catch (IOException ex)
+
         {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke åbne mediaplayer", ex.getMessage());
         }
     }
-
+    /*
+    *Sets allmovies, allcategories and clears searchfiled 
+    */
     @FXML
     private void handleClearFilter(ActionEvent event)
     {
         setAllMovies();
         setAllCategories();
-        searchField.clear();
-        comboList.clear();
-        comboList.addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        
-        comboFilterRating.getSelectionModel().clearSelection();
-
+        searchField.clear();       
+        comboFilterRating.getSelectionModel().clearAndSelect(0);
     }
+  
 
     /**
      * Opens the NewCategory controller. Transfers the datamodel
