@@ -114,9 +114,12 @@ public class MainViewController implements Initializable
     {
         try
         {
-            String input = searchField.getText();
-            ObservableList<Movie> result = dataModel.getSearchResult(input);
-            movieTable.setItems(result);
+
+        	String searchName = searchField.getText();
+        	int searchRating = 6; //comboFilterRating.getSelectionModel().getSelectedIndex() + 1; // tmp
+        	List searchCategories = categoryFilter.getSelectionModel().getSelectedItems();
+
+        	dataModel.getSearchResult(searchName, searchRating, searchCategories);
         } catch (DALException ex)
         {
             DisplayAlert al = new DisplayAlert();
@@ -152,13 +155,14 @@ public class MainViewController implements Initializable
         }
     }
     /*
-    *Sets allmovies, allcategories and clears searchfiled 
+    * Clears searchfiled, combobox, allmovies and categoryfilter
     */
     @FXML
     private void handleClearFilter(ActionEvent event)
     {
         setAllMovies();
-        setAllCategories();
+        //setAllCategories();
+        categoryFilter.getSelectionModel().clearSelection();
         searchField.clear();       
         comboFilterRating.getSelectionModel().clearAndSelect(0);
     }
@@ -310,11 +314,16 @@ public class MainViewController implements Initializable
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();}
-    catch(DALException | IOException ex)
+    catch(IOException ex)
         {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "ERROR - Fejl i out- eller indput", ex.getMessage());
         }
+    catch (DALException ex)
+    {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Fejl Server adgang", ex.getMessage());
+    }
     }
 
     @FXML
