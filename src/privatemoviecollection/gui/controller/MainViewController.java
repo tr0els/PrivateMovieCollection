@@ -110,13 +110,12 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleSearch(KeyEvent event)
+    private void handleSearch(ActionEvent event)
     {
         try
         {
-
         	String searchName = searchField.getText();
-        	int searchRating = 6; //comboFilterRating.getSelectionModel().getSelectedIndex() + 1; // tmp
+        	int searchRating = comboFilterRating.getSelectionModel().getSelectedIndex() + 1;
         	List searchCategories = categoryFilter.getSelectionModel().getSelectedItems();
 
         	dataModel.getSearchResult(searchName, searchRating, searchCategories);
@@ -166,7 +165,6 @@ public class MainViewController implements Initializable
         comboFilterRating.getSelectionModel().clearAndSelect(0);
     }
   
-
     /**
      * Opens the NewCategory controller. Transfers the datamodel
      * and updates the list of categories. 
@@ -320,11 +318,6 @@ public class MainViewController implements Initializable
         }
     }
 
-    @FXML
-    private void filterByRating(ActionEvent event)
-    {
-
-    }
 
     private void setAllMovies()
     {
@@ -355,30 +348,6 @@ public class MainViewController implements Initializable
             }
         });
 
-        /*   
-        // custom rendering of the time table cell
-        movieCategory.setCellFactory(column -> new TableCell<Movie, List<Category>>() {
-
-            @Override
-            protected void updateItem(List<Category> item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty) {
-                    setText(null);
-                } else if(!item.isEmpty()) {
-                    String text = "";
-                    for (Category c : item) {
-                        text = text + c.getName() + ", ";
-                    }
-                    text = text.replaceAll(", $", "");
-                    text.trim();
-                    setText(text);
-                } else {
-                    setText("list is empty!");
-                }
-            }
-        });
-         */
         movieRating.setCellValueFactory(cellData -> cellData.getValue().ratingProperty());
         movieRatingIMDB.setCellValueFactory(cellData -> cellData.getValue().imdbProperty());
 
