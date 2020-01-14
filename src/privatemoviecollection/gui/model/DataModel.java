@@ -26,7 +26,7 @@ public class DataModel
     
     private ObservableList<Movie> movies = FXCollections.observableArrayList();
     private ObservableList<Category> categories = FXCollections.observableArrayList();
-    private Category chosenCategory; 
+    private Category chosenCategory;
     
     public DataModel() throws DALException
     {
@@ -77,12 +77,10 @@ public class DataModel
         return chosenCategory;
     }
     
-    public ObservableList<Movie> getSearchResult(String input) throws DALException
+    public void getSearchResult(String input, int rating, List categories) throws DALException
     {
-        List<Movie> filter = bll.searchMovies(input);
-        ObservableList<Movie> output = FXCollections.observableList(filter);
-        
-        return output;
+        List<Movie> result = bll.searchMovies(input, rating, categories);
+        movies.setAll(result);
     }
     
     public void createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException
@@ -102,8 +100,6 @@ public class DataModel
         bll.updateMovie(mov);
     }
     
-    
-
     public void updateLastView(Movie mov) throws DALException 
     {
         bll.updateLastView(mov);

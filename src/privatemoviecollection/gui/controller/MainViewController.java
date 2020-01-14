@@ -110,9 +110,11 @@ public class MainViewController implements Initializable
     @FXML
     private void handleSearch(KeyEvent event) throws DALException
     {
-        String input = searchField.getText();
-        ObservableList<Movie> result = dataModel.getSearchResult(input);
-        movieTable.setItems(result);
+        String searchName = searchField.getText();
+        int searchRating = 6; //comboFilterRating.getSelectionModel().getSelectedIndex() + 1; // tmp
+        List searchCategories = categoryFilter.getSelectionModel().getSelectedItems();
+
+        dataModel.getSearchResult(searchName, searchRating, searchCategories);
     }
 
     @FXML
