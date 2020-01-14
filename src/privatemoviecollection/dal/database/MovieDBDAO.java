@@ -34,7 +34,7 @@ public class MovieDBDAO
             dbCon = new DatabaseConnector();
     }
 
-    public Movie createMovie(String name, int rating, String filelink, float imdb, List<Integer> idList) throws DALException
+    public Movie createMovie(String name, int rating, String filelink, float imdb, List<Category> idList) throws DALException
     {
 
         try
@@ -61,9 +61,9 @@ public class MovieDBDAO
                 {
                     int id = rs.getInt(1);
 
-                    for (Integer i : idList)
+                    for (Category i : idList)
                     {
-                        ps2.setInt(1, i);
+                        ps2.setInt(1, i.getId());
                         ps2.setInt(2, id);
                         ps2.executeUpdate();
                     }
@@ -223,7 +223,7 @@ public class MovieDBDAO
 
     }
     
-    public void updateCategoryInCatMovie(ArrayList<Integer> list, Movie mov)
+    public void updateCategoryInCatMovie(ArrayList<Category> list, Movie mov)
     {
         try
         {
@@ -239,9 +239,9 @@ public class MovieDBDAO
             ps.executeUpdate();
             ps.close();
             
-            for (Integer integer : list)
+            for (Category category : list)
             {
-                ps2.setInt(1, integer);
+                ps2.setInt(1, category.getId());
                 ps2.setInt(2, mov.getId());
                 ps2.executeUpdate();
             }

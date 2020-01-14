@@ -87,14 +87,14 @@ public class NewMovieController implements Initializable
         try
 
         {
-            ArrayList<Integer> idList = new ArrayList<Integer>();
+            ArrayList<Category> idList = new ArrayList<Category>();
             for (MenuItem item : chooseCategory.getItems())
             {
                 CheckMenuItem checkMenuItem = (CheckMenuItem) item;
                 if (checkMenuItem.isSelected())
                 {
                     int index = chooseCategory.getItems().indexOf(checkMenuItem);
-                    idList.add(categoryList.get(index).getId());
+                    idList.add(categoryList.get(index));
                 }
             }
 

@@ -108,6 +108,7 @@ public class EditMovieController implements Initializable
             movie.setFilelink(fileInput.getText());
             movie.setImdb(Float.parseFloat(imdbInput.getText()));
             
+            
             dm.updateMovie(movie);
             updateCategories();
             Stage stage = (Stage) updateMovie.getScene().getWindow();
@@ -141,7 +142,7 @@ public class EditMovieController implements Initializable
         categoryList = list;
         for (Category category : categoryList)
         {
-            CheckMenuItem checkMenuItem = new CheckMenuItem(category.getName());
+            CheckMenuItem checkMenuItem = new CheckMenuItem(category.toString());
             menuCategories.getItems().add(checkMenuItem);
             
             for (Category movieCategory : movie.getCategories())
@@ -151,25 +152,21 @@ public class EditMovieController implements Initializable
                     checkMenuItem.setSelected(true);
                 }
             }
-            
         }
     }
     
     public void updateCategories()
     {
-        ArrayList<Integer> idList = new ArrayList<Integer>();
+        ArrayList<Category> idList = new ArrayList<Category>();
             for (MenuItem item : menuCategories.getItems())
             {
                 CheckMenuItem checkMenuItem = (CheckMenuItem) item;
                 if (checkMenuItem.isSelected())
                 {
                     int index = menuCategories.getItems().indexOf(checkMenuItem);
-                    idList.add(categoryList.get(index).getId());
+                    idList.add(categoryList.get(index));
                 }
             }
         dm.updateCategoryCatMovie(idList, movie);
     }
-    
-    
-    
 }
