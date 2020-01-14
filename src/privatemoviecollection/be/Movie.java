@@ -123,6 +123,6 @@ public class Movie {
     }
     
     public void removeCategories() {
-        categories.removeAll();
+        categories.clear();
     }
 }

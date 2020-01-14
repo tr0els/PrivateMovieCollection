@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,7 +28,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import privatemoviecollection.be.Category;
@@ -48,7 +49,7 @@ public class MainViewController implements Initializable
     @FXML
     private TableColumn<Movie, String> movieName;
     @FXML
-    private TableColumn<Movie, List<Category>> movieCategory;
+    private TableColumn<Movie, ObservableList<Category>> movieCategory;
     @FXML
     private TableColumn<Movie, Integer> movieRating;
     @FXML
@@ -89,11 +90,12 @@ public class MainViewController implements Initializable
     {
         try
         {
-            comboFilterRating.setItems(comboList);
             dataModel = new DataModel();
+            
+            comboFilterRating.setItems(comboList);
             setAllMovies();
             setAllCategories();
-            
+            setSearchListeners();
 
             if (!dataModel.timeSinceLastview().isEmpty())
             {
@@ -107,12 +109,12 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleSearch(ActionEvent event)
+    private void handleSearch()
     {
         try
         {
         	String searchName = searchField.getText();
-        	int searchRating = comboFilterRating.getSelectionModel().getSelectedIndex() + 1;
+        	int searchRating = comboFilterRating.getSelectionModel().getSelectedIndex();
         	List searchCategories = categoryFilter.getSelectionModel().getSelectedItems();
 
         	dataModel.getSearchResult(searchName, searchRating, searchCategories);
@@ -328,10 +330,10 @@ public class MainViewController implements Initializable
         movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
         movieCategory.setCellValueFactory(new PropertyValueFactory<>("categories"));
-        movieCategory.setCellFactory(col -> new TableCell<Movie, List<Category>>()
+        movieCategory.setCellFactory(col -> new TableCell<Movie, ObservableList<Category>>()
         {
             @Override
-            public void updateItem(List<Category> categories, boolean empty)
+            public void updateItem(ObservableList<Category> categories, boolean empty)
             {
                 super.updateItem(categories, empty);
                 if (empty || categories.isEmpty())
@@ -372,6 +374,27 @@ public class MainViewController implements Initializable
             al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not Set list of Categories", ex.getMessage());
         }
     }
+    
+    private void setSearchListeners() {
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            handleSearch();
+        }); 
+        
+        comboFilterRating.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            handleSearch();
+        });
+        
+        categoryFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Category>()
+        {
+            @Override
+            public void changed(ObservableValue<? extends Category> arg0, Category oldCategory, Category newCategory)
+            {
+                handleSearch();
+            }
+        });
+                
+    }
+    
 
     private void alertOldMovies()
     {

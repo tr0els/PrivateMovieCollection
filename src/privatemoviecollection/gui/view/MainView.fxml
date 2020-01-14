@@ -25,11 +25,11 @@
             <Font name="System Bold" size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="searchField" layoutX="652.0" layoutY="174.0" onKeyTyped="#handleSearch" />
+      <TextField fx:id="searchField" layoutX="652.0" layoutY="174.0" />
       <Label layoutX="600.0" layoutY="178.0" text="Search" />
       <ListView fx:id="categoryFilter" layoutX="600.0" layoutY="261.0" prefHeight="348.0" prefWidth="200.0" />
       <Label layoutX="600.0" layoutY="243.0" text="Filter by categories" />
-      <ComboBox fx:id="comboFilterRating" layoutX="601.0" layoutY="208.0" onAction="#handleSearch" prefHeight="26.0" prefWidth="200.0" promptText="Filter by rating" />
+      <ComboBox fx:id="comboFilterRating" layoutX="601.0" layoutY="208.0" prefHeight="26.0" prefWidth="200.0" promptText="Filter by rating" />
       <Button fx:id="playMovieButton" layoutX="497.0" layoutY="144.0" mnemonicParsing="false" onAction="#handlePlayMovie" text="Play Movie" />
       <Button fx:id="clearFilter" layoutX="391.0" layoutY="144.0" mnemonicParsing="false" onAction="#handleClearFilter" text="Clear filter" />
       <Button fx:id="newCategoryButton" layoutX="623.0" layoutY="619.0" mnemonicParsing="false" onAction="#handleNewCategory" text="New " />
