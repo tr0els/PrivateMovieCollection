@@ -224,7 +224,7 @@ public class MovieDBDAO
 
     }
     
-    public void updateCategoryInCatMovie(ObservableList<Category> list, Movie mov)
+    public void updateCategoryInCatMovie(ObservableList<Category> list, Movie mov) throws DALException
     {
         try
         {
@@ -251,10 +251,10 @@ public class MovieDBDAO
             
         } catch (DALException ex)
         {
-            Logger.getLogger(MovieDBDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DALException("Could not update Category");
         } catch (SQLException ex)
         {
-            Logger.getLogger(MovieDBDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DALException("Could not update Category");
         }
         
         
