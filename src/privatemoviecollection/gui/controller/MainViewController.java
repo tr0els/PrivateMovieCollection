@@ -1,6 +1,5 @@
 package privatemoviecollection.gui.controller;
 
-
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -16,19 +15,23 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 import privatemoviecollection.be.Category;
@@ -81,8 +84,7 @@ public class MainViewController implements Initializable
     private Button editCategoryButton;
 
     //laver listen til comboFilterRating med tal fra 1-10
-
-    ObservableList<String> comboList = FXCollections.observableArrayList("Filter by rating","1","2","3","4","5","6","7","8","9","10");
+    ObservableList<String> comboList = FXCollections.observableArrayList("Filter by rating", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
 
     /**
      * Initializes the controller class.
@@ -96,7 +98,7 @@ public class MainViewController implements Initializable
             dataModel = new DataModel();
             setAllMovies();
             setAllCategories();
-            
+            categorySelectionMode();
 
             if (!dataModel.timeSinceLastview().isEmpty())
             {
@@ -115,11 +117,11 @@ public class MainViewController implements Initializable
         try
         {
 
-        	String searchName = searchField.getText();
-        	int searchRating = 6; //comboFilterRating.getSelectionModel().getSelectedIndex() + 1; // tmp
-        	List searchCategories = categoryFilter.getSelectionModel().getSelectedItems();
+            String searchName = searchField.getText();
+            int searchRating = 6; //comboFilterRating.getSelectionModel().getSelectedIndex() + 1; // tmp
+            List searchCategories = categoryFilter.getSelectionModel().getSelectedItems();
 
-        	dataModel.getSearchResult(searchName, searchRating, searchCategories);
+            dataModel.getSearchResult(searchName, searchRating, searchCategories);
         } catch (DALException ex)
         {
             DisplayAlert al = new DisplayAlert();
@@ -129,12 +131,13 @@ public class MainViewController implements Initializable
 
     /*
     *Handel playmovie via systemdefault mediaplayer 
-    */
+     */
     @FXML
     private void handlePlayMovie(ActionEvent event)
     {
-        try{
-       
+        try
+        {
+
             String s = movieTable.getSelectionModel().getSelectedItem().getFilelink();
             File f = new File(s);
             Desktop d = Desktop.getDesktop();
@@ -154,22 +157,22 @@ public class MainViewController implements Initializable
             al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke åbne mediaplayer", ex.getMessage());
         }
     }
+
     /*
     *Sets allmovies, allcategories and clears searchfiled and combobox
-    */
+     */
     @FXML
     private void handleClearFilter(ActionEvent event)
     {
         setAllMovies();
         setAllCategories();
-        searchField.clear();       
+        searchField.clear();
         comboFilterRating.getSelectionModel().clearAndSelect(0);
     }
-  
 
     /**
-     * Opens the NewCategory controller. Transfers the datamodel
-     * and updates the list of categories. 
+     * Opens the NewCategory controller. Transfers the datamodel and updates the
+     * list of categories.
      */
     @FXML
     private void handleNewCategory(ActionEvent event)
@@ -301,19 +304,21 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleEditMovie(ActionEvent event) 
-    { try{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditMovie.fxml"));
-        Parent root = loader.load();
+    private void handleEditMovie(ActionEvent event)
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditMovie.fxml"));
+            Parent root = loader.load();
 
-        EditMovieController editmoviecontroller = loader.getController();
-        editmoviecontroller.transfer(movieTable.getSelectionModel().getSelectedItem(), dataModel);
-        editmoviecontroller.categoryMenu(dataModel.getCategoryList());
+            EditMovieController editmoviecontroller = loader.getController();
+            editmoviecontroller.transfer(movieTable.getSelectionModel().getSelectedItem(), dataModel);
+            editmoviecontroller.categoryMenu(dataModel.getCategoryList());
 
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();}
-    catch(DALException | IOException ex)
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (DALException | IOException ex)
         {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "ERROR - Fejl i out- eller indput", ex.getMessage());
@@ -394,6 +399,7 @@ public class MainViewController implements Initializable
         try
         {
             categoryFilter.setItems(dataModel.getCategoryList());
+
         } catch (DALException ex)
         {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
@@ -420,5 +426,51 @@ public class MainViewController implements Initializable
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
         }
+    }
+
+    private void categorySelectionMode()
+    {
+        categoryFilter.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        
+        // GØR DET MULIGT AT SELECTE FLERE KATEGORIER UDEN AT KLIKKE CTRL
+        categoryFilter.addEventFilter(MouseEvent.MOUSE_CLICKED, evt ->
+        {
+            Node node = evt.getPickResult().getIntersectedNode();
+
+            // go up from the target node until a list cell is found or it's clear
+            // it was not a cell that was clicked
+            while (node != null && node != categoryFilter && !(node instanceof ListCell))
+            {
+                node = node.getParent();
+            }
+
+            // if is part of a cell or the cell,
+            // handle event instead of using standard handling
+            if (node instanceof ListCell)
+            {
+                // prevent further handling
+                evt.consume();
+
+                ListCell cell = (ListCell) node;
+                ListView lv = cell.getListView();
+
+                // focus the listview
+                lv.requestFocus();
+                
+                if (!cell.isEmpty())
+                {
+                    // handle selection for non-empty cells
+                    int index = cell.getIndex();
+                    if (cell.isSelected())
+                    {
+                        lv.getSelectionModel().clearSelection(index);
+                    } else
+                    {
+                        lv.getSelectionModel().select(index);
+                    }
+                }
+            }
+
+        });
     }
 }
