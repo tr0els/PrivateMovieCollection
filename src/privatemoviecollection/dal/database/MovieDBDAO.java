@@ -271,7 +271,7 @@ public class MovieDBDAO
             
             // build sql for name
             String sqlName = "";
-            if(!searchName.isEmpty() || searchName != null) {
+            if(!searchName.isEmpty()) {
                 sqlName = " name LIKE ? AND";
             }
             
@@ -306,8 +306,14 @@ public class MovieDBDAO
             PreparedStatement ps = con.prepareStatement(sql);
             
             int index = 1;
-            ps.setString(index++, searchName);
-            ps.setInt(index++, searchRating);
+            if(!searchName.isEmpty()) 
+            {
+                ps.setString(index++, searchName);
+            }
+            if(searchRating != 0)
+            {
+                ps.setInt(index++, searchRating);
+            }
             for(Category category : dummy) {
                 ps.setInt(index++, category.getId());
             }
