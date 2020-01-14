@@ -23,21 +23,37 @@ public class Category
         this.name = new SimpleStringProperty(name);
     }
     
+    /**
+     * Gets the id of a category
+     * @return
+     */
     public int getId()
     {
         return id;
     }
 
+    /**
+     * Gets the name of a category
+     * @return
+     */
     public String getName()
     {
         return name.get();
     }
 
+    /**
+     * Sets the name of a category. 
+     * @param name
+     */
     public void setName(String name)
     {
         this.name.set(name);
     }
     
+    /**
+     * Overrides the toString method to show the name of a category. 
+     * @return
+     */
     @Override
     public String toString()
     {

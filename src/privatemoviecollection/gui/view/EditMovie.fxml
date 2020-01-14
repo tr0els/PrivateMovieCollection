@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -17,12 +18,12 @@
       <TextField fx:id="imdbInput" layoutX="100.0" layoutY="211.0" prefHeight="26.0" prefWidth="50.0" />
       <Label layoutX="30.0" layoutY="215.0" text="Imdb Rating" />
       <Button fx:id="updateMovie" layoutX="125.0" layoutY="250.0" mnemonicParsing="false" onAction="#handleUpdateMovie" text="Update Movie" />
-      <TextField fx:id="categoryInput" layoutX="89.0" layoutY="137.0" prefHeight="26.0" prefWidth="224.0" promptText="Insert category" />
       <Label layoutX="39.0" layoutY="141.0" text="Category" />
       <Label layoutX="115.0" layoutY="14.0" text="Edit Movie">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
+      <MenuButton fx:id="menuCategories" layoutX="90.0" layoutY="137.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="190.0" text="Choose categories" />
    </children>
 </AnchorPane>

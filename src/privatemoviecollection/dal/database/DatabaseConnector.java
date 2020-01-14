@@ -11,8 +11,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import privatemoviecollection.dal.dalException.DALException;
 
 /**
@@ -47,7 +45,7 @@ public class DatabaseConnector
         }
         catch (SQLServerException ex)
         {
-        throw new DALException("Kunne ikke oprette forbindelse"); 
+        throw new DALException("Kunne ikke oprette forbindelse til serveren"); 
         }
     }
         

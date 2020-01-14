@@ -5,12 +5,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="122.0" prefWidth="321.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="privatemoviecollection.gui.controller.EditCategoryController">
+<AnchorPane id="AnchorPane" prefHeight="122.0" prefWidth="321.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="privatemoviecollection.gui.controller.EditCategoryController">
    <children>
       <TextField fx:id="txtCategoryTitle" layoutX="137.0" layoutY="46.0" />
       <Text layoutX="90.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" wrappingWidth="34.294921875" />
       <Button fx:id="cancel" layoutX="137.0" layoutY="79.0" mnemonicParsing="false" onAction="#closeWindow" text="Cancel" />
-      <Button fx:id="saveCategory" layoutX="202.0" layoutY="79.0" mnemonicParsing="false" onAction="#addNewCategory" text="Save" />
+      <Button fx:id="saveCategory" layoutX="202.0" layoutY="79.0" mnemonicParsing="false" onAction="#editCategory" text="Save" />
    </children>
 </AnchorPane>

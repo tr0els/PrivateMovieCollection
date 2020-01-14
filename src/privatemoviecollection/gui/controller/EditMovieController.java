@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package privatemoviecollection.gui.controller;
 
 import java.io.File;
@@ -18,9 +13,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.dal.dalException.DALException;
 import privatemoviecollection.gui.model.DataModel;
@@ -45,12 +44,14 @@ public class EditMovieController implements Initializable
     @FXML
     private TextField imdbInput;
     @FXML
-    private TextField categoryInput;
-    @FXML
     private Button updateMovie;
-
+    @FXML
+    private MenuButton menuCategories;
+    
     private Movie movie;
     private DataModel dm;
+    private List<Category> categoryList;
+    
 
     /**
      * Initializes the controller class.
@@ -67,23 +68,31 @@ public class EditMovieController implements Initializable
         String path;
 
         FileChooser fc = new FileChooser();
-        //fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("*.mp4"));
+        //"HUSK AT DECOMMENT!!!!" fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Movie Files", "*.mp4", "*.mpeg4"));
         File file = fc.showOpenDialog(null);
         path = file.getAbsolutePath();
         path = path.replace("\\", "/");
         fileInput.setText(path);
     }
 
+    /**
+     * Adds all movies in the database to an arraylist.
+     * Removes the selected movie from the arraylist so it isn't checked if the name equals itself.
+     * Loops through every movie in the arraylist 
+     * and checks if the nameinput equals a name already in the list 
+     * so two movies can't have the same name. 
+     * Then updates the parameters of the selected movie that the user has changed.
+     */
     @FXML
     private void handleUpdateMovie(ActionEvent event) throws DALException
     {
 
-        List<Movie> tempMovieList = new ArrayList<>();
-        tempMovieList.addAll(dm.getAllMovies());
-        tempMovieList.remove(movie);
-
         try
         {
+            List<Movie> tempMovieList = new ArrayList<>();
+            tempMovieList.addAll(dm.getAllMovies());
+            tempMovieList.remove(movie);
+
             for (int i = 0; i < tempMovieList.size(); i++)
             {
                 if (tempMovieList.get(i).toString().trim().equalsIgnoreCase(nameInput.getText()))
@@ -97,6 +106,7 @@ public class EditMovieController implements Initializable
             movie.setRating(Integer.parseInt(ratingInput.getText()));
             movie.setFilelink(fileInput.getText());
             movie.setImdb(Float.parseFloat(imdbInput.getText()));
+            
             dm.updateMovie(movie);
             Stage stage = (Stage) updateMovie.getScene().getWindow();
             stage.close();
@@ -107,14 +117,39 @@ public class EditMovieController implements Initializable
         }
     }
 
-    public void transfer(Movie movie, DataModel datamodel)
+    public void transfer(Movie currentMovie, DataModel datamodel)
+    /**
+     * Transfers the data from MainView to this view. 
+     * @param movie
+     * @param datamodel
+     */
     {
+        movie = currentMovie;
+        
         nameInput.setText(movie.getName());
         ratingInput.setText(movie.getRating() + "");
         fileInput.setText(movie.getFilelink());
         imdbInput.setText(movie.getImdb() + "");
-
-        this.movie = movie;
+        
         dm = datamodel;
+    }
+    
+    public void categoryMenu(List<Category> list)
+    {
+        categoryList = list;
+        for (Category category : categoryList)
+        {
+            CheckMenuItem checkMenuItem = new CheckMenuItem(category.getName());
+            menuCategories.getItems().add(checkMenuItem);
+            
+            for (Category movieCategory : movie.getCategories())
+            {
+                if (category.getName().equals(movieCategory.getName()))
+                {
+                    checkMenuItem.setSelected(true);
+                }
+            }
+            
+        }
     }
 }
