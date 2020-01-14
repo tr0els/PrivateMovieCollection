@@ -172,10 +172,8 @@ public class MainViewController implements Initializable
     private void handleClearFilter(ActionEvent event)
     {
         setAllMovies();
-        setAllCategories();
         searchField.clear();
         comboFilterRating.getSelectionModel().clearAndSelect(0);
-
         categoryFilter.getSelectionModel().clearSelection();
 
     }
