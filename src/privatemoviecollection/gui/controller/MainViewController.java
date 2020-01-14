@@ -8,8 +8,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -81,7 +79,6 @@ public class MainViewController implements Initializable
     private Button editCategoryButton;
 
     //laver listen til comboFilterRating med tal fra 1-10
-
     ObservableList<String> comboList = FXCollections.observableArrayList("Filter by rating","1","2","3","4","5","6","7","8","9","10");
 
     /**
