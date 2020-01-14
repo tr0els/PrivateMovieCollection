@@ -8,8 +8,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -81,7 +79,6 @@ public class MainViewController implements Initializable
     private Button editCategoryButton;
 
     //laver listen til comboFilterRating med tal fra 1-10
-
     ObservableList<String> comboList = FXCollections.observableArrayList("Filter by rating","1","2","3","4","5","6","7","8","9","10");
 
     /**
@@ -145,22 +142,23 @@ public class MainViewController implements Initializable
         } catch (DALException ex1)
         {
             DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke hente dine filer", ex1.getMessage());
+            al.displayAlert(Alert.AlertType.ERROR, "Could not play Movie", ex1.getMessage());
         } catch (IOException ex)
 
         {
             DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke åbne mediaplayer", ex.getMessage());
+            al.displayAlert(Alert.AlertType.ERROR, "Could not open mediaplayer", ex.getMessage());
         }
     }
     /*
-    *Sets allmovies, allcategories and clears searchfiled 
+    * Clears searchfiled, combobox, allmovies and categoryfilter
     */
     @FXML
     private void handleClearFilter(ActionEvent event)
     {
         setAllMovies();
-        setAllCategories();
+        //setAllCategories();
+        categoryFilter.getSelectionModel().clearSelection();
         searchField.clear();       
         comboFilterRating.getSelectionModel().clearAndSelect(0);
     }
@@ -187,7 +185,7 @@ public class MainViewController implements Initializable
         } catch (IOException ex)
         {
             DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke åbne NewCategory", ex.getMessage());
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not open New Category", ex.getMessage());
         }
     }
 
@@ -219,7 +217,7 @@ public class MainViewController implements Initializable
         } catch (DALException ex)
         {
             DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not Delete Category", ex.getMessage());
         }
     }
 
@@ -247,7 +245,7 @@ public class MainViewController implements Initializable
         } catch (IOException ex)
         {
             DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Håndtere efterspørgslen", ex.getMessage());
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not handle Edit Category", ex.getMessage());
         }
     }
 
@@ -269,7 +267,7 @@ public class MainViewController implements Initializable
         } catch (DALException | IOException ex)
         {
             DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not handel new movie", ex.getMessage());
         }
     }
 
@@ -294,7 +292,7 @@ public class MainViewController implements Initializable
         } catch (DALException ex)
         {
             DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not handel Delete Movie", ex.getMessage());
         }
     }
 
@@ -311,11 +309,16 @@ public class MainViewController implements Initializable
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();}
-    catch(DALException | IOException ex)
+    catch(IOException ex)
         {
             DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Fejl i out- eller indput", ex.getMessage());
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR in input or output", ex.getMessage());
         }
+    catch (DALException ex)
+    {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not handle Edit movie", ex.getMessage());
+    }
     }
 
 
@@ -365,7 +368,8 @@ public class MainViewController implements Initializable
             categoryFilter.setItems(dataModel.getCategoryList());
         } catch (DALException ex)
         {
-            Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not Set list of Categories", ex.getMessage());
         }
     }
 
@@ -387,7 +391,7 @@ public class MainViewController implements Initializable
         } catch (DALException | IOException ex)
         {
             DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR in Alter old moveis", ex.getMessage());
         }
     }
 }

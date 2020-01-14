@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.dal.dalException.DALException;
@@ -28,14 +30,8 @@ public class MovieDBDAO
 
     public MovieDBDAO() throws DALException
     {
-        try
-        {
+        
             dbCon = new DatabaseConnector();
-        } catch (DALException ex)
-        {
-            throw new DALException("Kunne ikke oprette forbindelse til Databasen");
-        }
-
     }
 
     public Movie createMovie(String name, int rating, String filelink, float imdb, List<Integer> idList) throws DALException
@@ -79,8 +75,9 @@ public class MovieDBDAO
 
             }
         } catch (SQLException ex)
-        {
-            throw new DALException("Kunne ikke oprette Movie");
+        {   
+            ex.printStackTrace();
+            throw new DALException("Could not create Movie");
         }
         return null;
     }
@@ -148,9 +145,9 @@ public class MovieDBDAO
 
             return movies;
         } catch (SQLException ex)
-        {
-
-            throw new DALException("Kunne ikke oprette forbindelse til din Server");
+        {   
+            ex.printStackTrace();
+            throw new DALException("Could not get movie");
         }
     }
 
@@ -172,8 +169,9 @@ public class MovieDBDAO
             ps2.executeUpdate();
             ps.executeUpdate();
         } catch (SQLException ex)
-        {
-            throw new DALException("Kunne ikke Slette movie");
+        {   
+            ex.printStackTrace();
+            throw new DALException("Could not delete movie");
         }
     }
 
@@ -195,7 +193,8 @@ public class MovieDBDAO
             ps.close();
         } catch (SQLException ex)
         {
-            throw new DALException("Kunne ikke opdatere movie");
+            ex.printStackTrace();
+            throw new DALException("Could not update Movie");
         }
     }
 
@@ -217,11 +216,49 @@ public class MovieDBDAO
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex)
-        {
-            throw new DALException("Kunne ikke opdatere lastview");
+        {   
+            ex.printStackTrace();
+            throw new DALException("Could not update lastview");
         }
 
     }
+    
+    public void updateCategoryInCatMovie(ArrayList<Integer> list, Movie mov)
+    {
+        try
+        {
+            Connection con = dbCon.getConnection();
+            
+            String sql = "DELETE FROM CatMovie WHERE MovieId = ?;";
+            String sql2 = "INSERT INTO CatMovie VALUES (?,?);";
+            
+            PreparedStatement ps = con.prepareStatement(sql);
+            PreparedStatement ps2 = con.prepareStatement(sql2);
+            
+            ps.setInt(1, mov.getId());
+            ps.executeUpdate();
+            ps.close();
+            
+            for (Integer integer : list)
+            {
+                ps2.setInt(1, integer);
+                ps2.setInt(2, mov.getId());
+                ps2.executeUpdate();
+            }
+            ps2.close();
+            
+            
+        } catch (DALException ex)
+        {
+            Logger.getLogger(MovieDBDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(MovieDBDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    
 
     public List<Movie> timeSinceLastview() throws DALException
     {
@@ -251,8 +288,9 @@ public class MovieDBDAO
             return oldMovies;
 
         } catch (SQLException ex)
-        {
-            throw new DALException("Kunne ikke hente listen");
+        {   
+            ex.printStackTrace();
+            throw new DALException("The list of movies could not be returned");
         }
     }
 
@@ -352,7 +390,7 @@ public class MovieDBDAO
         } catch (SQLException ex)
         {
             ex.printStackTrace();
-            throw new DALException("Kunne ikke oprette forbindelse til din Server");
+            throw new DALException("Could not search Movies");
         }
     }
 }

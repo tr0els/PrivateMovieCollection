@@ -55,7 +55,7 @@ public class CategoryDBDAO
  
         } catch (SQLException ex)
         {
-            throw new DALException("whut happend");
+           throw new DALException("ERROR - could not create category");
         }
         return null;
     }
@@ -84,8 +84,9 @@ public class CategoryDBDAO
             }
             return allCategories;
         } catch (SQLException ex)
-        {
-            throw new DALException("Kunne ikke hente Categories");
+        {   
+            ex.printStackTrace();
+            throw new DALException("Could not get Categories");
         }
     }
     
@@ -114,12 +115,13 @@ public class CategoryDBDAO
                 return true;
             } else
             {
-                throw new DALException("could not Delete");
+                throw new DALException("could not delete Category");
             }
 
         } catch (SQLException ex)
-        {
-            throw new DALException("Kunne ikke slette Category");
+        {   
+            ex.printStackTrace();
+            throw new DALException("Could not delete Category");
         }
         
     }
@@ -149,6 +151,7 @@ public class CategoryDBDAO
 
         } catch (SQLException ex)
         {
+            ex.printStackTrace();
             throw new DALException("Could not update Category ");
         }
         

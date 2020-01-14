@@ -113,5 +113,8 @@ public class BLLManager
         return movieDB.timeSinceLastview();
     }
 
-    
+    public void updateCategoryCatMovie(ArrayList<Integer> list, Movie mov)
+    {
+        movieDB.updateCategoryInCatMovie(list, mov);
+    }
 }

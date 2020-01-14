@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -108,6 +109,7 @@ public class EditMovieController implements Initializable
             movie.setImdb(Float.parseFloat(imdbInput.getText()));
             
             dm.updateMovie(movie);
+            updateCategories();
             Stage stage = (Stage) updateMovie.getScene().getWindow();
             stage.close();
         } catch (DALException ex)
@@ -152,4 +154,22 @@ public class EditMovieController implements Initializable
             
         }
     }
+    
+    public void updateCategories()
+    {
+        ArrayList<Integer> idList = new ArrayList<Integer>();
+            for (MenuItem item : menuCategories.getItems())
+            {
+                CheckMenuItem checkMenuItem = (CheckMenuItem) item;
+                if (checkMenuItem.isSelected())
+                {
+                    int index = menuCategories.getItems().indexOf(checkMenuItem);
+                    idList.add(categoryList.get(index).getId());
+                }
+            }
+        dm.updateCategoryCatMovie(idList, movie);
+    }
+    
+    
+    
 }
