@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.dal.dalException.DALException;
@@ -223,7 +224,7 @@ public class MovieDBDAO
 
     }
     
-    public void updateCategoryInCatMovie(ArrayList<Category> list, Movie mov)
+    public void updateCategoryInCatMovie(ObservableList<Category> list, Movie mov)
     {
         try
         {

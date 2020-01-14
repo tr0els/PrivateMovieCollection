@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -52,6 +54,7 @@ public class EditMovieController implements Initializable
     private Movie movie;
     private DataModel dm;
     private List<Category> categoryList;
+    ObservableList<Category> idList = FXCollections.observableArrayList();
     
 
     /**
@@ -107,9 +110,12 @@ public class EditMovieController implements Initializable
             movie.setRating(Integer.parseInt(ratingInput.getText()));
             movie.setFilelink(fileInput.getText());
             movie.setImdb(Float.parseFloat(imdbInput.getText()));
-           
-            
             updateCategories();
+            
+            movie.removeCategories();
+            movie.addCategories(idList);
+           
+            dm.updateCategoryCatMovie(idList, movie);
             dm.updateMovie(movie);
             Stage stage = (Stage) updateMovie.getScene().getWindow();
             stage.close();
@@ -157,8 +163,8 @@ public class EditMovieController implements Initializable
     
     public void updateCategories()
     {
-        ArrayList<Category> idList = new ArrayList<Category>();    
-            for (MenuItem item : menuCategories.getItems())
+        idList.clear();
+        for (MenuItem item : menuCategories.getItems())
             {
                 CheckMenuItem checkMenuItem = (CheckMenuItem) item;
                 if (checkMenuItem.isSelected())
@@ -167,8 +173,5 @@ public class EditMovieController implements Initializable
                     idList.add(categoryList.get(index));
                 }
             }
-        movie.removeCategories();
-        movie.addCategories(idList);
-        dm.updateCategoryCatMovie(idList, movie);
     }
 }

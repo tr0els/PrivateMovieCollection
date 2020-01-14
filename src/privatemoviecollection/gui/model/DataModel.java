@@ -159,7 +159,7 @@ public class DataModel
         return bll.timeSinceLastview();
     }
     
-    public void updateCategoryCatMovie(ArrayList<Category> list, Movie mov)
+    public void updateCategoryCatMovie(ObservableList<Category> list, Movie mov)
     {
         bll.updateCategoryCatMovie(list, mov);
     }
