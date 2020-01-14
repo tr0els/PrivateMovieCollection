@@ -155,13 +155,14 @@ public class MainViewController implements Initializable
         }
     }
     /*
-    *Sets allmovies, allcategories and clears searchfiled and combobox
+    * Clears searchfiled, combobox, allmovies and categoryfilter
     */
     @FXML
     private void handleClearFilter(ActionEvent event)
     {
         setAllMovies();
-        setAllCategories();
+        //setAllCategories();
+        categoryFilter.getSelectionModel().clearSelection();
         searchField.clear();       
         comboFilterRating.getSelectionModel().clearAndSelect(0);
     }
@@ -313,11 +314,16 @@ public class MainViewController implements Initializable
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();}
-    catch(DALException | IOException ex)
+    catch(IOException ex)
         {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "ERROR - Fejl i out- eller indput", ex.getMessage());
         }
+    catch (DALException ex)
+    {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Fejl Server adgang", ex.getMessage());
+    }
     }
 
     @FXML

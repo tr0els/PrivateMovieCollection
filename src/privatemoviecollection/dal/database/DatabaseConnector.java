@@ -21,6 +21,9 @@ public class DatabaseConnector
 {
     private SQLServerDataSource dataSource;
     
+    /*
+    * reads our DBsettings file with input that you need to connect to the database
+    */
     public DatabaseConnector() throws DALException
     {
         try{
@@ -34,10 +37,14 @@ public class DatabaseConnector
         }
         catch (IOException ex) {
             
-        throw new DALException("ingen forbindelse til Serveren");
+        throw new DALException("forkert input, check username or password in file");
         }
     }
     
+    /*
+    * Tries to connect to get a connection to our database. 
+    * @return Connection
+    */
     public Connection getConnection() throws DALException  
     {
         try{
