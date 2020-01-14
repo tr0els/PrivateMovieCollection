@@ -221,9 +221,7 @@ public class MainViewController implements Initializable
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK)
             {
-
-                dataModel.setChosenCategory(categoryFilter.getSelectionModel().getSelectedItem());
-                dataModel.deleteCategory(dataModel.getChosenCategory());
+                dataModel.deleteCategory(categoryFilter.getSelectionModel().getSelectedItem());
 
             } else
             {
@@ -250,9 +248,9 @@ public class MainViewController implements Initializable
 
             if (categoryFilter.getSelectionModel().getSelectedItem() != null)
             {
-                EditCategoryController EditCategoryController = loader.getController();
-                EditCategoryController.transferCategory(categoryFilter.getSelectionModel().getSelectedItem());
-                EditCategoryController.transferDatamodel(dataModel);
+                EditCategoryController editCategoryController = loader.getController();
+                editCategoryController.transferCategory(categoryFilter.getSelectionModel().getSelectedItem());
+                editCategoryController.transferDatamodel(dataModel);
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
                 stage.show();

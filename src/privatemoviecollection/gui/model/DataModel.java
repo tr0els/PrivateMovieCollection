@@ -25,7 +25,6 @@ public class DataModel
     
     private ObservableList<Movie> movies = FXCollections.observableArrayList();
     private ObservableList<Category> categories = FXCollections.observableArrayList();
-    private Category chosenCategory;
     
     public DataModel() throws DALException
     {
@@ -62,8 +61,7 @@ public class DataModel
     public void createCategory(String name) throws DALException
     {
         Category category = bll.createCategory(name);
-        categories.add(category);
-        getCategoryList();       
+        categories.add(category);      
     }
     
     /**
@@ -74,7 +72,6 @@ public class DataModel
     public void updateCategory(Category selectedCategory) throws DALException
     {
         bll.updateCategory(selectedCategory);
-        getCategoryList();
     }
     
     /**
@@ -84,26 +81,8 @@ public class DataModel
      */
     public void deleteCategory(Category category) throws DALException
     {
-        bll.deleteCategory(chosenCategory);
-        getCategoryList();
-    }
-    
-    /**
-     * Sets the chosen category. Used for deleting a category. 
-     * @param chosenCategory
-     */
-    public void setChosenCategory(Category chosenCategory)
-    {
-        this.chosenCategory = chosenCategory;
-    }
-
-    /**
-     * Gets the chosen category. Used for deleting a category. 
-     * @return
-     */
-    public Category getChosenCategory()
-    {
-        return chosenCategory;
+        categories.remove(category);
+        bll.deleteCategory(category);
     }
     
     public void getSearchResult(String input, int rating, List<Category> categories) throws DALException
