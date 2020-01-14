@@ -88,7 +88,7 @@ public class EditMovieController implements Initializable
      * Then updates the parameters of the selected movie that the user has changed.
      */
     @FXML
-    private void handleUpdateMovie(ActionEvent event) throws DALException
+    private void handleUpdateMovie(ActionEvent event) 
     {
 
         try

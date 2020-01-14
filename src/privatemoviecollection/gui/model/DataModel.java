@@ -159,7 +159,7 @@ public class DataModel
         return bll.timeSinceLastview();
     }
     
-    public void updateCategoryCatMovie(ObservableList<Category> list, Movie mov)
+    public void updateCategoryCatMovie(ObservableList<Category> list, Movie mov) throws DALException 
     {
         bll.updateCategoryCatMovie(list, mov);
     }
