@@ -410,7 +410,7 @@ public class MainViewController implements Initializable
         categoryFilter.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         // GØR DET MULIGT AT SELECTE FLERE KATEGORIER UDEN AT KLIKKE CTRL
-        categoryFilter.addEventFilter(MouseEvent.MOUSE_CLICKED, evt ->
+        categoryFilter.addEventFilter(MouseEvent.MOUSE_PRESSED, evt ->
         {
             Node node = evt.getPickResult().getIntersectedNode();
 
