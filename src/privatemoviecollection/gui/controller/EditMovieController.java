@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -106,7 +107,9 @@ public class EditMovieController implements Initializable
             movie.setRating(Integer.parseInt(ratingInput.getText()));
             movie.setFilelink(fileInput.getText());
             movie.setImdb(Float.parseFloat(imdbInput.getText()));
+           
             
+            updateCategories();
             dm.updateMovie(movie);
             Stage stage = (Stage) updateMovie.getScene().getWindow();
             stage.close();
@@ -139,7 +142,7 @@ public class EditMovieController implements Initializable
         categoryList = list;
         for (Category category : categoryList)
         {
-            CheckMenuItem checkMenuItem = new CheckMenuItem(category.getName());
+            CheckMenuItem checkMenuItem = new CheckMenuItem(category.toString());
             menuCategories.getItems().add(checkMenuItem);
             
             for (Category movieCategory : movie.getCategories())
@@ -149,7 +152,23 @@ public class EditMovieController implements Initializable
                     checkMenuItem.setSelected(true);
                 }
             }
-            
         }
+    }
+    
+    public void updateCategories()
+    {
+        ArrayList<Category> idList = new ArrayList<Category>();    
+            for (MenuItem item : menuCategories.getItems())
+            {
+                CheckMenuItem checkMenuItem = (CheckMenuItem) item;
+                if (checkMenuItem.isSelected())
+                {
+                    int index = menuCategories.getItems().indexOf(checkMenuItem);
+                    idList.add(categoryList.get(index));
+                }
+            }
+        movie.removeCategories();
+        movie.addCategories(idList);
+        dm.updateCategoryCatMovie(idList, movie);
     }
 }

@@ -122,7 +122,7 @@ public class DataModel
      * @param idList
      * @throws DALException
      */
-    public void createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException
+    public void createMovie(String name, int rating, String filelink, float imdb, ArrayList<Category> idList) throws DALException
     {
         Movie movie = bll.createMovie(name, rating, filelink, imdb, idList);
         movies.add(movie);
@@ -157,5 +157,10 @@ public class DataModel
     public List<Movie> timeSinceLastview() throws DALException
     {
         return bll.timeSinceLastview();
+    }
+    
+    public void updateCategoryCatMovie(ArrayList<Category> list, Movie mov)
+    {
+        bll.updateCategoryCatMovie(list, mov);
     }
 }
