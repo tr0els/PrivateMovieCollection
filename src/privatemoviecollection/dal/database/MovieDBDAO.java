@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.dal.dalException.DALException;
@@ -222,6 +224,43 @@ public class MovieDBDAO
         }
 
     }
+    
+    public void updateCategoryInCatMovie(ArrayList<Integer> list, Movie mov)
+    {
+        try
+        {
+            Connection con = dbCon.getConnection();
+            
+            String sql = "DELETE FROM CatMovie WHERE MovieId = ?;";
+            String sql2 = "INSERT INTO CatMovie VALUES (?,?);";
+            
+            PreparedStatement ps = con.prepareStatement(sql);
+            PreparedStatement ps2 = con.prepareStatement(sql2);
+            
+            ps.setInt(1, mov.getId());
+            ps.executeUpdate();
+            ps.close();
+            
+            for (Integer integer : list)
+            {
+                ps2.setInt(1, integer);
+                ps2.setInt(2, mov.getId());
+                ps2.executeUpdate();
+            }
+            ps2.close();
+            
+            
+        } catch (DALException ex)
+        {
+            Logger.getLogger(MovieDBDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(MovieDBDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    
 
     public List<Movie> timeSinceLastview() throws DALException
     {

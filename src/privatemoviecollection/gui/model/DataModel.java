@@ -160,4 +160,9 @@ public class DataModel
     {
         return bll.timeSinceLastview();
     }
+    
+    public void updateCategoryCatMovie(ArrayList<Integer> list, Movie mov)
+    {
+        bll.updateCategoryCatMovie(list, mov);
+    }
 }
