@@ -13,8 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.dal.dalException.DALException;
@@ -223,7 +221,7 @@ public class MovieDBDAO
 
     }
     
-    public void updateCategoryInCatMovie(ArrayList<Category> list, Movie mov)
+    public void updateCategoryInCatMovie(ArrayList<Category> list, Movie mov) throws DALException
     {
         try
         {
@@ -250,10 +248,10 @@ public class MovieDBDAO
             
         } catch (DALException ex)
         {
-            Logger.getLogger(MovieDBDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DALException("Could not update Category");
         } catch (SQLException ex)
         {
-            Logger.getLogger(MovieDBDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DALException("Could not update Category");
         }
         
         
