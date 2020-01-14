@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.dal.database.MovieDBDAO;
 import java.util.List;
+import javafx.collections.ObservableList;
 import privatemoviecollection.be.Category;
 import static privatemoviecollection.bll.util.SearchMovies.search;
 import privatemoviecollection.dal.dalException.DALException;
@@ -29,7 +30,7 @@ public class BLLManager
         categoryDbDao = new CategoryDBDAO();
     }
     
-    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException 
+    public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Category> idList) throws DALException 
     {
         Movie mov = movieDB.createMovie(name, rating, filelink, imdb, idList);
         
@@ -113,7 +114,7 @@ public class BLLManager
         return movieDB.timeSinceLastview();
     }
 
-    public void updateCategoryCatMovie(ArrayList<Integer> list, Movie mov)
+    public void updateCategoryCatMovie(ObservableList<Category> list, Movie mov)
     {
         movieDB.updateCategoryInCatMovie(list, mov);
     }

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.dal.dalException.DALException;
@@ -34,7 +35,7 @@ public class MovieDBDAO
             dbCon = new DatabaseConnector();
     }
 
-    public Movie createMovie(String name, int rating, String filelink, float imdb, List<Integer> idList) throws DALException
+    public Movie createMovie(String name, int rating, String filelink, float imdb, List<Category> idList) throws DALException
     {
 
         try
@@ -61,9 +62,9 @@ public class MovieDBDAO
                 {
                     int id = rs.getInt(1);
 
-                    for (Integer i : idList)
+                    for (Category i : idList)
                     {
-                        ps2.setInt(1, i);
+                        ps2.setInt(1, i.getId());
                         ps2.setInt(2, id);
                         ps2.executeUpdate();
                     }
@@ -223,7 +224,7 @@ public class MovieDBDAO
 
     }
     
-    public void updateCategoryInCatMovie(ArrayList<Integer> list, Movie mov)
+    public void updateCategoryInCatMovie(ObservableList<Category> list, Movie mov) throws DALException
     {
         try
         {
@@ -239,9 +240,9 @@ public class MovieDBDAO
             ps.executeUpdate();
             ps.close();
             
-            for (Integer integer : list)
+            for (Category category : list)
             {
-                ps2.setInt(1, integer);
+                ps2.setInt(1, category.getId());
                 ps2.setInt(2, mov.getId());
                 ps2.executeUpdate();
             }
@@ -250,10 +251,10 @@ public class MovieDBDAO
             
         } catch (DALException ex)
         {
-            Logger.getLogger(MovieDBDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DALException("Could not update Category");
         } catch (SQLException ex)
         {
-            Logger.getLogger(MovieDBDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DALException("Could not update Category");
         }
         
         

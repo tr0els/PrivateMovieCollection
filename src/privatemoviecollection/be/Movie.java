@@ -110,8 +110,8 @@ public class Movie {
         return categories;
     }
     
-    public void addCategories(List<Category> categories) {
-        categories.addAll(categories);
+    public void addCategories(List<Category> category) {
+        categories.addAll(category);
     }
 
     public void addCategory(Category category) {
