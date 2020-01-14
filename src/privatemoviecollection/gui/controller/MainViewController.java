@@ -118,11 +118,16 @@ public class MainViewController implements Initializable
     {
         try
         {
-        	String searchName = searchField.getText();
-        	int searchRating = comboFilterRating.getSelectionModel().getSelectedIndex();
-        	List searchCategories = categoryFilter.getSelectionModel().getSelectedItems();
+            String searchName = searchField.getText();
+            int searchRating = comboFilterRating.getSelectionModel().getSelectedIndex();
+            List<Category> searchCategories = categoryFilter.getSelectionModel().getSelectedItems();
 
-           dataModel.getSearchResult(searchName, searchRating, searchCategories);
+            for (Category sc : searchCategories) {
+                System.out.println("Content of category list (size: " + searchCategories.size() + "):");
+                System.out.println(sc.getName());
+            }
+
+            dataModel.getSearchResult(searchName, searchRating, searchCategories);
         } catch (DALException ex)
         {
             DisplayAlert al = new DisplayAlert();
@@ -403,8 +408,7 @@ public class MainViewController implements Initializable
             {
                 handleSearch();
             }
-        });
-                
+        });        
     }
     
 

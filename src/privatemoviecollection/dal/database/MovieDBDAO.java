@@ -321,10 +321,10 @@ public class MovieDBDAO
                     sqlNumCategories += "?,";
                 }
                 sqlNumCategories = sqlNumCategories.replaceAll(",$", "");
-                sqlCategories += " id IN (SELECT MovieId FROM CatMovie WHERE CategoryId = (" + sqlNumCategories + "))";
+                sqlCategories += " id IN (SELECT MovieId FROM CatMovie WHERE CategoryId IN (" + sqlNumCategories + ") GROUP BY MovieId HAVING COUNT(*) = ?)";
             }
             
-            // build sql for where
+            // build sql for where clause
             String sqlWhere = "";
             if(!sqlName.isEmpty() || !sqlRating.isEmpty() || !sqlCategories.isEmpty()) {
                 sqlWhere = " WHERE";
@@ -334,26 +334,34 @@ public class MovieDBDAO
             String sql = "SELECT * FROM Movie" + sqlWhere + sqlName + sqlRating + sqlCategories +";";
             sql = sql.replaceAll(" AND;$", ";");
 
-            System.out.println("SQL: " + sql); // debug
+            System.out.println("SQL: " + sql); // debug (remove)
             PreparedStatement ps = con.prepareStatement(sql);
             
             int index = 1;
-            if(!searchName.isEmpty()) 
-            {
+            
+            // set name
+            if(!searchName.isEmpty()) {
                 ps.setString(index++, "%" + searchName + "%");
             }
-            if(searchRating != 0)
-            {
+            
+            // set rating
+            if(searchRating > 0) {
                 ps.setInt(index++, searchRating);
             }
-            for(Category category : searchCategories) {
-                ps.setInt(index++, category.getId());
+            
+            // set category id(s) and amount
+            if(searchCategories.size() > 0) {
+                for(Category category : searchCategories) {
+                    ps.setInt(index++, category.getId());
+                }
+                ps.setInt(index++, searchCategories.size());
             }
            
+            // excute query
             ResultSet rs = ps.executeQuery();
-            
             while (rs.next())
             {
+                // get data
                 int id = rs.getInt("id");
                 String filelink = rs.getString("filelink");
                 String name = rs.getString("name");
@@ -361,6 +369,7 @@ public class MovieDBDAO
                 Date lastview = rs.getDate("lastview");
                 float imdb = rs.getFloat("imdb");
 
+                // create object
                 Movie movie = new Movie(id, filelink, name, imdb, rating);
 
                 // get categories for movie
@@ -369,22 +378,20 @@ public class MovieDBDAO
                 Statement statement2 = con.createStatement();
                 ResultSet rs2 = statement2.executeQuery(sql2);
 
+                // for each category
                 while (rs2.next())
                 {
                     int catId = rs2.getInt("id");
                     String catName = rs2.getString("name");
 
                     Category category = new Category(catId, catName);
+                    
+                    // add category to movie
                     movie.addCategory(category);
                 }
 
+                // add movie to list
                 movies.add(movie);
-            }
-
-            System.out.println("\n\n*** TEST ***\n");
-            for (Movie movie : movies)
-            {
-                System.out.println("Movie name: " + movie.getName() + " is in " + movie.getCategories().size() + " categories");
             }
 
             return movies;

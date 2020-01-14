@@ -107,7 +107,7 @@ public class DataModel
         return chosenCategory;
     }
     
-    public void getSearchResult(String input, int rating, List categories) throws DALException
+    public void getSearchResult(String input, int rating, List<Category> categories) throws DALException
     {
         List<Movie> result = bll.searchMovies(input, rating, categories);
         movies.setAll(result);
