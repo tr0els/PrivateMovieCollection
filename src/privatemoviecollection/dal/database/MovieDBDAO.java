@@ -297,19 +297,12 @@ public class MovieDBDAO
     public List<Movie> searchMovies(String searchName, int searchRating, List<Category> searchCategories) throws DALException {
         try {
             Connection con = dbCon.getConnection();
-        
+            
             List<Movie> movies = new ArrayList<>();
-            
-            // dummy data
-            searchName = "%dog%";
-            searchRating = 1;
-            List<Category> dummy = new ArrayList<>();
-            Category cat = new Category(1, "Action");
-            dummy.add(cat);
-            
+                
             // build sql for name
             String sqlName = "";
-            if(!searchName.isEmpty() || searchName != null) {
+            if(!searchName.isEmpty()) {
                 sqlName = " name LIKE ? AND";
             }
             
@@ -321,9 +314,9 @@ public class MovieDBDAO
             
             // build sql for categories
             String sqlCategories = "";
-            if(dummy.size() > 0) {
+            if(searchCategories.size() > 0) {
                 String sqlNumCategories = "";
-                for (int i = 0 ; i < dummy.size() ; i++ ) {
+                for (int i = 0 ; i < searchCategories.size() ; i++ ) {
                     sqlNumCategories += "?,";
                 }
                 sqlNumCategories = sqlNumCategories.replaceAll(",$", "");
@@ -338,20 +331,26 @@ public class MovieDBDAO
             
             // build final sql statement
             String sql = "SELECT * FROM Movie" + sqlWhere + sqlName + sqlRating + sqlCategories +";";
-            sql = sql.replaceAll(" AND$", "");
+            sql = sql.replaceAll(" AND;$", ";");
 
             System.out.println("SQL: " + sql); // debug
             PreparedStatement ps = con.prepareStatement(sql);
             
             int index = 1;
-            ps.setString(index++, searchName);
-            ps.setInt(index++, searchRating);
-            for(Category category : dummy) {
+            if(!searchName.isEmpty()) 
+            {
+                ps.setString(index++, "%" + searchName + "%");
+            }
+            if(searchRating != 0)
+            {
+                ps.setInt(index++, searchRating);
+            }
+            for(Category category : searchCategories) {
                 ps.setInt(index++, category.getId());
             }
            
             ResultSet rs = ps.executeQuery();
-
+            
             while (rs.next())
             {
                 int id = rs.getInt("id");

@@ -121,4 +121,8 @@ public class Movie {
     public void removeCategory(Category category) {
         categories.remove(category);
     }
+    
+    public void removeCategories() {
+        categories.removeAll();
+    }
 }
