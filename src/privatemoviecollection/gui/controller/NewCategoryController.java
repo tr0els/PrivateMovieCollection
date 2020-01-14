@@ -58,7 +58,7 @@ public class NewCategoryController implements Initializable
      * Adds a new category to the list. Then closes the window.
      */
     @FXML
-    private void addNewCategory(ActionEvent event) throws DALException
+    private void addNewCategory(ActionEvent event) 
     {
         try
         {
@@ -71,7 +71,7 @@ public class NewCategoryController implements Initializable
         } catch (DALException ex)
         {
             DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not Add Category", ex.getMessage());
         }
     }
 
