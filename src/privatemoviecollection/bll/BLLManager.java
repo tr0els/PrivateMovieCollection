@@ -114,7 +114,7 @@ public class BLLManager
         return movieDB.timeSinceLastview();
     }
 
-    public void updateCategoryCatMovie(ObservableList<Category> list, Movie mov)
+    public void updateCategoryCatMovie(ObservableList<Category> list, Movie mov) throws DALException
     {
         movieDB.updateCategoryInCatMovie(list, mov);
     }
