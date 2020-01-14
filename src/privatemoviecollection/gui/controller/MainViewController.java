@@ -155,7 +155,7 @@ public class MainViewController implements Initializable
         }
     }
     /*
-    *Sets allmovies, allcategories and clears searchfiled 
+    *Sets allmovies, allcategories and clears searchfiled and combobox
     */
     @FXML
     private void handleClearFilter(ActionEvent event)
