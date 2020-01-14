@@ -26,7 +26,7 @@ public class DataModel
     
     private ObservableList<Movie> movies = FXCollections.observableArrayList();
     private ObservableList<Category> categories = FXCollections.observableArrayList();
-    private Category chosenCategory; 
+    private Category chosenCategory;
     
     public DataModel() throws DALException
     {
@@ -35,6 +35,10 @@ public class DataModel
         movies.addAll(bll.getAllMovies());
     }
     
+    /**
+     * Gets an observable list of all movies
+     * @return
+     */
     public ObservableList<Movie> getAllMovies()
     {
         return movies;
@@ -103,33 +107,48 @@ public class DataModel
         return chosenCategory;
     }
     
-    public ObservableList<Movie> getSearchResult(String input) throws DALException
+    public void getSearchResult(String input, int rating, List categories) throws DALException
     {
-        List<Movie> filter = bll.searchMovies(input);
-        ObservableList<Movie> output = FXCollections.observableList(filter);
-        
-        return output;
+        List<Movie> result = bll.searchMovies(input, rating, categories);
+        movies.setAll(result);
     }
     
+    /**
+     * Creates a movie object and adds it to the movie list
+     * @param name
+     * @param rating
+     * @param filelink
+     * @param imdb
+     * @param idList
+     * @throws DALException
+     */
     public void createMovie(String name, int rating, String filelink, float imdb, ArrayList<Integer> idList) throws DALException
     {
         Movie movie = bll.createMovie(name, rating, filelink, imdb, idList);
         movies.add(movie);
     }
     
+    /**
+     * Deletes a movie object from the list
+     * @param mov
+     * @throws DALException
+     */
     public void deleteMovie(Movie mov) throws DALException
     {
         movies.remove(mov);
         bll.deleteMovie(mov);
     }
     
+    /**
+     * Updates the movie in the list. 
+     * @param mov
+     * @throws DALException
+     */
     public void updateMovie(Movie mov) throws DALException
     {
         bll.updateMovie(mov);
     }
     
-    
-
     public void updateLastView(Movie mov) throws DALException 
     {
         bll.updateLastView(mov);

@@ -5,16 +5,11 @@
  */
 package privatemoviecollection.bll;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import privatemoviecollection.be.Movie;
-import privatemoviecollection.bll.util.SearchMovies;
 import privatemoviecollection.dal.database.MovieDBDAO;
 import java.util.List;
 import privatemoviecollection.be.Category;
-import privatemoviecollection.bll.util.SearchMovies;
 import static privatemoviecollection.bll.util.SearchMovies.search;
 import privatemoviecollection.dal.dalException.DALException;
 import privatemoviecollection.dal.database.CategoryDBDAO;
@@ -99,11 +94,12 @@ public class BLLManager
         categoryDbDao.updateCategory(category);
     }
     
-    public List<Movie> searchMovies(String query) throws DALException 
+    public List<Movie> searchMovies(String name, int rating, List<Category> categories) throws DALException 
     {
-        List<Movie> allMovies = getAllMovies();
-        allMovies = search(allMovies, query);
-        return allMovies;
+        List<Movie> movies = new ArrayList<>();
+        movies = movieDB.searchMovies(name, rating, categories);
+        
+        return movies;
     }
     
     public void updateLastView(Movie mov) throws DALException 

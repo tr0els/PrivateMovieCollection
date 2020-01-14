@@ -126,6 +126,7 @@ public class NewMovieController implements Initializable
 
     /**
      * Transfers the datamodel from MainView to this view.
+     * @param dm
      */
     public void transfer(DataModel dm)
     {

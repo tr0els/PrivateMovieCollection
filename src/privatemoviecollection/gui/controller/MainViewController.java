@@ -1,9 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package privatemoviecollection.gui.controller;
+
 
 import java.awt.Desktop;
 import java.io.File;
@@ -100,6 +96,7 @@ public class MainViewController implements Initializable
             dataModel = new DataModel();
             setAllMovies();
             setAllCategories();
+            
 
             if (!dataModel.timeSinceLastview().isEmpty())
             {
@@ -117,9 +114,12 @@ public class MainViewController implements Initializable
     {
         try
         {
-            String input = searchField.getText();
-            ObservableList<Movie> result = dataModel.getSearchResult(input);
-            movieTable.setItems(result);
+
+        	String searchName = searchField.getText();
+        	int searchRating = 6; //comboFilterRating.getSelectionModel().getSelectedIndex() + 1; // tmp
+        	List searchCategories = categoryFilter.getSelectionModel().getSelectedItems();
+
+        	dataModel.getSearchResult(searchName, searchRating, searchCategories);
         } catch (DALException ex)
         {
             DisplayAlert al = new DisplayAlert();
@@ -160,12 +160,10 @@ public class MainViewController implements Initializable
     @FXML
     private void handleClearFilter(ActionEvent event)
     {
-        
         setAllMovies();
         setAllCategories();
         searchField.clear();       
         comboFilterRating.getSelectionModel().clearAndSelect(0);
-
     }
   
 
@@ -303,20 +301,19 @@ public class MainViewController implements Initializable
     }
 
     @FXML
-    private void handleEditMovie(ActionEvent event)
-    {
-        try
-        {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditMovie.fxml"));
-            Parent root = loader.load();
+    private void handleEditMovie(ActionEvent event) 
+    { try{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditMovie.fxml"));
+        Parent root = loader.load();
 
-            EditMovieController editmoviecontroller = loader.getController();
-            editmoviecontroller.transfer(movieTable.getSelectionModel().getSelectedItem(), dataModel);
+        EditMovieController editmoviecontroller = loader.getController();
+        editmoviecontroller.transfer(movieTable.getSelectionModel().getSelectedItem(), dataModel);
+        editmoviecontroller.categoryMenu(dataModel.getCategoryList());
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException ex)
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();}
+    catch(DALException | IOException ex)
         {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "ERROR - Fejl i out- eller indput", ex.getMessage());

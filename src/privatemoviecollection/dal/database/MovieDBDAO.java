@@ -256,4 +256,104 @@ public class MovieDBDAO
         }
     }
 
+    public List<Movie> searchMovies(String searchName, int searchRating, List<Category> searchCategories) throws DALException {
+        try {
+            Connection con = dbCon.getConnection();
+        
+            List<Movie> movies = new ArrayList<>();
+            
+            // dummy data
+            searchName = "%dog%";
+            searchRating = 1;
+            List<Category> dummy = new ArrayList<>();
+            Category cat = new Category(1, "Action");
+            dummy.add(cat);
+            
+            // build sql for name
+            String sqlName = "";
+            if(!searchName.isEmpty() || searchName != null) {
+                sqlName = " name LIKE ? AND";
+            }
+            
+            // build sql for rating
+            String sqlRating = "";
+            if(searchRating > 0) {
+                sqlRating += " IMDB > ? AND";
+            }            
+            
+            // build sql for categories
+            String sqlCategories = "";
+            if(dummy.size() > 0) {
+                String sqlNumCategories = "";
+                for (int i = 0 ; i < dummy.size() ; i++ ) {
+                    sqlNumCategories += "?,";
+                }
+                sqlNumCategories = sqlNumCategories.replaceAll(",$", "");
+                sqlCategories += " id IN (SELECT MovieId FROM CatMovie WHERE CategoryId = (" + sqlNumCategories + "))";
+            }
+            
+            // build sql for where
+            String sqlWhere = "";
+            if(!sqlName.isEmpty() || !sqlRating.isEmpty() || !sqlCategories.isEmpty()) {
+                sqlWhere = " WHERE";
+            }
+            
+            // build final sql statement
+            String sql = "SELECT * FROM Movie" + sqlWhere + sqlName + sqlRating + sqlCategories +";";
+            sql = sql.replaceAll(" AND$", "");
+
+            System.out.println("SQL: " + sql); // debug
+            PreparedStatement ps = con.prepareStatement(sql);
+            
+            int index = 1;
+            ps.setString(index++, searchName);
+            ps.setInt(index++, searchRating);
+            for(Category category : dummy) {
+                ps.setInt(index++, category.getId());
+            }
+           
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())
+            {
+                int id = rs.getInt("id");
+                String filelink = rs.getString("filelink");
+                String name = rs.getString("name");
+                int rating = rs.getInt("rating");
+                Date lastview = rs.getDate("lastview");
+                float imdb = rs.getFloat("imdb");
+
+                Movie movie = new Movie(id, filelink, name, imdb, rating);
+
+                // get categories for movie
+                String sql2 = "SELECT id, name FROM Category WHERE id IN (SELECT CategoryId FROM CatMovie WHERE MovieId = " + id + ");";
+                               
+                Statement statement2 = con.createStatement();
+                ResultSet rs2 = statement2.executeQuery(sql2);
+
+                while (rs2.next())
+                {
+                    int catId = rs2.getInt("id");
+                    String catName = rs2.getString("name");
+
+                    Category category = new Category(catId, catName);
+                    movie.addCategory(category);
+                }
+
+                movies.add(movie);
+            }
+
+            System.out.println("\n\n*** TEST ***\n");
+            for (Movie movie : movies)
+            {
+                System.out.println("Movie name: " + movie.getName() + " is in " + movie.getCategories().size() + " categories");
+            }
+
+            return movies;
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            throw new DALException("Kunne ikke oprette forbindelse til din Server");
+        }
+    }
 }
