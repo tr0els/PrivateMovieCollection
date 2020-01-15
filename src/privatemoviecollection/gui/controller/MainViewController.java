@@ -85,7 +85,6 @@ public class MainViewController implements Initializable
 
     //laver listen til comboFilterRating med tal fra 1-10
     ObservableList<String> comboList = FXCollections.observableArrayList("Filter by rating", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-    int CATEGORIES_SELECTED = 0;
 
     /**
      * Initializes the controller class.
@@ -497,13 +496,10 @@ public class MainViewController implements Initializable
                     int index = cell.getIndex();
                     if (cell.isSelected())
                     {
-                        lv.getSelectionModel().clearSelection(index);
-                        CATEGORIES_SELECTED--;
-                        
+                        lv.getSelectionModel().clearSelection(index);                        
                     } else
                     {
                         lv.getSelectionModel().select(index);
-                        CATEGORIES_SELECTED++;
                     }
                 }
             }
