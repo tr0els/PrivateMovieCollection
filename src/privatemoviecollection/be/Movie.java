@@ -100,12 +100,6 @@ public class Movie {
         this.lastview = lastview;
     }
     
-    @Override
-    public String toString()
-    {
-        return getName();
-    }
-    
     public ObservableList<Category> getCategories() {
         return categories;
     }
@@ -125,4 +119,36 @@ public class Movie {
     public void removeCategories() {
         categories.clear();
     }
+    
+    @Override
+    public String toString()
+    {
+        return getName();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Movie other = (Movie) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }
