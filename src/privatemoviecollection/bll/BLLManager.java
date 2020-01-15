@@ -80,9 +80,9 @@ public class BLLManager
      * @return
      * @throws DALException
      */
-    public boolean deleteCategory(Category category) throws DALException
+    public void deleteCategory(Category category) throws DALException
     {
-        return categoryDbDao.deleteCategory(category);
+        categoryDbDao.deleteCategory(category);
     }
     
     /**

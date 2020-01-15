@@ -50,6 +50,11 @@ public class Category
         this.name.set(name);
     }
     
+    public StringProperty nameProperty()
+    {
+        return name; 
+    }
+    
     /**
      * Overrides the toString method to show the name of a category. 
      * @return

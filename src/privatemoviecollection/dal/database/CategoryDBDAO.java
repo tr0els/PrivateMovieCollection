@@ -97,27 +97,23 @@ public class CategoryDBDAO
      * @return
      * @throws DALException
      */
-    public boolean deleteCategory(Category category) throws DALException
+    public void deleteCategory(Category category) throws DALException
     {
         try ( Connection con = dbCon.getConnection())
         {
             int id = category.getId();
-            String sqlcm = "DELETE FROM CatMovie WHERE CategoryId=?";
-            String sql = "DELETE FROM Category WHERE id=?";
+            String sqlcm = "DELETE FROM CatMovie WHERE CategoryId = (?)";
+            String sql = "DELETE FROM Category WHERE id=?;";
             
             PreparedStatement ps = con.prepareStatement(sqlcm);
             PreparedStatement ps2 = con.prepareStatement(sql);
                      
             ps.setInt(1, id);
             ps2.setInt(1, id);
-            if (ps2.executeUpdate() == 1)
-            {
-                return true;
-            } else
-            {
-                throw new DALException("could not delete Category");
-            }
-
+            
+            ps.executeUpdate();
+            ps2.executeUpdate();
+            
         } catch (SQLException ex)
         {   
             ex.printStackTrace();
