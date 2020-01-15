@@ -249,10 +249,10 @@ public class MainViewController implements Initializable
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditCategory.fxml"));
             Parent root = loader.load();
 
-            if (categoryFilter.getSelectionModel().getSelectedItem() != null && CATEGORIES_SELECTED == 1)
+            if (categoryFilter.getSelectionModel().getSelectedItems().size() == 1)
             {
                 EditCategoryController editCategoryController = loader.getController();
-                editCategoryController.transferCategory(categoryFilter.getSelectionModel().getSelectedItem());
+                editCategoryController.transferCategory(categoryFilter.getSelectionModel().getSelectedItems().get(0));
                 editCategoryController.transferDatamodel(dataModel);
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
