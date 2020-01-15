@@ -97,9 +97,7 @@ public class BLLManager
     
     public List<Movie> searchMovies(String name, int rating, List<Category> categories) throws DALException 
     {
-        List<Movie> movies = new ArrayList<>();
-        movies = movieDB.searchMovies(name, rating, categories);
-        
+        List<Movie> movies = movieDB.searchMovies(name, rating, categories);
         return movies;
     }
     

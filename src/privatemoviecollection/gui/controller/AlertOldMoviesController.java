@@ -46,9 +46,6 @@ public class AlertOldMoviesController implements Initializable
     {
     }    
     
-
-
-
     public void getListOfMovies() throws DALException 
     {   try{
         movieList.addAll(dm.timeSinceLastview());      
