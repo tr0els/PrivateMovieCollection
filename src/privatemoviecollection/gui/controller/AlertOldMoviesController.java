@@ -73,7 +73,7 @@ public class AlertOldMoviesController implements Initializable
     
 
     @FXML
-    private void handleDeleteMovie(ActionEvent event) throws DALException 
+    private void handleDeleteMovie(ActionEvent event) 
     {   try{
         int index = oldMovieList.getSelectionModel().getSelectedIndex();
         dm.deleteMovie(movieList.get(index));
@@ -87,7 +87,7 @@ public class AlertOldMoviesController implements Initializable
     }
 
     @FXML
-    private void handleCancel(ActionEvent event) throws DALException 
+    private void handleCancel(ActionEvent event)  
     { try{
         for (Movie oldMovy : movieList)
         {
