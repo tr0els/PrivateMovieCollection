@@ -85,6 +85,7 @@ public class MainViewController implements Initializable
 
     //laver listen til comboFilterRating med tal fra 1-10
     ObservableList<String> comboList = FXCollections.observableArrayList("Filter by rating", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+    int CATEGORIES_SELECTED = 0;
 
     /**
      * Initializes the controller class.
@@ -95,7 +96,7 @@ public class MainViewController implements Initializable
         try
         {
             dataModel = new DataModel();
-            
+
             comboFilterRating.setItems(comboList);
             setAllMovies();
             setAllCategories();
@@ -122,7 +123,8 @@ public class MainViewController implements Initializable
             int searchRating = comboFilterRating.getSelectionModel().getSelectedIndex();
             List<Category> searchCategories = categoryFilter.getSelectionModel().getSelectedItems();
 
-            for (Category sc : searchCategories) {
+            for (Category sc : searchCategories)
+            {
                 System.out.println("Content of category list (size: " + searchCategories.size() + "):");
                 System.out.println(sc.getName());
             }
@@ -246,14 +248,19 @@ public class MainViewController implements Initializable
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditCategory.fxml"));
             Parent root = loader.load();
 
-            if (categoryFilter.getSelectionModel().getSelectedItem() != null)
+            if (categoryFilter.getSelectionModel().getSelectedItem() != null && CATEGORIES_SELECTED == 1)
             {
                 EditCategoryController editCategoryController = loader.getController();
                 editCategoryController.transferCategory(categoryFilter.getSelectionModel().getSelectedItem());
                 editCategoryController.transferDatamodel(dataModel);
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
-                stage.show();
+                stage.showAndWait();
+                categoryFilter.getSelectionModel().clearSelection();
+            } else
+            {
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Please select exactly one category when editing", ButtonType.OK);
+                alert.showAndWait();
             }
         } catch (IOException ex)
         {
@@ -387,16 +394,19 @@ public class MainViewController implements Initializable
             al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not Set list of Categories", ex.getMessage());
         }
     }
-    
-    private void setSearchListeners() {
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            handleSearch();
-        }); 
-        
-        comboFilterRating.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+    private void setSearchListeners()
+    {
+        searchField.textProperty().addListener((observable, oldValue, newValue) ->
+        {
             handleSearch();
         });
-        
+
+        comboFilterRating.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
+        {
+            handleSearch();
+        });
+
         categoryFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Category>()
         {
             @Override
@@ -404,9 +414,8 @@ public class MainViewController implements Initializable
             {
                 handleSearch();
             }
-        });        
+        });
     }
-    
 
     private void alertOldMovies()
     {
@@ -426,7 +435,7 @@ public class MainViewController implements Initializable
         } catch (DALException | IOException ex)
         {
             DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "ERROR in Alter old moveis", ex.getMessage());
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR in Alert old movies", ex.getMessage());
         }
     }
 
@@ -466,9 +475,12 @@ public class MainViewController implements Initializable
                     if (cell.isSelected())
                     {
                         lv.getSelectionModel().clearSelection(index);
+                        CATEGORIES_SELECTED--;
+                        
                     } else
                     {
                         lv.getSelectionModel().select(index);
+                        CATEGORIES_SELECTED++;
                     }
                 }
             }
