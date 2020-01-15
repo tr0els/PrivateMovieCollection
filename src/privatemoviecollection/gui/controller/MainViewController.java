@@ -224,6 +224,7 @@ public class MainViewController implements Initializable
             if (result.get() == ButtonType.OK)
             {
                 dataModel.deleteCategory(categoryFilter.getSelectionModel().getSelectedItem());
+                categoryFilter.getSelectionModel().clearSelection();
 
             } else
             {
