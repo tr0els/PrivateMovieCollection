@@ -35,6 +35,16 @@ public class MovieDBDAO
             dbCon = new DatabaseConnector();
     }
 
+    /**
+     * Creates a movie in the database. 
+     * @param name
+     * @param rating
+     * @param filelink
+     * @param imdb
+     * @param idList
+     * @return Movie
+     * @throws DALException 
+     */
     public Movie createMovie(String name, int rating, String filelink, float imdb, List<Category> idList) throws DALException
     {
 
@@ -83,6 +93,12 @@ public class MovieDBDAO
         return null;
     }
 
+    /**
+     * Gets a movie from the database with an id.
+     * @param id
+     * @return
+     * @throws DALException 
+     */
     public Movie getMovie(int id) throws DALException
     {
         // only one movie will be returned when searching on id
@@ -152,6 +168,11 @@ public class MovieDBDAO
         }
     }
 
+    /**
+     * Deletes a movie from the database.
+     * @param mov
+     * @throws DALException 
+     */
     public void deleteMovie(Movie mov) throws DALException
     {
         try
@@ -176,6 +197,11 @@ public class MovieDBDAO
         }
     }
 
+    /**
+     * Updates a movie in the database with a certain id.
+     * @param mov
+     * @throws DALException 
+     */
     public void updateMovie(Movie mov) throws DALException
     {
         try
@@ -199,6 +225,11 @@ public class MovieDBDAO
         }
     }
 
+    /**
+     * Updates the lastview of a chosen movie. 
+     * @param mov
+     * @throws DALException 
+     */
     public void updateLastView(Movie mov) throws DALException
     {
         try
@@ -224,6 +255,13 @@ public class MovieDBDAO
 
     }
     
+    /**
+     * Updates the categories for a movie in CatMovie, 
+     * when they have been changed. 
+     * @param list
+     * @param mov
+     * @throws DALException 
+     */
     public void updateCategoryInCatMovie(ObservableList<Category> list, Movie mov) throws DALException
     {
         try
@@ -260,7 +298,12 @@ public class MovieDBDAO
         
     }
     
-
+    /**
+     * Gets the movies that the user hasn't seen in over 2 years, 
+     * and has a personal rating under 6.
+     * @return List<Movie>
+     * @throws DALException 
+     */
     public List<Movie> timeSinceLastview() throws DALException
     {
         try

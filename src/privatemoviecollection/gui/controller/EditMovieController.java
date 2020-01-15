@@ -66,6 +66,10 @@ public class EditMovieController implements Initializable
 
     }
 
+    /**
+     * Lets the user choose a file from their computer. 
+     * @param event 
+     */
     @FXML
     private void handleFileChooser(ActionEvent event)
     {
@@ -126,12 +130,12 @@ public class EditMovieController implements Initializable
         }
     }
 
-    public void transfer(Movie currentMovie, DataModel datamodel)
     /**
      * Transfers the data from MainView to this view. 
      * @param movie
      * @param datamodel
      */
+    public void transfer(Movie currentMovie, DataModel datamodel)
     {
         movie = currentMovie;
         
@@ -143,6 +147,12 @@ public class EditMovieController implements Initializable
         dm = datamodel;
     }
     
+    /**
+     * Sets the items in the MenuButton, 
+     * that are equal to the movie's categories, 
+     * to selected. 
+     * @param list 
+     */
     public void categoryMenu(List<Category> list)
     {
         categoryList = list;
@@ -161,6 +171,9 @@ public class EditMovieController implements Initializable
         }
     }
     
+    /**
+     * Updates the categories, connected to the movie, to the new ones.
+     */
     public void updateCategories()
     {
         idList.clear();

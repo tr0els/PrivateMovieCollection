@@ -40,26 +40,47 @@ public class Movie {
         this.categories = FXCollections.observableArrayList();
     }
 
+    /**
+     * Gets the movies id;
+     * @return id.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Gets the movies filelink.
+     * @return filelink.get().
+     */
     public String getFilelink() {
         return filelink.get();
     }
 
+    /**
+     * Sets the movies filelink.
+     * @param filelink 
+     */
     public void setFilelink(String filelink) {
         this.filelink.set(filelink);
     }
 
+    
     public StringProperty filelinkProperty() {
         return filelink;
     }
 
+    /**
+     * Gets the movies name;
+     * @return name.get().
+     */
     public String getName() {
         return name.get();
     }
 
+    /**
+     * Sets the movies name;
+     * @param name 
+     */
     public void setName(String name) {
         this.name.set(name);
     }
@@ -67,11 +88,19 @@ public class Movie {
     public StringProperty nameProperty() {
         return name;
     }
-
+    
+    /**
+     * Gets the movies rating.
+     * @return rating.get().
+     */
     public int getRating() {
         return rating.get();
     }
 
+    /**
+     * Sets the movies rating.
+     * @param rating 
+     */
     public void setRating(int rating) {
         this.rating.set(rating);
     }
@@ -80,10 +109,18 @@ public class Movie {
         return rating.asObject();
     }
     
+    /**
+     * Gets the movies imdb rating.
+     * @return imdb.get().
+     */
     public float getImdb() {
         return imdb.get();
     }
 
+    /**
+     * Sets the movies imdb rating.
+     * @param imdb 
+     */
     public void setImdb(Float imdb) {
         this.imdb.set(imdb);
     }
@@ -92,30 +129,57 @@ public class Movie {
         return imdb.asObject();
     }
     
+    /**
+     * Gets the movies lastview.
+     * @return lastview.
+     */
     public Date getLastview() {
         return lastview;
     }
 
+    /**
+     * Sets the movies lastview.
+     * @param lastview 
+     */
     public void setLastview(Date lastview) {
         this.lastview = lastview;
     }
     
+    /**
+     * Gets the movies categories.
+     * @return categories.
+     */
     public ObservableList<Category> getCategories() {
         return categories;
     }
     
+    /**
+     * Adds a list of categories to the movie. 
+     * @param category 
+     */
     public void addCategories(List<Category> category) {
         categories.addAll(category);
     }
 
+    /**
+     * Adds one category to the movie.
+     * @param category 
+     */
     public void addCategory(Category category) {
         categories.add(category);
     }
     
+    /**
+     * Removes one category from the movie.
+     * @param category 
+     */
     public void removeCategory(Category category) {
         categories.remove(category);
     }
     
+    /**
+     * Removes all categories from the movie.
+     */
     public void removeCategories() {
         categories.clear();
     }
