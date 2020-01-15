@@ -61,9 +61,8 @@ public class EditMovieController implements Initializable
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
+    public void initialize(URL url, ResourceBundle rb) 
     {
-
     }
 
     /**
@@ -116,10 +115,10 @@ public class EditMovieController implements Initializable
             movie.setImdb(Float.parseFloat(imdbInput.getText()));
             updateCategories();
             
-            movie.removeCategories();
-            movie.addCategories(idList);
+            movie.getCategories().clear();
+            movie.getCategories().addAll(idList);
            
-            dm.updateCategoryCatMovie(idList, movie);
+            dm.updateCategoryCatMovie(movie);
             dm.updateMovie(movie);
             Stage stage = (Stage) updateMovie.getScene().getWindow();
             stage.close();

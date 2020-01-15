@@ -155,8 +155,8 @@ public class DataModel
      * @param mov
      * @throws DALException 
      */
-    public void updateCategoryCatMovie(ObservableList<Category> list, Movie mov) throws DALException 
+    public void updateCategoryCatMovie(Movie movie) throws DALException 
     {
-        bll.updateCategoryCatMovie(list, mov);
+        bll.updateCategoryCatMovie(movie);
     }
 }

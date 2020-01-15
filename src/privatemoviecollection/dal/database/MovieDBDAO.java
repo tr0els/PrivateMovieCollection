@@ -13,9 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.collections.ObservableList;
 import privatemoviecollection.be.Category;
 import privatemoviecollection.be.Movie;
 import privatemoviecollection.dal.dalException.DALException;
@@ -262,7 +259,7 @@ public class MovieDBDAO
      * @param mov
      * @throws DALException 
      */
-    public void updateCategoryInCatMovie(ObservableList<Category> list, Movie mov) throws DALException
+    public void updateCategoryInCatMovie(Movie movie) throws DALException
     {
         try
         {
@@ -274,14 +271,14 @@ public class MovieDBDAO
             PreparedStatement ps = con.prepareStatement(sql);
             PreparedStatement ps2 = con.prepareStatement(sql2);
             
-            ps.setInt(1, mov.getId());
+            ps.setInt(1, movie.getId());
             ps.executeUpdate();
             ps.close();
             
-            for (Category category : list)
+            for (Category category : movie.getCategories())
             {
                 ps2.setInt(1, category.getId());
-                ps2.setInt(2, mov.getId());
+                ps2.setInt(2, movie.getId());
                 ps2.executeUpdate();
             }
             ps2.close();
