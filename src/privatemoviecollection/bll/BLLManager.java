@@ -101,17 +101,35 @@ public class BLLManager
         return movies;
     }
     
+    /**
+     * Updates a movies lastview.
+     * @param mov
+     * @throws DALException 
+     */
     public void updateLastView(Movie mov) throws DALException 
     {
         movieDB.updateLastView(mov);
     
     }
     
+    /**
+     * Gets a list of movies that the user hasn't seen in more than 2 years, 
+     * and has a personal rating under 6.
+     * @return
+     * @throws DALException 
+     */
     public List<Movie> timeSinceLastview() throws DALException
     {
         return movieDB.timeSinceLastview();
     }
 
+    /**
+     * Updates the CatMovie table in the database, 
+     * when a movies categories have been changed.
+     * @param list
+     * @param mov
+     * @throws DALException 
+     */
     public void updateCategoryCatMovie(ObservableList<Category> list, Movie mov) throws DALException
     {
         movieDB.updateCategoryInCatMovie(list, mov);

@@ -270,6 +270,10 @@ public class MainViewController implements Initializable
         }
     }
 
+    /**
+     * Opens the NewMovie window, when the newMovieButton is pressed. 
+     * @param event 
+     */
     @FXML
     private void handleNewMovie(ActionEvent event)
     {
@@ -292,6 +296,11 @@ public class MainViewController implements Initializable
         }
     }
 
+    /**
+     * Deletes a chosen movie. 
+     * Opens a dialogbox that asks if the user is sure. 
+     * @param event 
+     */
     @FXML
     private void handleDeleteMovie(ActionEvent event)
     {
@@ -317,8 +326,12 @@ public class MainViewController implements Initializable
         }
     }
 
+    /**
+     * Opens the editMovie view, 
+     * and transfers the DataModel and the chosen movie. 
+     * @param event 
+     */
     @FXML
-
     private void handleEditMovie(ActionEvent event)
     {
         try
@@ -344,9 +357,11 @@ public class MainViewController implements Initializable
         }
     }
 
+    /**
+     * Sets all the movies in the TableView.
+     */
     private void setAllMovies()
     {
-
         movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
         movieCategory.setCellValueFactory(new PropertyValueFactory<>("categories"));
@@ -418,6 +433,10 @@ public class MainViewController implements Initializable
         });
     }
 
+    /**
+     * Opens the AlertOldMovies view.
+     * Transfers the DataModel. 
+     */
     private void alertOldMovies()
     {
         try
@@ -440,6 +459,9 @@ public class MainViewController implements Initializable
         }
     }
 
+    /**
+     * 
+     */
     private void categorySelectionMode()
     {
         categoryFilter.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);

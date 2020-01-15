@@ -67,6 +67,10 @@ public class NewMovieController implements Initializable
         // TODO
     }
 
+    /**
+     * Lets the user choose a file from their computer. 
+     * @param event 
+     */
     @FXML
     private void handleFileChooser(ActionEvent event)
     {
@@ -80,6 +84,10 @@ public class NewMovieController implements Initializable
         fileInput.setText(path);
     }
 
+    /**
+     * Creates a new movie when the createMovie button is pressed. 
+     * @param event 
+     */
     @FXML
     private void handleCreateMovie(ActionEvent event)
     {

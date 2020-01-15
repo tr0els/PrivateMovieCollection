@@ -127,16 +127,34 @@ public class DataModel
         bll.updateMovie(mov);
     }
     
+    /**
+     * Updates lastview in the database for the chosen movie.
+     * @param mov
+     * @throws DALException 
+     */
     public void updateLastView(Movie mov) throws DALException 
     {
         bll.updateLastView(mov);
     }
     
+    /**
+     * Gets the movies that the user hasn't seen in more than 2 years, 
+     * and has a personal rating under 6.
+     * @return List<Movie>
+     * @throws DALException 
+     */
     public List<Movie> timeSinceLastview() throws DALException
     {
         return bll.timeSinceLastview();
     }
     
+    /**
+     * Updates the CatMovie table in the database, 
+     * when a movie's categories have been changed.
+     * @param list
+     * @param mov
+     * @throws DALException 
+     */
     public void updateCategoryCatMovie(ObservableList<Category> list, Movie mov) throws DALException 
     {
         bll.updateCategoryCatMovie(list, mov);
