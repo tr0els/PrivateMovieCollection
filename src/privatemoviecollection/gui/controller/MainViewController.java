@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,7 +31,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
@@ -397,14 +397,13 @@ public class MainViewController implements Initializable
             handleSearch();
         });
         
-        categoryFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Category>()
-        {
+        categoryFilter.getSelectionModel().getSelectedIndices().addListener(new ListChangeListener<Integer>() {
+
             @Override
-            public void changed(ObservableValue<? extends Category> arg0, Category oldCategory, Category newCategory)
-            {
+            public void onChanged(ListChangeListener.Change<? extends Integer> c) {
                 handleSearch();
             }
-        });        
+        });           
     }
     
 
