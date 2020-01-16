@@ -62,7 +62,6 @@ public class NewCategoryController implements Initializable
     {
         try
         {
-            dataModel = new DataModel();
             dataModel.createCategory(txtCategoryTitle.getText());
 
             Stage stage = (Stage) saveCategory.getScene().getWindow();
