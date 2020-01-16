@@ -97,7 +97,7 @@ public class EditCategoryController implements Initializable
      * Sets a new name for the category and updates the listview
      * @throws DALException
      */
-    public void handleEditCategory() throws DALException
+    private void handleEditCategory() throws DALException
     {
         try
         {
