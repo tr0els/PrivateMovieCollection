@@ -60,7 +60,7 @@ public class EditCategoryController implements Initializable
      * Edits the name of the category, then closes the window. 
      */
     @FXML
-    private void editCategory(ActionEvent event) throws DALException
+    private void editCategory(ActionEvent event) 
     {
         try
         {
