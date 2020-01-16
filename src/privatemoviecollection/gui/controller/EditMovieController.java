@@ -140,7 +140,7 @@ public class EditMovieController implements Initializable
      * Sets a lists of all movie categories in the MenuButton, 
      * and checks the categories the movie belongs to. 
      */
-    public void setCategoryMenu()
+    private void setCategoryMenu()
     {
         for (Category menuCategory : allCategories)
         {
