@@ -374,7 +374,6 @@ public class MovieDBDAO
             String sql = "SELECT * FROM Movie" + sqlWhere + sqlName + sqlRating + sqlCategories +";";
             sql = sql.replaceAll(" AND;$", ";");
 
-            System.out.println("SQL: " + sql); // debug (remove)
             PreparedStatement ps = con.prepareStatement(sql);
             
             int index = 1;
