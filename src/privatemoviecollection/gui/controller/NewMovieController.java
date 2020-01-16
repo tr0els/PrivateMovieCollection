@@ -7,7 +7,6 @@ package privatemoviecollection.gui.controller;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -21,7 +20,6 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.scene.media.Media;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import privatemoviecollection.be.Movie;
@@ -77,7 +75,7 @@ public class NewMovieController implements Initializable
         String path;
 
         FileChooser fc = new FileChooser();
-        //"HUSK AT UNCOMMENT!!!!!!!" fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Movie Files" ,"*.mp4", "*.mpeg4"));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Movie Files" ,"*.mp4", "*.mpeg4"));
         File file = fc.showOpenDialog(null);
         path = file.getAbsolutePath();
         path = path.replace("\\", "/");
