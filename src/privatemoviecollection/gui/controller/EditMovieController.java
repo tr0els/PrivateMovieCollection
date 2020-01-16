@@ -164,7 +164,7 @@ public class EditMovieController implements Initializable
         String path;
 
         FileChooser fc = new FileChooser();
-        //HUSK AT DECOMMENT!!!! --> fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Movie Files", "*.mp4", "*.mpeg4"));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Movie Files", "*.mp4", "*.mpeg4"));
         File file = fc.showOpenDialog(null);
         path = file.getAbsolutePath();
         path = path.replace("\\", "/");
