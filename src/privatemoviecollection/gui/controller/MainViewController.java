@@ -45,7 +45,7 @@ import privatemoviecollection.gui.utilGUI.DisplayAlert;
  */
 public class MainViewController implements Initializable
 {
-
+    
     @FXML
     private TableView<Movie> movieTable;
     @FXML
@@ -74,7 +74,7 @@ public class MainViewController implements Initializable
     private Button newMovieButton;
     @FXML
     private Button deleteMovieButton;
-
+    
     private DataModel dataModel;
     @FXML
     private Button editMovieButton;
@@ -93,13 +93,13 @@ public class MainViewController implements Initializable
         try
         {
             dataModel = new DataModel();
-
+            
             comboFilterRating.setItems(comboList);
             setAllMovies();
             setAllCategories();
             setSearchListeners();
             categorySelectionMode();
-
+            
             if (!dataModel.timeSinceLastview().isEmpty())
             {
                 alertOldMovies();
@@ -110,7 +110,7 @@ public class MainViewController implements Initializable
             al.displayAlert(Alert.AlertType.ERROR, "Kunne ikke hente dine filer", ex.getMessage());
         }
     }
-
+    
     @FXML
     private void handleSearch()
     {
@@ -119,13 +119,13 @@ public class MainViewController implements Initializable
             String searchName = searchField.getText();
             int searchRating = comboFilterRating.getSelectionModel().getSelectedIndex();
             List<Category> searchCategories = categoryFilter.getSelectionModel().getSelectedItems();
-
+            
             for (Category sc : searchCategories)
             {
                 System.out.println("Content of category list (size: " + searchCategories.size() + "):");
                 System.out.println(sc.getName());
             }
-
+            
             dataModel.getSearchResult(searchName, searchRating, searchCategories);
         } catch (DALException ex)
         {
@@ -142,21 +142,21 @@ public class MainViewController implements Initializable
     {
         try
         {
-
+            
             String s = movieTable.getSelectionModel().getSelectedItem().getFilelink();
             File f = new File(s);
             Desktop d = Desktop.getDesktop();
             d.open(f);
-
+            
             Movie mo = movieTable.getSelectionModel().getSelectedItem();
             dataModel.updateLastView(mo);
-
+            
         } catch (DALException ex1)
         {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "Could not play Movie", ex1.getMessage());
         } catch (IOException ex)
-
+        
         {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "Could not open mediaplayer", ex.getMessage());
@@ -174,7 +174,7 @@ public class MainViewController implements Initializable
         searchField.clear();
         comboFilterRating.getSelectionModel().clearAndSelect(0);
         categoryFilter.getSelectionModel().clearSelection();
-
+        
     }
 
     /**
@@ -188,10 +188,10 @@ public class MainViewController implements Initializable
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/NewCategory.fxml"));
             Parent root = loader.load();
-
+            
             NewCategoryController newCategoryController = loader.getController();
             newCategoryController.transfer(dataModel);
-
+            
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.showAndWait();
@@ -212,21 +212,29 @@ public class MainViewController implements Initializable
     {
         try
         {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("A Deletion Confirmation");
-            alert.setHeaderText("Are you sure you want to delete:");
-            alert.setContentText(categoryFilter.getSelectionModel().getSelectedItem() + "?");
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK)
+            if (categoryFilter.getSelectionModel().getSelectedItems().size() == 1)
             {
-                dataModel.deleteCategory(categoryFilter.getSelectionModel().getSelectedItem());
-                categoryFilter.getSelectionModel().clearSelection();
-
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("A Deletion Confirmation");
+                alert.setHeaderText("Are you sure you want to delete:");
+                alert.setContentText(categoryFilter.getSelectionModel().getSelectedItems().get(0) + "?");
+                
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK)
+                {
+                    dataModel.deleteCategory(categoryFilter.getSelectionModel().getSelectedItem());
+                    categoryFilter.getSelectionModel().clearSelection();
+                    
+                } else
+                {
+                    alert.close();
+                }
             } else
             {
-                alert.close();
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Please select exactly one category when deleting", ButtonType.OK);
+                alert.showAndWait();
             }
+            
         } catch (DALException ex)
         {
             DisplayAlert al = new DisplayAlert();
@@ -245,7 +253,7 @@ public class MainViewController implements Initializable
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditCategory.fxml"));
             Parent root = loader.load();
-
+            
             if (categoryFilter.getSelectionModel().getSelectedItems().size() == 1)
             {
                 EditCategoryController editCategoryController = loader.getController();
@@ -268,8 +276,9 @@ public class MainViewController implements Initializable
     }
 
     /**
-     * Opens the NewMovie window, when the newMovieButton is pressed. 
-     * @param event 
+     * Opens the NewMovie window, when the newMovieButton is pressed.
+     *
+     * @param event
      */
     @FXML
     private void handleNewMovie(ActionEvent event)
@@ -278,11 +287,11 @@ public class MainViewController implements Initializable
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/NewMovie.fxml"));
             Parent root = loader.load();
-
+            
             NewMovieController newMovieController = loader.getController();
             newMovieController.transfer(dataModel);
             newMovieController.categoryMenu(dataModel.getCategoryList());
-
+            
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
@@ -294,9 +303,9 @@ public class MainViewController implements Initializable
     }
 
     /**
-     * Deletes a chosen movie. 
-     * Opens a dialogbox that asks if the user is sure. 
-     * @param event 
+     * Deletes a chosen movie. Opens a dialogbox that asks if the user is sure.
+     *
+     * @param event
      */
     @FXML
     private void handleDeleteMovie(ActionEvent event)
@@ -304,7 +313,7 @@ public class MainViewController implements Initializable
         try
         {
             String name = movieTable.getSelectionModel().getSelectedItem().getName();
-
+            
             if (movieTable.getSelectionModel().getSelectedItem() != null)
             {
                 int input = JOptionPane.showConfirmDialog(null, "Permanently delete " + name + " from the list?", "Select an Option...",
@@ -324,9 +333,10 @@ public class MainViewController implements Initializable
     }
 
     /**
-     * Opens the editMovie view, 
-     * and transfers the DataModel and the chosen movie. 
-     * @param event 
+     * Opens the editMovie view, and transfers the DataModel and the chosen
+     * movie.
+     *
+     * @param event
      */
     @FXML
     private void handleEditMovie(ActionEvent event)
@@ -335,10 +345,10 @@ public class MainViewController implements Initializable
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/EditMovie.fxml"));
             Parent root = loader.load();
-
+            
             EditMovieController editmoviecontroller = loader.getController();
             editmoviecontroller.transfer(movieTable.getSelectionModel().getSelectedItem(), dataModel);
-
+            
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
@@ -356,7 +366,7 @@ public class MainViewController implements Initializable
     {
         movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-
+        
         movieCategory.setCellValueFactory(new PropertyValueFactory<>("categories"));
         /*
         movieCategory.setCellFactory(col -> new TableCell<Movie, ObservableList<Category>>()
@@ -381,8 +391,8 @@ public class MainViewController implements Initializable
                 }
             }
         });
-        */
-
+         */
+        
         movieRating.setCellValueFactory(cellData -> cellData.getValue().ratingProperty());
         movieRatingIMDB.setCellValueFactory(cellData -> cellData.getValue().imdbProperty());
 
@@ -398,39 +408,39 @@ public class MainViewController implements Initializable
         try
         {
             categoryFilter.setItems(dataModel.getCategoryList());
-
+            
         } catch (DALException ex)
         {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not Set list of Categories", ex.getMessage());
         }
     }
-
+    
     private void setSearchListeners()
     {
         searchField.textProperty().addListener((observable, oldValue, newValue) ->
         {
             handleSearch();
         });
-
+        
         comboFilterRating.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
         {
             handleSearch();
         });
-
         
-        categoryFilter.getSelectionModel().getSelectedIndices().addListener(new ListChangeListener<Integer>() {
-
+        categoryFilter.getSelectionModel().getSelectedIndices().addListener(new ListChangeListener<Integer>()
+        {
+            
             @Override
-            public void onChanged(ListChangeListener.Change<? extends Integer> c) {
+            public void onChanged(ListChangeListener.Change<? extends Integer> c)
+            {
                 handleSearch();
             }
         });
     }
 
     /**
-     * Opens the AlertOldMovies view.
-     * Transfers the DataModel. 
+     * Opens the AlertOldMovies view. Transfers the DataModel.
      */
     private void alertOldMovies()
     {
@@ -438,15 +448,15 @@ public class MainViewController implements Initializable
         {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/privatemoviecollection/gui/view/AlertOldMovies.fxml"));
             Parent root = loader.load();
-
+            
             AlertOldMoviesController alertOldMoviesController = loader.getController();
             alertOldMoviesController.transfer(dataModel);
-
+            
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setAlwaysOnTop(true);
             stage.show();
-
+            
         } catch (DALException | IOException ex)
         {
             DisplayAlert al = new DisplayAlert();
@@ -455,7 +465,7 @@ public class MainViewController implements Initializable
     }
 
     /**
-     * 
+     *
      */
     private void categorySelectionMode()
     {
@@ -479,13 +489,13 @@ public class MainViewController implements Initializable
             {
                 // prevent further handling
                 evt.consume();
-
+                
                 ListCell cell = (ListCell) node;
                 ListView lv = cell.getListView();
 
                 // focus the listview
                 lv.requestFocus();
-
+                
                 if (!cell.isEmpty())
                 {
                     // handle selection for non-empty cells
@@ -499,7 +509,7 @@ public class MainViewController implements Initializable
                     }
                 }
             }
-
+            
         });
     }
 }
