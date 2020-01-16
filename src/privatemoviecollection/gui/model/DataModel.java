@@ -29,7 +29,6 @@ public class DataModel
     public DataModel() throws DALException
     {
         bll = new BLLManager();
-        
         movies.addAll(bll.getAllMovies());
     }
     

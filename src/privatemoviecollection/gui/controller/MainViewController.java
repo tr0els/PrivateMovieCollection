@@ -7,8 +7,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -340,7 +338,6 @@ public class MainViewController implements Initializable
 
             EditMovieController editmoviecontroller = loader.getController();
             editmoviecontroller.transfer(movieTable.getSelectionModel().getSelectedItem(), dataModel);
-            editmoviecontroller.categoryMenu(dataModel.getCategoryList());
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -349,10 +346,6 @@ public class MainViewController implements Initializable
         {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "ERROR in input or output", ex.getMessage());
-        } catch (DALException ex)
-        {
-            DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not handle Edit movie", ex.getMessage());
         }
     }
 
@@ -362,8 +355,10 @@ public class MainViewController implements Initializable
     private void setAllMovies()
     {
         movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
         movieCategory.setCellValueFactory(new PropertyValueFactory<>("categories"));
+        /*
         movieCategory.setCellFactory(col -> new TableCell<Movie, ObservableList<Category>>()
         {
             @Override
@@ -386,6 +381,7 @@ public class MainViewController implements Initializable
                 }
             }
         });
+        */
 
         movieRating.setCellValueFactory(cellData -> cellData.getValue().ratingProperty());
         movieRatingIMDB.setCellValueFactory(cellData -> cellData.getValue().imdbProperty());
