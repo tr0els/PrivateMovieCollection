@@ -74,15 +74,13 @@ public class MainViewController implements Initializable
     private Button newMovieButton;
     @FXML
     private Button deleteMovieButton;
-
-    private DataModel dataModel;
     @FXML
     private Button editMovieButton;
     @FXML
     private Button editCategoryButton;
 
-    //laver listen til comboFilterRating med tal fra 1-10
-    ObservableList<String> comboList = FXCollections.observableArrayList("Filter by rating", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+    private DataModel dataModel;
+    ObservableList<String> comboList = FXCollections.observableArrayList("Filter by minimum rating", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
 
     /**
      * Initializes the controller class.
@@ -142,7 +140,6 @@ public class MainViewController implements Initializable
     {
         try
         {
-
             String s = movieTable.getSelectionModel().getSelectedItem().getFilelink();
             File f = new File(s);
             Desktop d = Desktop.getDesktop();
@@ -174,7 +171,6 @@ public class MainViewController implements Initializable
         searchField.clear();
         comboFilterRating.getSelectionModel().clearAndSelect(0);
         categoryFilter.getSelectionModel().clearSelection();
-
     }
 
     /**
@@ -355,10 +351,9 @@ public class MainViewController implements Initializable
     private void setAllMovies()
     {
         movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
         movieCategory.setCellValueFactory(new PropertyValueFactory<>("categories"));
-        /*
+
         movieCategory.setCellFactory(col -> new TableCell<Movie, ObservableList<Category>>()
         {
             @Override
@@ -381,7 +376,6 @@ public class MainViewController implements Initializable
                 }
             }
         });
-        */
 
         movieRating.setCellValueFactory(cellData -> cellData.getValue().ratingProperty());
         movieRatingIMDB.setCellValueFactory(cellData -> cellData.getValue().imdbProperty());

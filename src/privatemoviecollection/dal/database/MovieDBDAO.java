@@ -350,7 +350,7 @@ public class MovieDBDAO
             // build sql for rating
             String sqlRating = "";
             if(searchRating > 0) {
-                sqlRating += " IMDB > ? AND";
+                sqlRating += " IMDB >= ? AND";
             }            
             
             // build sql for categories
