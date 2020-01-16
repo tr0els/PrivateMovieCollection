@@ -465,13 +465,12 @@ public class MainViewController implements Initializable
     }
 
     /**
-     *
+     * Makes it possible to select multiple categories in categoryFilter without holding down CTRL
      */
     private void categorySelectionMode()
     {
         categoryFilter.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        // GØR DET MULIGT AT SELECTE FLERE KATEGORIER UDEN AT KLIKKE CTRL
         categoryFilter.addEventFilter(MouseEvent.MOUSE_PRESSED, evt ->
         {
             Node node = evt.getPickResult().getIntersectedNode();
