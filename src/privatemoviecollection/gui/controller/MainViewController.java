@@ -149,11 +149,11 @@ public class MainViewController implements Initializable
         {
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "Could not play Movie", ex1.getMessage());
-        } catch (IOException ex)
+        } catch (Exception ex)
         
         {
             DisplayAlert al = new DisplayAlert();
-            al.displayAlert(Alert.AlertType.ERROR, "Could not open mediaplayer", ex.getMessage());
+            al.displayAlert(Alert.AlertType.ERROR, "Could not open mediaplayer", "Could not find file on your computer");
         }
     }
 
