@@ -163,13 +163,6 @@ public class MovieDBDAO
 
                 movies.add(movie);
             }
-
-            System.out.println("\n\n*** TEST ***\n");
-            for (Movie movie : movies)
-            {
-                System.out.println("Movie name: " + movie.getName() + " is in " + movie.getCategories().size() + " categories");
-            }
-
             return movies;
         } catch (SQLException ex)
         {   
