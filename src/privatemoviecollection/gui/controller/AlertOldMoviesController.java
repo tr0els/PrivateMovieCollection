@@ -46,19 +46,30 @@ public class AlertOldMoviesController implements Initializable
     {
     }    
     
+    /**
+     * Gets a list of movies that the user hasn't seen in more than 2 years, 
+     * and that has a personal rating under 6. 
+     * These movies are put into a list and set into a listview. 
+     * @throws DALException 
+     */
     public void getListOfMovies() throws DALException 
     {   try{
         movieList.addAll(dm.timeSinceLastview());      
         oldMovieList.setItems(movieList);}
     
-    catch (DALException ex)
-    {
-    DisplayAlert al = new DisplayAlert();
-    al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
-    }
+        catch (DALException ex)
+        {
+            DisplayAlert al = new DisplayAlert();
+            al.displayAlert(Alert.AlertType.ERROR, "ERROR - kunne ikke håndtere efterspørgslen", ex.getMessage());
+        }
     
     }
     
+    /**
+     * Transfers the datamodel and the movielist to the controller. 
+     * @param datamodel
+     * @throws DALException 
+     */
     public void transfer(DataModel datamodel) throws DALException 
     {
         dm = datamodel;
@@ -68,7 +79,10 @@ public class AlertOldMoviesController implements Initializable
         
     }
     
-
+    /**
+     * Deletes a movie from the listview, and from the mainView. 
+     * @param event 
+     */
     @FXML
     private void handleDeleteMovie(ActionEvent event) 
     {   try{
@@ -83,6 +97,11 @@ public class AlertOldMoviesController implements Initializable
 
     }
 
+    /**
+     * Closes the window, and updates the lastview of the movies, 
+     * that are still in the list. 
+     * @param event 
+     */
     @FXML
     private void handleCancel(ActionEvent event)  
     { try{
