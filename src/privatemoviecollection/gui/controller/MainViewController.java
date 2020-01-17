@@ -110,6 +110,31 @@ public class MainViewController implements Initializable
     }
     
     /**
+     * Sets listeners on the search/filter options so the search method is called on any changes
+     */
+    private void setSearchListeners()
+    {
+        searchField.textProperty().addListener((observable, oldValue, newValue) ->
+        {
+            handleSearch();
+        });
+        
+        comboFilterRating.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
+        {
+            handleSearch();
+        });
+        
+        categoryFilter.getSelectionModel().getSelectedIndices().addListener(new ListChangeListener<Integer>()
+        {
+            @Override
+            public void onChanged(ListChangeListener.Change<? extends Integer> c)
+            {
+                handleSearch();
+            }
+        });
+    }
+    
+    /**
      * Performs a search based on the given text, rating, and categories
      */
     @FXML
@@ -402,29 +427,6 @@ public class MainViewController implements Initializable
             DisplayAlert al = new DisplayAlert();
             al.displayAlert(Alert.AlertType.ERROR, "ERROR - Could not Set list of Categories", ex.getMessage());
         }
-    }
-    
-    private void setSearchListeners()
-    {
-        searchField.textProperty().addListener((observable, oldValue, newValue) ->
-        {
-            handleSearch();
-        });
-        
-        comboFilterRating.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
-        {
-            handleSearch();
-        });
-        
-        categoryFilter.getSelectionModel().getSelectedIndices().addListener(new ListChangeListener<Integer>()
-        {
-            
-            @Override
-            public void onChanged(ListChangeListener.Change<? extends Integer> c)
-            {
-                handleSearch();
-            }
-        });
     }
 
     /**
