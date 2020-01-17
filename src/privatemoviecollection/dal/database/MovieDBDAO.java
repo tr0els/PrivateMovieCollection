@@ -91,23 +91,36 @@ public class MovieDBDAO
     }
 
     /**
-     * Gets a movie from the database with an id.
+     * Gets a movie from the database based on the id
      * @param id
-     * @return
-     * @throws DALException 
+     * @return movie object
+     * @throws DALException
      */
     public Movie getMovie(int id) throws DALException
     {
-        // only one movie will be returned when searching on id
+        // only one movie will be returned when using id
         // so always return the first and only movie in the result list
         return getMoviesQuery(id).get(0);
     }
 
+    /**
+     * Gets a list of all movies
+     * @return
+     * @throws DALException 
+     */
     public List<Movie> getAllMovies() throws DALException
     {
         return getMoviesQuery(0);
     }
 
+    /**
+     * Helper mathod for getting movies
+     * If id is 0 all movies is returned
+     * if id > 0 the movie with the given id is returned
+     * @param movieId is the movie id
+     * @return list of movies
+     * @throws DALException 
+     */
     public List<Movie> getMoviesQuery(int movieId) throws DALException
     {
         try ( Connection con = dbCon.getConnection())
@@ -335,6 +348,14 @@ public class MovieDBDAO
         }
     }
 
+    /**
+     * Searches movies based on the given parameters
+     * @param searchName name of movie or part of it
+     * @param searchRating value of minimum rating the movie should have
+     * @param searchCategories list of categories the movie should be in
+     * @return list of movies objects based on search result
+     * @throws DALException 
+     */
     public List<Movie> searchMovies(String searchName, int searchRating, List<Category> searchCategories) throws DALException {
         try {
             Connection con = dbCon.getConnection();
