@@ -64,7 +64,10 @@ public class Movie {
         this.filelink.set(filelink);
     }
 
-    
+    /**
+     * returns the movies filelink property
+     * @param filelink 
+     */
     public StringProperty filelinkProperty() {
         return filelink;
     }
@@ -85,6 +88,10 @@ public class Movie {
         this.name.set(name);
     }
 
+    /**
+     * returns the movies filelink property
+     * @param nameProperty
+     */
     public StringProperty nameProperty() {
         return name;
     }
@@ -184,12 +191,22 @@ public class Movie {
         categories.clear();
     }
     
+    /**
+     * Name of the movie
+     * @return the observable name property
+     */
     @Override
     public String toString()
     {
         return getName();
     }
 
+    /**
+     * Changes the equals method so that movie objects are equal 
+     * if they have the same id
+     * @param obj category object
+     * @return boolean true or false
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

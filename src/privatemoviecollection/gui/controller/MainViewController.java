@@ -80,7 +80,7 @@ public class MainViewController implements Initializable
     private Button editCategoryButton;
 
     private DataModel dataModel;
-    ObservableList<String> comboList = FXCollections.observableArrayList("Filter by minimum rating", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+    private ObservableList<String> comboList = FXCollections.observableArrayList("Filter by minimum rating", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
 
     /**
      * Initializes the controller class.
@@ -109,6 +109,9 @@ public class MainViewController implements Initializable
         }
     }
     
+    /**
+     * Performs a search based on the given text, rating, and categories
+     */
     @FXML
     private void handleSearch()
     {
@@ -118,12 +121,6 @@ public class MainViewController implements Initializable
             int searchRating = comboFilterRating.getSelectionModel().getSelectedIndex();
             List<Category> searchCategories = categoryFilter.getSelectionModel().getSelectedItems();
             
-            for (Category sc : searchCategories)
-            {
-                System.out.println("Content of category list (size: " + searchCategories.size() + "):");
-                System.out.println(sc.getName());
-            }
-            
             dataModel.getSearchResult(searchName, searchRating, searchCategories);
         } catch (DALException ex)
         {
@@ -132,8 +129,8 @@ public class MainViewController implements Initializable
         }
     }
 
-    /*
-    *Handel playmovie via systemdefault mediaplayer 
+    /**
+     * Handel playmovie via systemdefault mediaplayer 
      */
     @FXML
     private void handlePlayMovie(ActionEvent event)
@@ -160,14 +157,12 @@ public class MainViewController implements Initializable
         }
     }
 
-    /*
-    *Sets allmovies, allcategories and clears searchfiled and combobox
+    /**
+     * Clears all search filters so all movies show
      */
-    //Clears searchfiled, combobox, allmovies and categoryfilter
     @FXML
     private void handleClearFilter(ActionEvent event)
     {
-        setAllMovies();
         searchField.clear();
         comboFilterRating.getSelectionModel().clearAndSelect(0);
         categoryFilter.getSelectionModel().clearSelection();
@@ -360,6 +355,7 @@ public class MainViewController implements Initializable
      */
     private void setAllMovies()
     {
+        // setup the tableview columns content
         movieName.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         movieCategory.setCellValueFactory(new PropertyValueFactory<>("categories"));
         movieCategory.setCellFactory(col -> new TableCell<Movie, ObservableList<Category>>()
@@ -388,7 +384,7 @@ public class MainViewController implements Initializable
         movieRating.setCellValueFactory(cellData -> cellData.getValue().ratingProperty());
         movieRatingIMDB.setCellValueFactory(cellData -> cellData.getValue().imdbProperty());
 
-        // add data to the table
+        // set data for the tableview
         movieTable.setItems(dataModel.getAllMovies());
     }
 

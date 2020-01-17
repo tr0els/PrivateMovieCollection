@@ -50,6 +50,10 @@ public class Category
         this.name.set(name);
     }
     
+    /**
+     * Name of the category
+     * @return the observable name property
+     */
     public StringProperty nameProperty()
     {
         return name; 
@@ -65,6 +69,12 @@ public class Category
         return getName();
     }
 
+    /**
+     * Changes the equals method so that category objects are equal 
+     * if they have the same id
+     * @param obj category object
+     * @return boolean true or false
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -82,6 +92,4 @@ public class Category
         }
         return true;
     }
-    
-    
 }

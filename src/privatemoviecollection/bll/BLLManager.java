@@ -19,7 +19,6 @@ import privatemoviecollection.dal.database.CategoryDBDAO;
 public class BLLManager
 {
     private final MovieDBDAO movieDB;
-    
     private final CategoryDBDAO categoryDbDao;
     
     public BLLManager() throws DALException
@@ -28,23 +27,45 @@ public class BLLManager
         categoryDbDao = new CategoryDBDAO();
     }
     
+    /**
+     * Creates a new movie in the db
+     * @param name
+     * @param rating
+     * @param filelink
+     * @param imdb
+     * @param idList
+     * @return returns a movie object
+     * @throws DALException 
+     */
     public Movie createMovie(String name, int rating, String filelink, float imdb, ArrayList<Category> idList) throws DALException 
     {
         Movie mov = movieDB.createMovie(name, rating, filelink, imdb, idList);
-        
         return mov;
     }
     
+    /**
+     * Deletes a movie from the db
+     * @param mov
+     * @throws DALException 
+     */
     public void deleteMovie(Movie mov) throws DALException
     {
         movieDB.deleteMovie(mov);
     }
     
+    /**
+     * Updates a movie in the db
+    */
     public void updateMovie(Movie mov) throws DALException
     {
         movieDB.updateMovie(mov);
     }
     
+    /**
+     * Gets a list of all movies
+     * @return
+     * @throws DALException 
+     */
     public List<Movie> getAllMovies() throws DALException
     {
         return movieDB.getAllMovies();
@@ -93,6 +114,14 @@ public class BLLManager
         categoryDbDao.updateCategory(category);
     }
     
+    /**
+     * Searches movies based on the given parameters
+     * @param name name of movie or part of it
+     * @param rating value of minimum rating the movie should have
+     * @param categories list of categories the movie should be in
+     * @throws DALException
+     * @returns a list of movie object results
+     */
     public List<Movie> searchMovies(String name, int rating, List<Category> categories) throws DALException 
     {
         List<Movie> movies = movieDB.searchMovies(name, rating, categories);

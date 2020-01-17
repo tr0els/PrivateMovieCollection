@@ -84,6 +84,13 @@ public class DataModel
         bll.deleteCategory(category);
     }
     
+/**
+     * Searches movies based on the parameters
+     * @param input movie name or part of it
+     * @param rating value of minimum rating the movie should have
+     * @param categories list of categories the movie should be in
+     * @throws DALException
+     */
     public void getSearchResult(String input, int rating, List<Category> categories) throws DALException
     {
         List<Movie> result = bll.searchMovies(input, rating, categories);
